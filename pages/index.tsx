@@ -5,11 +5,6 @@ import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 
 const inter = Inter({ subsets: ["latin"] });
-const Wrapper = styled.div`
-  height: 100vw;
-  padding: 100px;
-  justify-content: center;
-`;
 
 export default function Home() {
   return (
@@ -21,3 +16,9 @@ export default function Home() {
     </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  height: 100vw;
+  padding: 100px;
+  justify-content: center;
+`;
