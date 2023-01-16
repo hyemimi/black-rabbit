@@ -28,6 +28,7 @@ function LoginForm() {
           <Input
             {...register("userID", {
               required: "Please write your ID",
+              minLength: { value: 5, message: "5글자 이상 입력해주세요" },
             })}
             placeholder="Write your ID"
           />
@@ -35,6 +36,7 @@ function LoginForm() {
           <Input
             {...register("userPW", {
               required: "Please write your Password",
+              minLength: { value: 8, message: "8글자 이상 입력해주세요" },
             })}
             placeholder="Write your Password"
           />
