@@ -6,17 +6,9 @@ import styled from "styled-components";
 
 const inter = Inter({ subsets: ["latin"] });
 const Wrapper = styled.div`
-  background: white;
-  padding-bottom: 200px;
-`;
-const Banner = styled.div`
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
+  height: 100vw;
+  padding: 100px;
   justify-content: center;
-  padding: 60px;
-  background-size: cover;
-  background-color: ${(props) => props.theme.white.lighter};
 `;
 
 export default function Home() {
@@ -24,9 +16,8 @@ export default function Home() {
     <Wrapper>
       <Head>
         <title>검은토끼</title>
-        <div>프로젝트 세팅</div>
       </Head>
-      <Banner />
+      <h1>home</h1>
     </Wrapper>
   );
 }
