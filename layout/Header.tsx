@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { motion, useScroll, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Searchbar from "@/components/common/Searchbar";
 
 function Header() {
   const navAnimation = useAnimation();
@@ -40,6 +41,7 @@ function Header() {
           </Items>
         </Col>
         <Col>
+          <Searchbar></Searchbar>
           <Button onClick={() => router.push("/login")}>Login</Button>
         </Col>
       </Nav>
