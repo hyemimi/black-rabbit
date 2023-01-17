@@ -10,6 +10,10 @@ export default function Searchbar() {
   };
   return (
     <Search onSubmit={handleSubmit(onvalid)}>
+      <Input
+        {...register("keyword", { required: true, minLength: 2 })}
+        placeholder="검색"
+      ></Input>
       <svg
         fill="currentColor"
         viewBox="0 0 20 20"
@@ -21,10 +25,6 @@ export default function Searchbar() {
           clipRule="evenodd"
         ></path>
       </svg>
-      <Input
-        {...register("keyword", { required: true, minLength: 2 })}
-        placeholder="검색"
-      ></Input>
     </Search>
   );
 }
@@ -33,21 +33,23 @@ const Search = styled.form`
   color: white;
   display: flex;
   align-items: center;
-  position: relative;
+
   svg {
-    height: 25px;
+    transform: translateX(-30px);
+    height: 20px;
   }
 `;
 
 const Input = styled.input`
-  position: absolute;
-  left: 0x;
-  right: 0px;
+  position: relative;
+  left: 0;
+  right: 0;
   padding: 5px 10px;
   padding-left: 5px;
-  color: white;
   font-size: 16px;
-  background-color: transparent;
-  border-radius: 15px;
-  border: 1px solid ${(props) => props.theme.pointColor};
+  background-color: #c9c9c9;
+  border-radius: 20px;
+  border: none;
+  height: 40px;
+  width: 300px;
 `;

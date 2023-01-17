@@ -12,13 +12,25 @@ export default function Home() {
       <Head>
         <title>검은토끼</title>
       </Head>
-      <h1>home</h1>
+      <h1>검은토끼 홈화면 입니다</h1>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
-  height: 100vw;
-  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 1em;
+  padding-left: 250px;
   justify-content: center;
+`;
+const PageDiv = styled.div`
+  width: 100%;
+  height: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
