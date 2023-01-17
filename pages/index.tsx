@@ -12,7 +12,9 @@ export default function Home() {
       <Head>
         <title>검은토끼</title>
       </Head>
-      <h1>검은토끼 홈화면 입니다</h1>
+      <Banner>
+        <Title>검은토끼와 함께 멋진 작품을 만들어보세요</Title>
+      </Banner>
     </Wrapper>
   );
 }
@@ -26,11 +28,15 @@ const Wrapper = styled.div`
   padding-left: 250px;
   justify-content: center;
 `;
-const PageDiv = styled.div`
-  width: 100%;
-  height: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+
+const Banner = styled.div`
+  background-color: ${(props) => props.theme.pointColor};
+  height: 250px;
+  width: 900px;
+`;
+
+const Title = styled.h1`
+  padding-top: 100px;
+  text-align: center;
+  font-size: 30px;
 `;
