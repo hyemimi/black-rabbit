@@ -49,5 +49,5 @@ const Input = styled.input`
   font-size: 16px;
   background-color: transparent;
   border-radius: 15px;
-  border: 1px solid ${(props) => props.theme.white.lighter};
+  border: 1px solid ${(props) => props.theme.pointColor};
 `;

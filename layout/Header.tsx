@@ -5,30 +5,13 @@ import { useRouter } from "next/router";
 import Searchbar from "@/components/common/Searchbar";
 
 function Header() {
-  const navAnimation = useAnimation();
   const router = useRouter();
-  const { scrollY } = useScroll();
 
-  useEffect(() => {
-    scrollY.onChange(() => {
-      if (scrollY.get() > 80) {
-        navAnimation.start({
-          backgroundColor: "rgba(255,255,255,0.5)",
-        });
-      } else {
-        navAnimation.start({
-          backgroundColor: "rgba(0,0,0,1)",
-        });
-      }
-    });
-  }, [scrollY]);
+  useEffect(() => {}, []);
 
   return (
     <>
-      <Nav
-        animate={navAnimation}
-        initial={{ backgroundColor: "rgba(0,0,0,1)" }}
-      >
+      <Nav>
         <Col>
           <Items>
             <Item>
@@ -51,14 +34,15 @@ function Header() {
 
 export default Header;
 
-const Nav = styled(motion.nav)`
+const Nav = styled.nav`
   display: flex;
+  width: 1140px;
+  height: 100px;
   justify-content: space-between;
   align-items: center;
   position: fixed;
   width: 100%;
   top: 0;
-  background-color: white;
   font-size: 14px;
   padding: 20px 60px;
   color: white;
@@ -75,7 +59,7 @@ const Items = styled.ul`
 `;
 const Item = styled.li`
   margin-right: 20px;
-  color: ${(props) => props.theme.white.darker};
+  color: ${(props) => props.theme.textColor};
   position: relative;
   display: flex;
   justify-content: center;
@@ -86,8 +70,9 @@ const Button = styled.button`
   font-size: 14px;
   padding: 5px 16px 5px 16px;
   text-align: center;
-  color: rgb(218, 218, 218);
-  background-color: rgb(48, 48, 48);
+  border: none;
+  color: ${(props) => props.theme.textColor};
+  background-color: ${(props) => props.theme.pointColor};
   border-radius: 30px;
   cursor: pointer;
   transition-duration: 50ms;

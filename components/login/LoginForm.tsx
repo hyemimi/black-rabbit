@@ -83,7 +83,7 @@ const Input = styled.input`
   color: white;
   font-size: 16px;
   background-color: transparent;
-  border: 1px solid ${(props) => props.theme.white.lighter};
+  border: 1px solid ${(props) => props.theme.pointColor};
   margin: 5px;
   text-align: center;
 `;
@@ -91,7 +91,8 @@ const Input = styled.input`
 const Button = styled.button`
   font-size: auto;
   height: 100%;
-  background-color: white;
+  background-color: ${(props) => props.theme.pointColor};
+  border: 1px solid ${(props) => props.theme.pointColor};
   border-radius: 20px;
   width: 50%;
   margin: auto;
