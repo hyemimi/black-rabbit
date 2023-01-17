@@ -1,17 +1,19 @@
+import { useRouter } from "next/router";
 import styled from "styled-components";
 
 export default function Sidebar() {
+  const router = useRouter();
   return (
     <Side>
       <Logo>
         <h1>Logo</h1>
       </Logo>
       <div style={{ marginTop: "50px" }}>
-        <MenuButton>홈</MenuButton>
+        <MenuButton onClick={() => router.push("/")}>홈</MenuButton>
         <MenuButton>좋아요</MenuButton>
         <MenuButton>알림</MenuButton>
         <MenuButton>도움</MenuButton>
-        <MenuButton>로그인</MenuButton>
+        <MenuButton onClick={() => router.push("/login")}>로그인</MenuButton>
       </div>
     </Side>
   );

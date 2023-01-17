@@ -15,6 +15,17 @@ export default function Home() {
       <Banner>
         <Title>검은토끼와 함께 멋진 작품을 만들어보세요</Title>
       </Banner>
+      <FilterDiv>
+        <div>
+          <FilterButton>전체</FilterButton>
+          <FilterButton>인기</FilterButton>
+          <FilterButton>추천</FilterButton>
+          <FilterButton>최근</FilterButton>
+        </div>
+        <div>
+          <FilterButton>전체보기</FilterButton>
+        </div>
+      </FilterDiv>
     </Wrapper>
   );
 }
@@ -23,10 +34,11 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
   gap: 1em;
-  padding-left: 250px;
   justify-content: center;
+  width: 1000px;
+  padding-left: 550px;
+  padding-right: 10px;
 `;
 
 const Banner = styled.div`
@@ -39,4 +51,28 @@ const Title = styled.h1`
   padding-top: 100px;
   text-align: center;
   font-size: 30px;
+`;
+
+const FilterDiv = styled.span`
+  display: flex;
+  justify-content: space-between;
+  width: 900px;
+`;
+const FilterButton = styled.button`
+  margin: 10px;
+  height: fit-content;
+  font-size: 14px;
+  padding: 5px 16px 5px 16px;
+  text-align: center;
+  border: none;
+  color: ${(props) => props.theme.textColor};
+  background-color: D9D9D9;
+  border-radius: 30px;
+  cursor: pointer;
+  transition-duration: 50ms;
+  &: hover {
+    color: rgb(254, 254, 254);
+    background-color: rgb(63, 63, 63);
+  transition-duration: 100ms;
+  }}
 `;

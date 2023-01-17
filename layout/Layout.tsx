@@ -5,12 +5,10 @@ import Sidebar from "./Sidebar";
 export default function Layout() {
   return (
     <>
-      <LayoutDiv>
-        <Sidebar />
-        <div style={{ transform: "translateX(+250px)" }}>
-          <Header />
-        </div>
-      </LayoutDiv>
+      <Sidebar />
+      <div style={{ transform: "translateX(+250px)" }}>
+        <Header />
+      </div>
     </>
   );
   //1140px width height 924 px
