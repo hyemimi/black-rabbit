@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
+import ProductList from "@/components/home/ProductList";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,7 @@ export default function Home() {
           <FilterButton>전체보기</FilterButton>
         </div>
       </FilterDiv>
+      <ProductList />
     </Wrapper>
   );
 }
