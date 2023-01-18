@@ -1,6 +1,11 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-
+import homeIcon from "../public/home.png";
+import likeIcon from "../public/heart.png";
+import alarmIcon from "../public/bell.png";
+import Image from "next/image";
+import helpIcon from "../public/help.png";
+import loginIcon from "../public/login.png";
 export default function Sidebar() {
   const router = useRouter();
   return (
@@ -9,11 +14,25 @@ export default function Sidebar() {
         <h1>Logo</h1>
       </Logo>
       <div style={{ marginTop: "50px" }}>
-        <MenuButton onClick={() => router.push("/")}>홈</MenuButton>
-        <MenuButton>좋아요</MenuButton>
-        <MenuButton>알림</MenuButton>
-        <MenuButton>도움</MenuButton>
-        <MenuButton onClick={() => router.push("/login")}>로그인</MenuButton>
+        <MenuButton onClick={() => router.push("/")}>
+          <Image width={32} height={32} src={homeIcon} alt="" />홈
+        </MenuButton>
+        <MenuButton>
+          <Image width={30} height={30} src={likeIcon} alt="" />
+          좋아요
+        </MenuButton>
+        <MenuButton>
+          <Image width={30} height={30} src={alarmIcon} alt="" />
+          알림
+        </MenuButton>
+        <MenuButton>
+          <Image width={30} height={30} src={helpIcon} alt="" />
+          도움
+        </MenuButton>
+        <MenuButton onClick={() => router.push("/login")}>
+          <Image width={30} height={30} src={loginIcon} alt="" />
+          로그인
+        </MenuButton>
       </div>
     </Side>
   );
