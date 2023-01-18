@@ -1,3 +1,10 @@
-export default function signup() {
-  return <div>회원가입폼</div>;
-}
+import SignUpForm from "@/components/signup/SignUpForm";
+
+const SignUp = () => {
+  return (
+    <div>
+      <SignUpForm />
+    </div>
+  );
+};
+export default SignUp;
