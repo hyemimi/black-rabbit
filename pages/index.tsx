@@ -48,8 +48,9 @@ export default function Home() {
           <option>서울</option>
           <option>경기</option>
         </Selector>
-        <Input placeholder="최소" /> <h1>~</h1>
-        <Input placeholder="최대" />
+
+        <Input placeholder="최소금액" />
+        <Input placeholder="최대금액" />
         <button>가격대 설정</button>
       </FilterDiv>
       <FilterDiv>
@@ -85,6 +86,7 @@ const Banner = styled.div`
   width: 900px;
 `;
 const Input = styled.input`
+  text-align: center;
   position: relative;
   left: 0;
   right: 0;
@@ -93,8 +95,9 @@ const Input = styled.input`
   font-size: 16px;
   background-color: #c9c9c9;
   margin: 5px;
-
+  border-radius: 30px;
   border: none;
+  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
 `;
 const Title = styled.h1`
   padding-top: 100px;
