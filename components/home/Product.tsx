@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import Image from "next/image";
 import tempimage from "../../public/help.png";
-import heart from "../../public/heart.png";
+
+import { useRouter } from "next/router";
+import Heartbutton from "../common/Heartbutton";
 interface Iproduct {
   id: number;
   name: string;
@@ -10,8 +12,9 @@ interface Iproduct {
   image: string;
 }
 export default function Product({ id, name, price, detail, image }: Iproduct) {
+  const router = useRouter();
   return (
-    <Box>
+    <Box onClick={() => router.push(`/product/${id}`)}>
       <InnerBox>
         <Image src={tempimage} alt="" width={240} height={200}></Image>
         <Wrapper>
@@ -20,23 +23,13 @@ export default function Product({ id, name, price, detail, image }: Iproduct) {
             <p>{price}</p> <br />
             <p>{detail}</p>
           </Overview>
-          <Circle>
-            <Image src={heart} alt="" width={20} height={20}></Image>
-          </Circle>
+          <Heartbutton />
         </Wrapper>
       </InnerBox>
     </Box>
   );
 }
-const Circle = styled.div`
-  border-radius: 50px;
-  height: 25px;
-  width: 25px;
-  background-color: #c9c9c9;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5px;
-`;
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -49,6 +42,7 @@ const Box = styled.div`
   margin-bottom: 30px;
   margin-right: 30px;
   padding: 5px;
+  cursor: pointer;
 `;
 const InnerBox = styled.div`
   margin: 10px;
