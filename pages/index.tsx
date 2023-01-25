@@ -4,7 +4,7 @@ import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 import ProductList from "@/components/home/ProductList";
-
+import { Wrapper } from "@/components/common/Wrapper";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -68,17 +68,6 @@ export default function Home() {
     </Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1em;
-  justify-content: center;
-  width: 1000px;
-  padding-left: 550px;
-  padding-right: 10px;
-`;
 
 const Banner = styled.div`
   background-color: ${(props) => props.theme.pointColor};
