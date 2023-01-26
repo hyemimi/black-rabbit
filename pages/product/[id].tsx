@@ -11,7 +11,7 @@ export default function detail() {
           <Image src={tempimage} width={464} height={380} alt="" />
         </div>
         <DetailDiv>
-          <h1>제목</h1>
+          <Title>제목</Title>
           <p>예약날짜 선택</p>
           <ButtonDiv>
             <button>예약하기</button>
@@ -36,6 +36,7 @@ const InfoDiv = styled.div`
 const DetailDiv = styled.div`
   margin-left: 50px;
   padding: 5px;
+  width: 100%;
 `;
 const Wrapper = styled.div`
   display: flex;
@@ -44,6 +45,10 @@ const Wrapper = styled.div`
   width: 1000px;
   padding-left: 300px;
   padding-right: 10px;
+`;
+const Title = styled.h1`
+  font-size: 50px;
+  color: ${(props) => props.theme.pointColor};
 `;
 
 const Div = styled.div``;

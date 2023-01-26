@@ -50,8 +50,9 @@ export default function Home() {
         </Selector>
 
         <Input placeholder="최소금액" />
+        <Span>~</Span>
         <Input placeholder="최대금액" />
-        <button>가격대 설정</button>
+        <button>가격설정</button>
       </FilterDiv>
       <FilterDiv>
         <div>
@@ -75,18 +76,21 @@ const Banner = styled.div`
   width: 900px;
 `;
 const Input = styled.input`
-  text-align: center;
-  position: relative;
-  left: 0;
-  right: 0;
+  width: 180px;
+  height: 35px;
   padding: 5px 10px;
-  padding-left: 5px;
-  font-size: 16px;
-  background-color: #c9c9c9;
-  margin: 5px;
+  background: #f5f5f5;
+  border: 1px solid white;
   border-radius: 30px;
-  border: none;
-  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.04);
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+  color: #2b2b2b;
+`;
+const Span = styled.span`
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
 `;
 const Title = styled.h1`
   padding-top: 100px;
