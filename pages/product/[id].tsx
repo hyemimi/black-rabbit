@@ -8,15 +8,21 @@ export default function detail() {
       <InfoDiv>
         <div>
           <h1>카테고리 {`>`} 카메라</h1>
-          <Image src={tempimage} width={464} height={380} alt="" />
+          <ProductImage></ProductImage>
         </div>
         <DetailDiv>
           <Title>제목</Title>
-          <p>예약날짜 선택</p>
+          <Heartbutton />
+          <hr />
+          <Div>
+            <div>10000원 / 1일</div>
+            <div>예약날짜 선택</div>
+            <div>가격 30000원</div>
+          </Div>
+          <br />
           <ButtonDiv>
-            <button>예약하기</button>
-            <button>장바구니</button>
-            <Heartbutton />
+            <Button color="reservation">예약하기</Button>
+            <Button>장바구니</Button>
           </ButtonDiv>
         </DetailDiv>
       </InfoDiv>
@@ -29,8 +35,17 @@ export default function detail() {
   );
 }
 
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  width: 1000px;
+  padding-left: 320px;
+  padding-right: 10px;
+`;
 const InfoDiv = styled.div`
   display: flex;
+  width: 900px;
 `;
 
 const DetailDiv = styled.div`
@@ -38,20 +53,20 @@ const DetailDiv = styled.div`
   padding: 5px;
   width: 100%;
 `;
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  width: 1000px;
-  padding-left: 300px;
-  padding-right: 10px;
-`;
-const Title = styled.h1`
-  font-size: 50px;
-  color: ${(props) => props.theme.pointColor};
+
+const ProductImage = styled.div`
+  background-color: ${(props) => props.theme.searchColor};
+  width: 464px;
+  height: 380px;
 `;
 
-const Div = styled.div``;
+const Title = styled.h1`
+  font-size: 50px;
+`;
+
+const Div = styled.div`
+  padding: 30px;
+`;
 
 const Hr = styled.hr`
   color: black;
@@ -60,4 +75,22 @@ const Hr = styled.hr`
 
 const ButtonDiv = styled.div`
   display: flex;
+  margin: 30px;
+  justify-content: space-between;
+`;
+
+const Button = styled.button`
+  background-color: ${(props) =>
+    props.color ? props.theme.pointColor : props.theme.searchColor};
+  border: none;
+  cursor: pointer;
+  width: 145px;
+  height: 54px;
+  font-size: 15px;
+  transition-duration: 50ms;
+  &: hover {
+    color: rgb(254, 254, 254);
+    background-color: rgb(0, 0, 0, 1);
+    transition-duration: 100ms;
+  }
 `;
