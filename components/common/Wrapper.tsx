@@ -9,7 +9,6 @@ export const Wrapper = styled.div`
   justify-content: center;
   width: 100%;
   min-width: 1000px;
-  min-height: 100vh;
   height: fit-content;
   padding-left: 250px;
 `;
