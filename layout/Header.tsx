@@ -23,6 +23,7 @@ function Header() {
 
 export default Header;
 
+//header : 100px
 const Nav = styled.nav`
   display: flex;
   height: 100px;
