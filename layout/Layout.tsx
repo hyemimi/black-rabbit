@@ -25,4 +25,5 @@ const HeaderContainer = styled.div`
   height: 100%;
   margin-left: 250px;
   display: flex;
+  justify-content: space-between;
 `;

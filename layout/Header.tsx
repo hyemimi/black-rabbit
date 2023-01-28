@@ -23,18 +23,28 @@ function Header() {
 
 export default Header;
 
-//header : 100px
+//header  100px
 const Nav = styled.nav`
   display: flex;
   height: 100px;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  width: 1000px;
-  top: 0;
+  min-width: 1000px;
+  width: 100%;
+  top: 0px;
   font-size: 14px;
+  justify-content: space-evenly;
+
   padding: 20px 60px;
 `;
+
+/*
+top: 0px;
+width: 100vw;
+height: 70px;
+position: fixed;
+background-color: #2f2f2f;
+box-sizing: border-box;
+border-bottom: 1px solid rgb(55, 55, 55);
+*/
 
 const Col = styled.div`
   display: flex;
