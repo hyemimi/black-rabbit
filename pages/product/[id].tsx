@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Wrapper } from "@/components/common/Wrapper";
 import Image from "next/image";
 import tempimage from "../../public/help.png";
 import Heartbutton from "@/components/common/Heartbutton";
@@ -53,7 +54,7 @@ export default function detail() {
   );
 }
 
-const Wrapper = styled.div`
+/*const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
@@ -61,6 +62,7 @@ const Wrapper = styled.div`
   padding-left: 320px;
   padding-right: 10px;
 `;
+*/
 const InfoDiv = styled.div`
   display: flex;
   width: 900px;
