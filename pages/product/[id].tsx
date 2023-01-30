@@ -2,7 +2,16 @@ import styled from "styled-components";
 import Image from "next/image";
 import tempimage from "../../public/help.png";
 import Heartbutton from "@/components/common/Heartbutton";
+import React, { useState } from "react";
 export default function detail() {
+  const [selected, setSelected] = useState(true);
+  const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    if (event.currentTarget.name === "detail") {
+      setSelected(true);
+    } else {
+      setSelected(false);
+    }
+  };
   return (
     <Wrapper>
       <InfoDiv>
@@ -11,8 +20,11 @@ export default function detail() {
           <ProductImage></ProductImage>
         </div>
         <DetailDiv>
-          <Title>제목</Title>
-          <Heartbutton />
+          <h1>언더독렌탈</h1>
+          <TitleDiv>
+            <Title>Canon EOS Rebel T7 18-55mm 번들 세트</Title>
+            <Heartbutton />
+          </TitleDiv>
           <hr />
           <Div>
             <div>10000원 / 1일</div>
@@ -27,9 +39,15 @@ export default function detail() {
         </DetailDiv>
       </InfoDiv>
 
-      <Hr />
       <Div>
-        <h1>상세 설명</h1>
+        <TabDiv>
+          <Tab name="detail" onClick={onClick} selected={selected}>
+            상품 설명
+          </Tab>
+          <Tab name="review" onClick={onClick} selected={!selected}>
+            상품 리뷰
+          </Tab>
+        </TabDiv>
       </Div>
     </Wrapper>
   );
@@ -53,7 +71,11 @@ const DetailDiv = styled.div`
   padding: 5px;
   width: 100%;
 `;
-
+const TitleDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 const ProductImage = styled.div`
   background-color: ${(props) => props.theme.searchColor};
   width: 464px;
@@ -61,7 +83,8 @@ const ProductImage = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: 50px;
+  font-size: 30px;
+  font-weight: bold;
 `;
 
 const Div = styled.div`
@@ -87,10 +110,16 @@ const Button = styled.button`
   width: 145px;
   height: 54px;
   font-size: 15px;
-  transition-duration: 50ms;
-  &: hover {
-    color: rgb(254, 254, 254);
-    background-color: rgb(0, 0, 0, 1);
-    transition-duration: 100ms;
-  }
+`;
+const TabDiv = styled.div`
+  display: flex;
+  width: 900px;
+`;
+const Tab = styled(Button)<{ selected: boolean }>`
+  background-color: ${(props) =>
+    props.selected ? props.theme.pointColor : props.theme.searchColor};
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 `;
