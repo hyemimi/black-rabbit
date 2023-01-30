@@ -11,10 +11,10 @@ export default function Home() {
   return (
     <Wrapper>
       <Head>
-        <title>검은토끼</title>
+        <title>데이필름</title>
       </Head>
       <Banner>
-        <Title>검은토끼와 함께 멋진 작품을 만들어보세요</Title>
+        <Title>데이필름과 함께 멋진 작품을 만들어보세요</Title>
       </Banner>
       <FilterDiv>
         <Selector name="category">
