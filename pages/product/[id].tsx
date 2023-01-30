@@ -5,6 +5,7 @@ import tempimage from "../../public/help.png";
 import Heartbutton from "@/components/common/Heartbutton";
 import React, { useState } from "react";
 import ReviewProduct from "@/components/detail/ReviewProduct";
+import { useRouter } from "next/router";
 export default function detail() {
   const [selected, setSelected] = useState(true);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -14,6 +15,16 @@ export default function detail() {
       setSelected(false);
     }
   };
+  var user_id = 1;
+  const goCartPage = (user_id: number) => {
+    if (window.confirm("장바구니로 이동하시겠습니까?")) {
+      router.push(`/cart/${user_id}`);
+    } else {
+    }
+  };
+
+  const router = useRouter();
+  console.log(router);
   return (
     <Wrapper>
       <InfoDiv>
@@ -36,7 +47,13 @@ export default function detail() {
           <br />
           <ButtonDiv>
             <Button color="reservation">예약하기</Button>
-            <Button>장바구니</Button>
+            <Button
+              onClick={() => {
+                goCartPage(user_id);
+              }}
+            >
+              장바구니
+            </Button>
           </ButtonDiv>
         </DetailDiv>
       </InfoDiv>

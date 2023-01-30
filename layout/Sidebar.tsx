@@ -23,7 +23,7 @@ export default function Sidebar() {
           <Image width={30} height={30} src={likeIcon} alt="" />
           좋아요
         </MenuButton>
-        <MenuButton>
+        <MenuButton onClick={() => router.push(`/cart/${user_id}`)}>
           <Image width={30} height={30} src={cartIcon} alt="" />
           장바구니
         </MenuButton>
