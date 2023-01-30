@@ -4,6 +4,7 @@ import Image from "next/image";
 import tempimage from "../../public/help.png";
 import Heartbutton from "@/components/common/Heartbutton";
 import React, { useState } from "react";
+import ReviewProduct from "@/components/detail/ReviewProduct";
 export default function detail() {
   const [selected, setSelected] = useState(true);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -49,20 +50,12 @@ export default function detail() {
             상품 리뷰
           </Tab>
         </TabDiv>
+        {selected ? <></> : <ReviewProduct />}
       </Div>
     </Wrapper>
   );
 }
 
-/*const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1em;
-  width: 1000px;
-  padding-left: 320px;
-  padding-right: 10px;
-`;
-*/
 const InfoDiv = styled.div`
   display: flex;
   width: 900px;
