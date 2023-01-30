@@ -9,6 +9,7 @@ import loginIcon from "../public/login.png";
 import cartIcon from "../public/cart.png";
 export default function Sidebar() {
   const router = useRouter();
+  let user_id = 1; // 임시데이터
   return (
     <Side>
       <Logo>
@@ -18,7 +19,7 @@ export default function Sidebar() {
         <MenuButton onClick={() => router.push("/")}>
           <Image width={32} height={32} src={homeIcon} alt="" /> 홈
         </MenuButton>
-        <MenuButton>
+        <MenuButton onClick={() => router.push(`/like/${user_id}`)}>
           <Image width={30} height={30} src={likeIcon} alt="" />
           좋아요
         </MenuButton>
