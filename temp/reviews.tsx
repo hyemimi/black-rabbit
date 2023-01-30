@@ -18,4 +18,12 @@ export const reviews = [
     score: 5,
     createTime: null,
   },
+  {
+    Item_id: 1,
+    user_id: 2,
+    title: "리뷰",
+    detail: "하자가 많고 어쩌고 저쩌고 그런데 유용하고 어쩌고 저쩌고 어쩌고",
+    score: 3,
+    createTime: null,
+  },
 ];
