@@ -4,24 +4,25 @@ import tempimage from "../../public/help.png";
 
 import { useRouter } from "next/router";
 import Heartbutton from "../common/Heartbutton";
-interface Iproduct {
-  id: number;
-  name: string;
-  price: number;
-  detail: string;
-  image: string;
-}
-export default function Product({ id, name, price, detail, image }: Iproduct) {
+import { IItem } from "@/temp/items";
+
+export default function Product({
+  Item_id,
+  modelName,
+  image,
+  title,
+  pricePerOne,
+}: IItem) {
   const router = useRouter();
   return (
-    <Box onClick={() => router.push(`/product/${id}`)}>
+    <Box onClick={() => router.push(`/product/${Item_id}`)}>
       <InnerBox>
         <Image src={tempimage} alt="" width={240} height={200}></Image>
         <Wrapper>
           <Overview>
-            <h1>{name}</h1> <br />
-            <p>{price}</p> <br />
-            <p>{detail}</p>
+            <h1>{modelName}</h1> <br />
+            <p>{pricePerOne}</p> <br />
+            <p>{title}</p>
           </Overview>
           <Heartbutton />
         </Wrapper>
