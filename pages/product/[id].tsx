@@ -6,6 +6,9 @@ import Heartbutton from "@/components/common/Heartbutton";
 import React, { useState } from "react";
 import ReviewProduct from "@/components/detail/ReviewProduct";
 import { useRouter } from "next/router";
+import DatePicker from "react-datepicker";
+import DatePick from "@/components/common/DatePick";
+
 export default function detail() {
   const [selected, setSelected] = useState(true);
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -24,6 +27,8 @@ export default function detail() {
   };
 
   const router = useRouter();
+  const [startDate, setStartDate] = useState<any>(new Date());
+  const [endDate, setEndDate] = useState<any>(new Date());
   console.log(router);
   return (
     <Wrapper>
@@ -41,8 +46,10 @@ export default function detail() {
           <hr />
           <Div>
             <div>10000원 / 1일</div>
-            <div>예약날짜 선택</div>
-            <div>가격 30000원</div>
+            <div>
+              예약날짜 선택
+              <DatePick />
+            </div>
           </Div>
           <br />
           <ButtonDiv>
