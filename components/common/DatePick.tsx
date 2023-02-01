@@ -33,7 +33,6 @@ export default function () {
           excludeDates={[addDays(getDate(new Date()), 3)]}
           excludeDateIntervals={[
             { start: subDays(new Date(), 1), end: addDays(new Date(), 5) },
-            { start: addDays(new Date(), 10), end: addDays(new Date(), 30) },
           ]}
           dateFormat="yyyy-MM-dd"
           minDate={new Date()}
@@ -43,7 +42,9 @@ export default function () {
           locale={ko}
           disabledKeyboardNavigation
         />
-        가격 : {price >= 0 && price}
+        <PriceDiv>
+          <Pricebox> {price >= 0 && price} </Pricebox>원
+        </PriceDiv>
       </Div>
     </>
   );
@@ -52,12 +53,24 @@ export default function () {
 const Div = styled.div`
   font-display: row;
   justify-content: space-between;
-  align-items: center;
+
   width: 272px;
 `;
 
-const Button = styled.div`
-  width: 200px;
-  background-color: ${(props) => props.theme.pointColor};
+const PriceDiv = styled.div`
+  display: flex;
+
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  font-size: 35px;
+  margin-top: 20px;
+`;
+const Pricebox = styled.div`
+  width: 250px;
+  height: 50px;
+  border-radius: 20px;
+  background-color: ${(props) => props.theme.searchColor};
   cursor: pointer;
+  text-align: center;
 `;

@@ -27,9 +27,7 @@ export default function detail() {
   };
 
   const router = useRouter();
-  const [startDate, setStartDate] = useState<any>(new Date());
-  const [endDate, setEndDate] = useState<any>(new Date());
-  console.log(router);
+
   return (
     <Wrapper>
       <InfoDiv>
@@ -45,11 +43,8 @@ export default function detail() {
           </TitleDiv>
           <hr />
           <Div>
-            <div>10000원 / 1일</div>
-            <div>
-              예약날짜 선택
-              <DatePick />
-            </div>
+            <PriceTag>10000원 / 1일</PriceTag>
+            <DatePick />
           </Div>
           <br />
           <ButtonDiv>
@@ -62,6 +57,7 @@ export default function detail() {
               장바구니
             </Button>
           </ButtonDiv>
+          <hr />
         </DetailDiv>
       </InfoDiv>
 
@@ -87,7 +83,7 @@ const InfoDiv = styled.div`
 
 const DetailDiv = styled.div`
   margin-left: 50px;
-  padding: 5px;
+  padding: 10px;
   width: 100%;
 `;
 const TitleDiv = styled.div`
@@ -105,7 +101,11 @@ const Title = styled.h1`
   font-size: 30px;
   font-weight: bold;
 `;
-
+const PriceTag = styled.div`
+  display: flex;
+  font-size: 20px;
+  margin-bottom: 20px;
+`;
 const Div = styled.div`
   padding: 30px;
 `;
@@ -117,7 +117,8 @@ const Hr = styled.hr`
 
 const ButtonDiv = styled.div`
   display: flex;
-  margin: 30px;
+  margin: 10px;
+
   justify-content: space-between;
 `;
 
@@ -140,5 +141,12 @@ const Tab = styled(Button)<{ selected: boolean }>`
   width: 100%;
   justify-content: center;
   align-items: center;
+  display: flex;
+`;
+
+const SmallTitle = styled.div`
+  border-radius: 10px;
+  width: 200px;
+  background-color: ${(props) => props.theme.searchColor};
   display: flex;
 `;
