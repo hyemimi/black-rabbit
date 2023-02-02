@@ -44,6 +44,13 @@ export default function detail() {
           <hr />
           <Div>
             <PriceTag>10000원 / 1일</PriceTag>
+            <select>
+              <option value="">선택</option>
+              <option value="픽업">픽업</option>
+              <option value="직거래">직거래</option>
+              <option value="배송">배송</option>
+            </select>
+
             <DatePick />
           </Div>
           <br />
