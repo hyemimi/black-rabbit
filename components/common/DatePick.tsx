@@ -18,7 +18,7 @@ export default function () {
   };
   useEffect(() => {
     setIsOpen(false);
-    setPrice(onedayprice * (getDay(endDate) - getDay(startDate) + 1));
+    setPrice(onedayprice * (getDate(endDate) - getDate(startDate) + 1));
   }, [endDate]);
   return (
     <>
