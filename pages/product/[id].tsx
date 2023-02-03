@@ -11,6 +11,8 @@ import DatePick from "@/components/common/DatePick";
 
 export default function detail() {
   const [selected, setSelected] = useState(true);
+  const [count, setCount] = useState<number>(0);
+  const [method, setMethod] = useState<string | null>("");
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (event.currentTarget.name === "detail") {
       setSelected(true);
@@ -27,7 +29,14 @@ export default function detail() {
   };
 
   const router = useRouter();
-
+  const onSelectHandler = (event: any) => {
+    if (event.currentTarget.name === "count") {
+      setCount(event.currentTarget.value);
+    }
+    if (event.currentTarget.name === "method") {
+      setMethod(event.currentTarget.value);
+    }
+  };
   return (
     <Wrapper>
       <InfoDiv>
@@ -49,16 +58,16 @@ export default function detail() {
             </TitleItem>
             <TitleItem>
               <BoxName>수량</BoxName>{" "}
-              <Select>
+              <Select onChange={onSelectHandler} name="count">
                 <option value="">선택</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
               </Select>
             </TitleItem>
             <TitleItem>
               <BoxName>거래 방법</BoxName>{" "}
-              <Select>
+              <Select onChange={onSelectHandler} name="method">
                 <option value="">선택</option>
                 <option value="픽업">픽업</option>
                 <option value="직거래">직거래</option>
@@ -68,7 +77,7 @@ export default function detail() {
             <TitleItem>
               <BoxName>예약기간</BoxName>
 
-              <DatePick />
+              <DatePick count={count} />
             </TitleItem>
           </ContentDiv>
           <br />

@@ -6,7 +6,7 @@ import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
-export default function () {
+export default function ({ count }: any) {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange as any;
   const [isOpen, setIsOpen] = useState(false);
@@ -18,7 +18,7 @@ export default function () {
   };
   useEffect(() => {
     setIsOpen(false);
-    setPrice(onedayprice * (getDate(endDate) - getDate(startDate) + 1));
+    setPrice(count * onedayprice * (getDate(endDate) - getDate(startDate) + 1));
   }, [endDate]);
   return (
     <>
