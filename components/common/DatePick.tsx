@@ -30,10 +30,10 @@ export default function () {
           onChange={(update: any) => {
             setDateRange(update);
           }}
-          excludeDates={[addDays(getDate(new Date()), 3)]}
-          excludeDateIntervals={[
+          /*excludeDates={[addDays(getDate(new Date()), 3)]}*/
+          /*excludeDateIntervals={[
             { start: subDays(new Date(), 1), end: addDays(new Date(), 5) },
-          ]}
+          ]}*/
           dateFormat="yyyy-MM-dd"
           minDate={new Date()}
           closeOnScroll={true}
@@ -55,6 +55,7 @@ const Div = styled.div`
   justify-content: space-between;
 
   width: 272px;
+  margin-left: 10px;
 `;
 
 const PriceDiv = styled.div`

@@ -42,17 +42,35 @@ export default function detail() {
             <Heartbutton />
           </TitleDiv>
           <hr />
-          <Div>
-            <PriceTag>10000원 / 1일</PriceTag>
-            <select>
-              <option value="">선택</option>
-              <option value="픽업">픽업</option>
-              <option value="직거래">직거래</option>
-              <option value="배송">배송</option>
-            </select>
+          <ContentDiv>
+            <TitleItem>
+              <BoxName>가격</BoxName>
+              <Box>10000원 / 1일</Box>
+            </TitleItem>
+            <TitleItem>
+              <BoxName>수량</BoxName>{" "}
+              <Select>
+                <option value="">선택</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+              </Select>
+            </TitleItem>
+            <TitleItem>
+              <BoxName>거래 방법</BoxName>{" "}
+              <Select>
+                <option value="">선택</option>
+                <option value="픽업">픽업</option>
+                <option value="직거래">직거래</option>
+                <option value="배송">배송</option>
+              </Select>
+            </TitleItem>
+            <TitleItem>
+              <BoxName>예약기간</BoxName>
 
-            <DatePick />
-          </Div>
+              <DatePick />
+            </TitleItem>
+          </ContentDiv>
           <br />
           <ButtonDiv>
             <Button color="reservation">예약하기</Button>
@@ -64,7 +82,6 @@ export default function detail() {
               장바구니
             </Button>
           </ButtonDiv>
-          <hr />
         </DetailDiv>
       </InfoDiv>
 
@@ -108,25 +125,56 @@ const Title = styled.h1`
   font-size: 30px;
   font-weight: bold;
 `;
-const PriceTag = styled.div`
-  display: flex;
-  font-size: 20px;
-  margin-bottom: 20px;
-`;
+
 const Div = styled.div`
   padding: 30px;
 `;
-
-const Hr = styled.hr`
-  color: black;
-  width: 900px;
+const Select = styled.select`
+  width: 150px;
+  height: 30px;
+  background-color: #ececec;
+  color: gray;
+  padding-left: 5px;
+  font-size: 14px;
+  border: none;
+  margin-left: 10px;
+  option {
+    color: black;
+    background: white;
+    display: flex;
+    white-space: pre;
+    min-height: 20px;
+    padding: 0px 2px 1px;
+  }
 `;
 
-const ButtonDiv = styled.div`
+const TitleItem = styled.div`
   display: flex;
   margin: 10px;
-
+`;
+const BoxName = styled.div`
+  font-size: 20px;
+  width: 100px;
+`;
+const Box = styled.div`
+  background-color: #ececec;
+  border: none;
+  cursor: pointer;
+  width: 150px;
+  height: 30px;
+  font-size: 15px;
+  text-align: center;
+  align-items: center;
+  margin-left: 10px;
+`;
+const ContentDiv = styled.div`
+  align-items: center;
   justify-content: space-between;
+  padding: 10px;
+`;
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
 `;
 
 const Button = styled.button`
@@ -148,12 +196,5 @@ const Tab = styled(Button)<{ selected: boolean }>`
   width: 100%;
   justify-content: center;
   align-items: center;
-  display: flex;
-`;
-
-const SmallTitle = styled.div`
-  border-radius: 10px;
-  width: 200px;
-  background-color: ${(props) => props.theme.searchColor};
   display: flex;
 `;
