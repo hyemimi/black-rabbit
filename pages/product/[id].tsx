@@ -20,7 +20,8 @@ export default function detail() {
       setSelected(false);
     }
   };
-  var user_id = 1;
+  let user_id = 1;
+  let pricePerOne = 10000;
   const goCartPage = (user_id: number) => {
     if (window.confirm("장바구니로 이동하시겠습니까?")) {
       router.push(`/cart/${user_id}`);
@@ -54,7 +55,7 @@ export default function detail() {
           <ContentDiv>
             <TitleItem>
               <BoxName>가격</BoxName>
-              <Box>10000원 / 1일</Box>
+              <Box>{pricePerOne}원 / 1일</Box>
             </TitleItem>
             <TitleItem>
               <BoxName>수량</BoxName>{" "}
@@ -77,7 +78,7 @@ export default function detail() {
             <TitleItem>
               <BoxName>예약기간</BoxName>
 
-              <DatePick count={count} />
+              <DatePick pricePerOne={pricePerOne} count={count} />
             </TitleItem>
           </ContentDiv>
           <br />

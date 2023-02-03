@@ -6,19 +6,19 @@ import addDays from "date-fns/addDays";
 import format from "date-fns/format";
 import DatePicker from "react-datepicker";
 import styled from "styled-components";
-export default function ({ count }: any) {
+export default function ({ count, pricePerOne }: any) {
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange as any;
   const [isOpen, setIsOpen] = useState(false);
   const [price, setPrice] = useState<number>(0);
-  let onedayprice = 10000;
+
   const handleClick = (e: any) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
   useEffect(() => {
     setIsOpen(false);
-    setPrice(count * onedayprice * (getDate(endDate) - getDate(startDate) + 1));
+    setPrice(count * pricePerOne * (getDate(endDate) - getDate(startDate) + 1));
   }, [endDate]);
   return (
     <>
