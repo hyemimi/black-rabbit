@@ -11,14 +11,14 @@ export default function ({ count, pricePerOne }: any) {
   const [startDate, endDate] = dateRange as any;
   const [isOpen, setIsOpen] = useState(false);
   const [price, setPrice] = useState<number>(0);
-
+  console.log();
   const handleClick = (e: any) => {
     e.preventDefault();
     setIsOpen(!isOpen);
   };
   useEffect(() => {
     setIsOpen(false);
-    setPrice(count * pricePerOne * (getDate(endDate) - getDate(startDate) + 1));
+    setPrice(count * pricePerOne * getDate(endDate - startDate));
   }, [endDate]);
   return (
     <>
