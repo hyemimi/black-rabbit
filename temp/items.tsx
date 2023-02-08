@@ -34,6 +34,7 @@ export interface IItem {
   modifyTime?: string;
   use_yn?: boolean;
   permit_yn?: boolean;
+  isHeart?: boolean; // 임시로 만든 좋아요 데이터
 }
 
 //temp data
@@ -100,5 +101,6 @@ export const items = [
     modifyTime: undefined,
     use_yn: false,
     permit_yn: false,
+    isHeart: true,
   },
 ];

@@ -12,6 +12,7 @@ export default function Product({
   image,
   title,
   pricePerOne,
+  isHeart,
 }: IItem) {
   const router = useRouter();
   return (
@@ -24,7 +25,7 @@ export default function Product({
             <p>{pricePerOne}</p> <br />
             <p>{title}</p>
           </Overview>
-          <Heartbutton />
+          <Heartbutton isHeart={isHeart} />
         </Wrapper>
       </InnerBox>
     </Box>
