@@ -1,3 +1,4 @@
+import Distinguisher from "@/components/common/Distinguisher";
 import SignUpForm from "@/components/signup/IndividualSignUpForm";
 import styled from "styled-components";
 
@@ -5,7 +6,10 @@ const IndividualSignUp = () => {
   return (
     <Wrapper>
       <StyledDiv>
-        <StyledTitle>회원가입</StyledTitle>
+        <FlexDiv>
+          <StyledTitle>회원가입</StyledTitle>
+          <Distinguisher name={"개인회원"} />
+        </FlexDiv>
         <Intro>데이필름과 함께해요!</Intro>
         <SignUpForm />
       </StyledDiv>
@@ -29,12 +33,19 @@ const StyledDiv = styled.div`
   text-align: center;
 `;
 
+const FlexDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  height: 25px;
+  margin-bottom: 0.5rem;
+`;
 const StyledTitle = styled.h1`
   text-align: left;
   font-size: 1.5rem;
   font-weight: 500;
-  margin-bottom: 0.4rem;
+  line-height: 25px;
 `;
+
 const Intro = styled.h1`
   text-align: left;
   font-size: 1rem;
