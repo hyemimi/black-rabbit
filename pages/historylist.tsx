@@ -18,7 +18,7 @@ export default function historylist() {
             <H1>주문일 : 2022/11/23</H1>
             <H1>주문번호 : 12314441</H1>
           </Header>
-          <Item width="300px">{it.title}</Item>
+          <Item width="600px">{it.modelName}</Item>
         </Box>
       ))}
     </Wrapper>
