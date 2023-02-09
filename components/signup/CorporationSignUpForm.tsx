@@ -62,6 +62,16 @@ const CorporationSignUpForm = () => {
     },
     [enteredEmail, nickname, password, router]
   );
+  //사업자 등록번호 확인
+  async function corporationNumberHandler() {
+    try {
+      const response = await axios.post("/user?ID=12345");
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   //이메일
   const emailChangeHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -138,68 +148,49 @@ const CorporationSignUpForm = () => {
     <SytledForm onSubmit={submitHandler}>
       <Div>
         <div>
-          <StyledLabel htmlFor="passwordCheck">사업자 등록번호*</StyledLabel>
+          <StyledLabel htmlFor="corporation-number">
+            사업자 등록번호*
+          </StyledLabel>
+          <CheckDiv>
+            <StyledInput
+              id="number"
+              type="integer"
+              placeholder="-없이 숫자만 입력"
+              onChange={passwordConfirmChangeHandler}
+            />
+            <CheckButton onClick={corporationNumberHandler}>확인</CheckButton>
+          </CheckDiv>
+        </div>
+
+        <div>
+          <StyledLabel htmlFor="representator-name">대표자명*</StyledLabel>
           <StyledInput
-            id="passwordCheck"
-            type="password"
-            onChange={passwordConfirmChangeHandler}
+            id="representator-name"
+            type="text"
+            placeholder="대표자명"
           />
-          <br />
-          {passwordConfirm.length > 0 && (
-            <StyledSpan
-              className={`message ${isPasswordConfirm ? "success" : "error"}`}
-            >
-              {passwordConfirmMessage}
-            </StyledSpan>
-          )}
         </div>
         <div>
-          <StyledLabel htmlFor="passwordCheck">대표자명*</StyledLabel>
-          <StyledInput
-            id="passwordCheck"
-            type="password"
-            onChange={passwordConfirmChangeHandler}
-          />
-          <br />
-          {passwordConfirm.length > 0 && (
-            <StyledSpan
-              className={`message ${isPasswordConfirm ? "success" : "error"}`}
-            >
-              {passwordConfirmMessage}
-            </StyledSpan>
-          )}
-        </div>
-        <div>
-          <StyledLabel htmlFor="email">상호*</StyledLabel>
-          <StyledInput
-            id="email"
-            type="email"
-            placeholder="이메일을 입력해주세요."
-            onChange={emailChangeHandler}
-          />
-          <br />
-          {enteredEmail.length > 0 && (
-            <StyledSpan className={`message ${isEmail ? "success" : "error"}`}>
-              {emailMessage}
-            </StyledSpan>
-          )}
+          <StyledLabel htmlFor="brand-name">상호*</StyledLabel>
+          <StyledInput id="brand-name" type="text" placeholder="상호" />
         </div>
 
         <div>
           <StyledLabel htmlFor="password">사업장 주소*</StyledLabel>
-          <StyledInput
-            id="password"
-            type="password"
-            onChange={passwordChangeHandler}
-          />
-          <br />
-          {password.length > 0 && (
-            <StyledSpan
-              className={`message ${isPassword ? "success" : "error"}`}
-            >
-              {passwordMessage}
-            </StyledSpan>
-          )}
+          <CheckDiv>
+            <StyledInput
+              id="address-number"
+              type="integer"
+              onChange={passwordChangeHandler}
+              placeholder="우편번호"
+            />
+            <CheckButton>
+              주소
+              <br /> 검색
+            </CheckButton>
+          </CheckDiv>
+          <StyledInput id="address-basic" type="text" placeholder="기본주소" />
+          <StyledInput id="address-detail" type="text" placeholder="상세주소" />
         </div>
 
         <div>
@@ -207,33 +198,30 @@ const CorporationSignUpForm = () => {
           <StyledInput
             id="passwordCheck"
             type="password"
+            placeholder="입점 담당자명"
             onChange={passwordConfirmChangeHandler}
           />
-          <br />
-          {passwordConfirm.length > 0 && (
-            <StyledSpan
-              className={`message ${isPasswordConfirm ? "success" : "error"}`}
-            >
-              {passwordConfirmMessage}
-            </StyledSpan>
-          )}
         </div>
 
         <div>
-          <StyledLabel htmlFor="nickname">정산계좌*</StyledLabel>
-          <StyledInput
-            id="nickname"
-            type="string"
-            onChange={nicknameChangeHandler}
-          />
+          <StyledLabel htmlFor="account-number">정산계좌*</StyledLabel>
+          <CheckDiv>
+            <StyledInput
+              id="account-number"
+              type="integer"
+              placeholder="-없이 숫자만 입력"
+            />
+            <CheckButton>인증</CheckButton>
+          </CheckDiv>
         </div>
+
         <StyledHr />
         <div>
           <StyledLabel htmlFor="email">입점 담당자 이메일*</StyledLabel>
           <StyledInput
             id="email"
             type="email"
-            placeholder="이메일을 입력해주세요."
+            placeholder="이메일"
             onChange={emailChangeHandler}
           />
           <br />
@@ -249,6 +237,7 @@ const CorporationSignUpForm = () => {
           <StyledInput
             id="password"
             type="password"
+            placeholder="숫자, 영문자, 특수문자 조합 8글자 이상"
             onChange={passwordChangeHandler}
           />
           <br />
@@ -266,6 +255,7 @@ const CorporationSignUpForm = () => {
           <StyledInput
             id="passwordCheck"
             type="password"
+            placeholder="비밀번호 확인"
             onChange={passwordConfirmChangeHandler}
           />
           <br />
@@ -300,8 +290,9 @@ const CorporationSignUpForm = () => {
           </Link>
         </div>
         <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
+          <Link href="#">
+            <input name="terms" type="checkbox" />
+
             <StyledLabel>위치기반 서비스 이용 약관(필수)</StyledLabel>
           </Link>
         </div>
@@ -360,4 +351,24 @@ const StyledSpan = styled.span`
   font-size: small;
   color: ${(props) =>
     props.className == "message error" ? "#e01c1c" : "#02A913"};
+`;
+
+const CheckButton = styled.button`
+  margin-left: 1rem;
+  height: 2.5rem;
+  width: 4rem;
+  background: #b9d9c0;
+  border-radius: 10px;
+  border: 0;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background: #d9d9d9;
+  }
+`;
+
+const CheckDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
