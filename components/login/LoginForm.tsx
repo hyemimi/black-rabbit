@@ -108,6 +108,7 @@ const Button = styled.button`
   margin: 3rem auto;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 
   &:hover {
     background: #b9d9c0;
