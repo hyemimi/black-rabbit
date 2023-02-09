@@ -68,6 +68,7 @@ const Div = styled.div`
   border-radius: 10px;
 
   &:hover {
-    background: #d9d9d9;
+    border: 0;
+    background: #b6dcbe;
   }
 `;
