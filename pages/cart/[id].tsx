@@ -1,6 +1,7 @@
 import CartList from "@/components/cart/CartList";
 import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
+import { TitleDiv } from "@/components/common/TitleDiv";
 
 export default function Cart() {
   return (
@@ -32,14 +33,6 @@ export default function Cart() {
   );
 }
 
-const TitleDiv = styled.div`
-  width: 900px;
-
-  h1 {
-    font-size: 25px;
-  }
-  padding: 7px;
-`;
 const Hr = styled.div`
   border: 1.5px solid gray;
   margin-top: 10px;
@@ -66,7 +59,6 @@ const ButtonDiv = styled.div`
 `;
 const Title = styled.div`
   display: flex;
-
   align-items: center;
 `;
 const Name = styled.h1`
