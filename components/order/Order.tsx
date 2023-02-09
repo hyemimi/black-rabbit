@@ -1,9 +1,10 @@
 import { IItem } from "@/temp/items";
 import styled from "styled-components";
+import { Box, Item } from "../common/Box";
 
 export default function Order({ brandName, modelName, image }: IItem) {
   return (
-    <ItemDiv>
+    <>
       <Box>
         <Header>
           <H1>2022.2.2 주문</H1>
@@ -21,7 +22,7 @@ export default function Order({ brandName, modelName, image }: IItem) {
           </Item>
         </InnerBox>
       </Box>
-    </ItemDiv>
+    </>
   );
 }
 
@@ -49,21 +50,7 @@ const ImageDiv = styled.div`
   background-color: ${(props) => props.theme.pointColor};
   margin-top: 25px;
 `;
-const Box = styled.div`
-  width: 900px;
-  height: 300px;
-  border: 1px solid #d9d9d9;
-  padding: 20px;
-`;
 
 const InnerBox = styled.div`
   display: flex;
-`;
-const Item = styled.div<{ width: string }>`
-  margin: 10px;
-  width: ${(props) => props.width};
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
-  font-size: 30px;
 `;
