@@ -1,7 +1,6 @@
 import LoginForm from "@/components/login/LoginForm";
 import styled from "styled-components";
 import Link from "next/link";
-import ToggleButton from "@/components/common/ToggleButton";
 
 export default function login() {
   return (
@@ -14,9 +13,6 @@ export default function login() {
             회원가입하기
           </StyledLink>
         </Intro>
-
-        <ToggleButton />
-
         <LoginForm></LoginForm>
       </StyledDiv>
     </Wrapper>
