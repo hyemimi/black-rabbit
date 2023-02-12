@@ -12,9 +12,11 @@ export default function myreview() {
       </TitleDiv>
       {items.map((item) => (
         <ReviewBox height="135px">
-          <ImageDiv>배경</ImageDiv>
-          {item.brandName}
-          {item.modelName}
+          <ImageDiv></ImageDiv>
+          <H1>
+            {item.brandName}
+            {item.modelName}
+          </H1>
           <h1>리뷰보기 &gt;</h1>
         </ReviewBox>
       ))}
@@ -26,6 +28,10 @@ const ImageDiv = styled.div`
   background-color: ${(props) => props.theme.searchColor};
   width: 200px;
   height: 100%;
+`;
+const H1 = styled.div`
+  font-weight: bold;
+  font-size: 20px;
 `;
 const ReviewBox = styled(Box)`
   text-align: center;
