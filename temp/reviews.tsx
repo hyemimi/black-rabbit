@@ -26,4 +26,12 @@ export const reviews = [
     score: 3,
     createTime: null,
   },
+  {
+    Item_id: 1,
+    user_id: 3,
+    title: "리뷰입니다",
+    detail: "별로에요",
+    score: 1,
+    createTime: null,
+  },
 ];
