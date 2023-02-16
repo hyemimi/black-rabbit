@@ -11,7 +11,7 @@ const user_id = 1; // 임시 유저id 데이터
 export const menuList = [
   { ref: "/", label: homeIcon, text: "홈" },
   { ref: "/like", label: likeIcon, text: "좋아요" },
-  { ref: `/cart/${user_id}`, label: cartIcon, text: "장바구니" },
+  { ref: "/cart", label: cartIcon, text: "장바구니" },
   { ref: "/", label: helpIcon, text: "도움" },
   { ref: "/", label: alarmIcon, text: "알림" },
   { ref: "/login", label: loginIcon, text: "로그인" },
@@ -21,7 +21,7 @@ export const menuList = [
 export const ImenuList = [
   { ref: "/", label: homeIcon, text: "홈" },
   {
-    ref: `/like`,
+    ref: "/orderlist",
     label: likeIcon,
     text: "주문/배송",
     dropmenu: [
