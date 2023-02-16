@@ -1,8 +1,8 @@
-import CartList from "@/components/cart/CartList";
 import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
 import { TitleDiv } from "@/components/common/TitleDiv";
-
+import { items } from "@/temp/items";
+import CartItem from "@/components/cart/CartItem";
 export default function Cart() {
   return (
     <Wrapper>
@@ -19,7 +19,9 @@ export default function Cart() {
           </Title>
         </MenuBar>
       </TitleDiv>
-      <CartList />
+      {items.map((item) => (
+        <CartItem key={item.Item_id} {...item} />
+      ))}
       <TotalBox>총 결제 금액 | 어쩌구</TotalBox>
       <ButtonDiv>
         <Button height="86px" width="290px" color="delete">
