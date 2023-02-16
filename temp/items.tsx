@@ -118,7 +118,7 @@ export const items = [
     pricePerTen: 180000,
     image: "",
     brandName: "Canon",
-    modelName: "Canon EOS Rebel T7 18-55mm 번들 세트",
+    modelName: "ㅇㅇㅇㅇㅇ",
     status: {
       status: "보통",
       number: 1,
@@ -136,7 +136,7 @@ export const items = [
     isHeart: true,
   },
   {
-    Item_id: 2,
+    Item_id: 4,
     owner_id: 1,
     owner_name: "언더독렌탈",
     title: "사용에 편리함",
@@ -150,7 +150,7 @@ export const items = [
     pricePerTen: 180000,
     image: "",
     brandName: "Canon",
-    modelName: "Canon EOS Rebel T7 18-55mm 번들 세트",
+    modelName: "EOS Rebel",
     status: {
       status: "보통",
       number: 1,
@@ -168,7 +168,7 @@ export const items = [
     isHeart: true,
   },
   {
-    Item_id: 2,
+    Item_id: 5,
     owner_id: 1,
     owner_name: "언더독렌탈",
     title: "사용에 편리함",
@@ -182,7 +182,7 @@ export const items = [
     pricePerTen: 180000,
     image: "",
     brandName: "Canon",
-    modelName: "Canon EOS Rebel T7 18-55mm 번들 세트",
+    modelName: "C세트",
     status: {
       status: "보통",
       number: 1,
@@ -200,7 +200,7 @@ export const items = [
     isHeart: true,
   },
   {
-    Item_id: 2,
+    Item_id: 6,
     owner_id: 1,
     owner_name: "언더독렌탈",
     title: "사용에 편리함",
@@ -214,7 +214,7 @@ export const items = [
     pricePerTen: 180000,
     image: "",
     brandName: "Canon",
-    modelName: "Canon EOS Rebel T7 18-55mm 번들 세트",
+    modelName: "T7",
     status: {
       status: "보통",
       number: 1,

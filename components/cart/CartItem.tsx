@@ -1,5 +1,7 @@
 import { IItem } from "@/temp/items";
 import styled from "styled-components";
+import { useState } from "react";
+
 export default function CartItem({
   Item_id,
   modelName,
@@ -9,35 +11,21 @@ export default function CartItem({
   brandName,
   method,
 }: IItem) {
-  // 체크박스 상태 관리는 recoil로 하기
   return (
-    <ItemDiv>
-      <SelectBox>
-        <input type="checkbox"></input>
-      </SelectBox>
-      <ItemBox>
-        <ImageDiv>{image}</ImageDiv>
-        <Item>
-          <h1>
-            {brandName} {modelName}
-          </h1>
-        </Item>
-        <Item>{pricePerOne}</Item>
-        <Item>{pricePerOne}</Item>
-        <Item>{pricePerOne}</Item>
-      </ItemBox>
-    </ItemDiv>
+    <ItemBox>
+      <ImageDiv>{image}</ImageDiv>
+      <Item>
+        <h1>
+          {brandName} {modelName}
+        </h1>
+      </Item>
+      <Item>{pricePerOne}</Item>
+      <Item>{pricePerOne}</Item>
+      <Item>{pricePerOne}</Item>
+    </ItemBox>
   );
 }
-const ItemDiv = styled.div`
-  display: flex;
-`;
-const SelectBox = styled.div`
-  width: 68px;
-  height: 118px;
-  background-color: ${(props) => props.theme.pointColor};
-  padding: 25px;
-`;
+
 const ImageDiv = styled.div`
   width: 200px;
 `;
