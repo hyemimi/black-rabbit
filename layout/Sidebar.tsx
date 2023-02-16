@@ -1,44 +1,47 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import homeIcon from "../public/home.png";
-import likeIcon from "../public/heart.png";
-import alarmIcon from "../public/bell.png";
 import Image from "next/image";
-import helpIcon from "../public/help.png";
-import loginIcon from "../public/login.png";
-import cartIcon from "../public/cart.png";
+import { menuList, ImenuList } from "./Menu";
+import { useState } from "react";
 export default function Sidebar() {
+  const [Iuser, setIuser] = useState(null);
+  const [Isopen, setIsopen] = useState(false);
   const router = useRouter();
-  let user_id = 1; // 임시데이터
+  let user_id = 1; // 임시 유저id 데이터
+
   return (
     <Side>
       <Logo>
         <h1>데이필름</h1>
       </Logo>
       <div style={{ marginTop: "50px" }}>
-        <MenuButton onClick={() => router.push("/")}>
-          <Image width={32} height={32} src={homeIcon} alt="" /> 홈
-        </MenuButton>
-        <MenuButton onClick={() => router.push(`/like/${user_id}`)}>
-          <Image width={30} height={30} src={likeIcon} alt="" />
-          좋아요
-        </MenuButton>
-        <MenuButton onClick={() => router.push(`/cart/${user_id}`)}>
-          <Image width={30} height={30} src={cartIcon} alt="" />
-          장바구니
-        </MenuButton>
-        <MenuButton>
-          <Image width={30} height={30} src={alarmIcon} alt="" />
-          알림
-        </MenuButton>
-        <MenuButton>
-          <Image width={30} height={30} src={helpIcon} alt="" />
-          도움
-        </MenuButton>
-        <MenuButton onClick={() => router.push("/login")}>
-          <Image width={30} height={30} src={loginIcon} alt="" />
-          로그인
-        </MenuButton>
+        {ImenuList.map((menu) => (
+          <MenuButton
+            key={menu.text}
+            onClick={() => {
+              router.push(menu.ref);
+              setIsopen(!Isopen);
+            }}
+          >
+            <Image width={32} height={32} src={menu.label} alt="" /> {menu.text}
+            {Isopen &&
+              menu.dropmenu?.map((dropmenu) => (
+                <MenuButton
+                  key={dropmenu.text}
+                  onClick={() => router.push(dropmenu.ref)}
+                >
+                  {" "}
+                  <h4
+                    onClick={() => {
+                      setIsopen(true);
+                    }}
+                  >
+                    {dropmenu.text}
+                  </h4>
+                </MenuButton>
+              ))}
+          </MenuButton>
+        ))}
       </div>
     </Side>
   );
@@ -58,6 +61,9 @@ const Side = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  h4 {
+    font-size: 15px;
+  }
 `;
 const Logo = styled.div`
   margin: 10px;
