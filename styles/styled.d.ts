@@ -6,5 +6,6 @@ declare module "styled-components" {
     pointColor: string;
     textColor: string;
     searchColor: string;
+    modalColor: string;
   }
 }
