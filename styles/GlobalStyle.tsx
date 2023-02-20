@@ -55,8 +55,8 @@ body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
   line-height : 1.2;
-  color : ${(props) => props.theme.white.darker};
-  background-color : ${(props) => props.theme.black.lighter};
+  color : ${(props) => props.theme.textColor};
+  background-color : ${(props) => props.theme.bgColor};
   overflow-x : hidden;
   
 }
