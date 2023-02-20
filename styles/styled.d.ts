@@ -5,5 +5,7 @@ declare module "styled-components" {
     bgColor: string;
     pointColor: string;
     textColor: string;
+    searchColor: string;
+    modalColor: string;
   }
 }
