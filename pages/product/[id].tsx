@@ -53,10 +53,18 @@ export default function detail() {
           </TitleDiv>
           <hr />
           <ContentDiv>
-            <TitleItem>
-              <BoxName>가격</BoxName>
-              <Box>{pricePerOne}원 / 1일</Box>
-            </TitleItem>
+            <PriceTag>
+              <GreenBox>1일당</GreenBox>
+              <GrayBox>{pricePerOne}</GrayBox>
+            </PriceTag>
+            <PriceTag>
+              <GreenBox>5일이상 대여시</GreenBox>
+              <GrayBox>{pricePerOne}</GrayBox>
+            </PriceTag>
+            <PriceTag>
+              <GreenBox>10일이상 대여시</GreenBox>
+              <GrayBox>{pricePerOne}</GrayBox>
+            </PriceTag>
             <TitleItem>
               <BoxName>수량</BoxName>{" "}
               <Select onChange={onSelectHandler} name="count">
@@ -157,26 +165,31 @@ const Select = styled.select`
     padding: 0px 2px 1px;
   }
 `;
-
+const GreenBox = styled.div`
+  background-color: ${(props) => props.theme.pointColor};
+  width: 130px;
+  text-align: center;
+  height: 30px;
+  padding: 5px;
+`;
+const GrayBox = styled.div`
+  padding: 5px;
+  width: 250px;
+  text-align: center;
+  background-color: ${(props) => props.theme.searchColor};
+`;
 const TitleItem = styled.div`
   display: flex;
   margin: 10px;
+`;
+const PriceTag = styled.div`
+  display: flex;
 `;
 const BoxName = styled.div`
   font-size: 20px;
   width: 100px;
 `;
-const Box = styled.div`
-  background-color: #ececec;
-  border: none;
-  cursor: pointer;
-  width: 150px;
-  height: 30px;
-  font-size: 15px;
-  text-align: center;
-  align-items: center;
-  margin-left: 10px;
-`;
+
 const ContentDiv = styled.div`
   align-items: center;
   justify-content: space-between;
