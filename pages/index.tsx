@@ -44,7 +44,12 @@ export default function Home() {
     if (event.currentTarget.name === "category") {
       /* 카테고리 필터 */
       setSelectedCat(event.currentTarget.value);
-      setSearch({ ...search, category: event.currentTarget.value });
+      if (event.currentTarget.value === "전체") {
+        delete search.category;
+        setSearch({ ...search });
+      } else {
+        setSearch({ ...search, category: event.currentTarget.value });
+      }
     }
     if (event.currentTarget.name === "method") {
       /* 거래방법 필터 */
@@ -72,7 +77,9 @@ export default function Home() {
           name="category"
           value={selectedCat}
         >
-          <option defaultValue="분류">분류</option>
+          <option value={"전체"} defaultChecked={true}>
+            전체
+          </option>
           {CategoryList.map((category) => (
             <option key={category.value} value={category.value}>
               {category.name}
