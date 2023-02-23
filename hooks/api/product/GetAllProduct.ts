@@ -12,13 +12,13 @@ export interface AllProductQueryParam {
   unpaged?: boolean;
 }
 
-export function useGetAllProduct(search: AllProductQueryParam) {
+export function useGetAllProduct(search?: AllProductQueryParam) {
   const fetchAllProduct = () => {
     return instance.get("/items/all", { params: search });
   };
-  const { data: items } = useQuery(
+  const { data: items, refetch } = useQuery(
     ["allProduct"],
     async () => await fetchAllProduct()
   );
-  return { items };
+  return { items, refetch };
 }

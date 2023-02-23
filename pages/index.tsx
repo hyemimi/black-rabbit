@@ -1,13 +1,17 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 import ProductList from "@/components/home/ProductList";
 import { Wrapper } from "@/components/common/Wrapper";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { AllProductQueryParam } from "@/hooks/api/product/GetAllProduct";
+import {
+  AllProductQueryParam,
+  useGetAllProduct,
+} from "@/hooks/api/product/GetAllProduct";
+import { instance } from "@/libs/api/client";
+import { useQueryClient } from "@tanstack/react-query";
 const inter = Inter({ subsets: ["latin"] });
 
 /* 카테고리 리스트 입니다*/
@@ -24,25 +28,33 @@ const CategoryList = [
 
 export default function Home() {
   const router = useRouter();
-  const [search, setSearch] = useState<AllProductQueryParam | null>({
+  const [search, setSearch] = useState<AllProductQueryParam>({
     paged: true,
-    category: "DRONE",
   });
   const [selectedCat, setSelectedCat] = useState<string>("");
   const [selectedMet, setSelectedMet] = useState<string>("");
   const [selectedWhe, setSelectedWhe] = useState<string>("");
+  const { items, refetch } = useGetAllProduct(search);
 
+  useEffect(() => {
+    refetch();
+  }, [search]);
+  console.log(search);
   const onSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.currentTarget.name === "category") {
+      /* 카테고리 필터 */
       setSelectedCat(event.currentTarget.value);
-      setSearch({ category: selectedCat, ...search });
-      console.log(search);
+      setSearch({ ...search, category: event.currentTarget.value });
     }
     if (event.currentTarget.name === "method") {
+      /* 거래방법 필터 */
       setSelectedMet(event.currentTarget.value);
+      //setSearch({ ...search, method: event.currentTarget.value });
     }
     if (event.currentTarget.name === "where") {
+      /* 지역 필터 */
       setSelectedWhe(event.currentTarget.value);
+      //setSearch({ ...search, where: event.currentTarget.value });
     }
   };
 
@@ -60,9 +72,7 @@ export default function Home() {
           name="category"
           value={selectedCat}
         >
-          <option disabled value="분류">
-            분류
-          </option>
+          <option defaultValue="분류">분류</option>
           {CategoryList.map((category) => (
             <option key={category.value} value={category.value}>
               {category.name}
