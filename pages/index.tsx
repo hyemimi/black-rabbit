@@ -1,14 +1,30 @@
 import Head from "next/head";
-import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 import ProductList from "@/components/home/ProductList";
 import { Wrapper } from "@/components/common/Wrapper";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useGetAllProduct } from "@/hooks/api/product/GetAllProduct";
+import { useRouter } from "next/router";
+import {
+  AllProductQueryParam,
+  useGetAllProduct,
+} from "@/hooks/api/product/GetAllProduct";
+import { instance } from "@/libs/api/client";
+import { useQueryClient } from "@tanstack/react-query";
 const inter = Inter({ subsets: ["latin"] });
+
+/* 카테고리 리스트 입니다*/
+const CategoryList = [
+  { value: "CAMERA", name: "카메라" },
+  { value: "LENS", name: "렌즈" },
+  { value: "CAMCORDER", name: "캠코더" },
+  { value: "DRONE", name: "드론, 액션캠" },
+  { value: "MIC", name: "음향 및 마이크" },
+  { value: "LIGHT", name: "조명" },
+  { value: "ACCESSORY", name: "액세서리" },
+  { value: "ETC", name: "기타" },
+];
 
 export default function Home() {
   const router = useRouter();
@@ -36,12 +52,12 @@ export default function Home() {
       }
     }
     if (event.currentTarget.name === "method") {
-      /* 거래방법 필터 - 미구현*/
+      /* 거래방법 필터 */
       setSelectedMet(event.currentTarget.value);
       //setSearch({ ...search, method: event.currentTarget.value });
     }
     if (event.currentTarget.name === "where") {
-      /* 지역 필터 - 미구현 */
+      /* 지역 필터 */
       setSelectedWhe(event.currentTarget.value);
       //setSearch({ ...search, where: event.currentTarget.value });
     }
@@ -56,22 +72,22 @@ export default function Home() {
         <Title>데이필름과 함께 멋진 작품을 만들어보세요</Title>
       </Banner>
       <FilterDiv>
-        <Selector name="category">
-          <option disabled selected>
-            분류
+        <Selector
+          onChange={onSelectorChange}
+          name="category"
+          value={selectedCat}
+        >
+          <option value={"전체"} defaultChecked={true}>
+            전체
           </option>
-          <option>전체</option>
-          <option>카메라</option>
-          <option>렌즈</option>
-          <option>캠코더</option>
-          <option>드론, 액션캠</option>
-          <option>음향 및 마이크</option>
-          <option>조명</option>
-          <option>액세서리</option>
-          <option>기타</option>
+          {CategoryList.map((category) => (
+            <option key={category.value} value={category.value}>
+              {category.name}
+            </option>
+          ))}
         </Selector>
-        <Selector name="how">
-          <option disabled selected>
+        <Selector name="method">
+          <option disabled value="거래방법">
             거래방법
           </option>
           <option>전체</option>
@@ -80,7 +96,7 @@ export default function Home() {
           <option>직거래</option>
         </Selector>
         <Selector name="where">
-          <option disabled selected>
+          <option disabled value="지역">
             지역
           </option>
           <option>전체</option>
