@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, InputHTMLAttributes } from "react";
+import { useState, useCallback, InputHTMLAttributes, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
@@ -39,26 +39,27 @@ const IndividualSignUpForm = () => {
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
   const router = useRouter();
 
+  const REGISTER_USERS_URL = "/sign/user";
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log({ enteredEmail, nickname, password, passwordConfirm });
-      // try {
-      //   await axios
-      //     .post(REGISTER_USERS_URL, {
-      //       username: name,
-      //       password: password,
-      //       email: email,
-      //     })
-      //     .then((res) => {
-      //       console.log('response:', res)
-      //       if (res.status === 200) {
-      //         router.push('/sign_up/profile_start')
-      //       }
-      //     })
-      // } catch (err) {
-      //   console.error(err)
-      // }
+      try {
+        await axios
+          .post(REGISTER_USERS_URL, {
+            email: enteredEmail,
+            nickname: nickname,
+            pw: password,
+          })
+          .then((res) => {
+            console.log("response:", res);
+            if (res.status === 200) {
+              router.push("/sign_up/profile_start");
+            }
+          });
+      } catch (err) {
+        console.error(err);
+      }
     },
     [enteredEmail, nickname, password, router]
   );
