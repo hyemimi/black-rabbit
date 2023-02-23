@@ -19,10 +19,6 @@ export default function test() {
     });
   };
 
-  // 커스텀 useQuery 훅 불러오기
-  const { items } = useGetAllProduct();
-  console.log(items);
-
   return (
     <Wrapper>
       <button onClick={onSignUpClick}>클릭</button>

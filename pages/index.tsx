@@ -5,9 +5,48 @@ import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 import ProductList from "@/components/home/ProductList";
 import { Wrapper } from "@/components/common/Wrapper";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import { useGetAllProduct } from "@/hooks/api/product/GetAllProduct";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
+  const router = useRouter();
+  const [search, setSearch] = useState<AllProductQueryParam>({
+    paged: true,
+  });
+  const [selectedCat, setSelectedCat] = useState<string>("");
+  const [selectedMet, setSelectedMet] = useState<string>("");
+  const [selectedWhe, setSelectedWhe] = useState<string>("");
+  const { items, refetch } = useGetAllProduct(search);
+
+  useEffect(() => {
+    refetch();
+  }, [search]);
+  console.log(search);
+  const onSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.currentTarget.name === "category") {
+      /* 카테고리 필터 */
+      setSelectedCat(event.currentTarget.value);
+      if (event.currentTarget.value === "전체") {
+        delete search.category;
+        setSearch({ ...search });
+      } else {
+        setSearch({ ...search, category: event.currentTarget.value });
+      }
+    }
+    if (event.currentTarget.name === "method") {
+      /* 거래방법 필터 - 미구현*/
+      setSelectedMet(event.currentTarget.value);
+      //setSearch({ ...search, method: event.currentTarget.value });
+    }
+    if (event.currentTarget.name === "where") {
+      /* 지역 필터 - 미구현 */
+      setSelectedWhe(event.currentTarget.value);
+      //setSearch({ ...search, where: event.currentTarget.value });
+    }
+  };
+
   return (
     <Wrapper>
       <Head>
