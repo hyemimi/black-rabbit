@@ -1,14 +1,16 @@
-import { Box } from "@/components/common/Box";
 import { TitleDiv } from "@/components/common/TitleDiv";
 import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
+import { DaumPostcodeEmbed } from "react-daum-postcode";
+import SearchAddress from "@/components/common/SearchAddress";
+
 export default function addresslist() {
   return (
     <Wrapper>
       <TitleDiv>
         <h1>배송지 관리</h1>
       </TitleDiv>
-
+      <SearchAddress />
       <ItemDiv>
         <SelectBox>
           <input type="checkbox"></input>
@@ -21,7 +23,6 @@ export default function addresslist() {
       </ItemDiv>
       <ButtonDiv>
         <Button color="delete">삭제</Button>
-        <Button>저장</Button>
       </ButtonDiv>
     </Wrapper>
   );
