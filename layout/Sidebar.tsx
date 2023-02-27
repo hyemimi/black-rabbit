@@ -6,20 +6,26 @@ import alarmIcon from "../public/bell.png";
 import Image from "next/image";
 import helpIcon from "../public/help.png";
 import loginIcon from "../public/login.png";
+import cartIcon from "../public/cart.png";
 export default function Sidebar() {
   const router = useRouter();
+  let user_id = 1; // 임시데이터
   return (
     <Side>
       <Logo>
-        <h1>Logo</h1>
+        <h1>데이필름</h1>
       </Logo>
-      <div style={{ marginTop: "50px" }}>
+      <Div>
         <MenuButton onClick={() => router.push("/")}>
-          <Image width={32} height={32} src={homeIcon} alt="" />홈
+          <Image width={32} height={32} src={homeIcon} alt="" /> 홈
         </MenuButton>
-        <MenuButton>
+        <MenuButton onClick={() => router.push(`/like/${user_id}`)}>
           <Image width={30} height={30} src={likeIcon} alt="" />
           좋아요
+        </MenuButton>
+        <MenuButton onClick={() => router.push(`/cart/${user_id}`)}>
+          <Image width={30} height={30} src={cartIcon} alt="" />
+          장바구니
         </MenuButton>
         <MenuButton>
           <Image width={30} height={30} src={alarmIcon} alt="" />
@@ -33,11 +39,13 @@ export default function Sidebar() {
           <Image width={30} height={30} src={loginIcon} alt="" />
           로그인
         </MenuButton>
-      </div>
+      </Div>
     </Side>
   );
 }
-
+const Div = styled.div`
+  margin-top: 50px;
+`;
 const Side = styled.div`
   position: fixed;
   padding-top: 30px;
@@ -64,7 +72,6 @@ const Logo = styled.div`
   }
 `;
 const MenuButton = styled.div`
-  margin: 5px;
   height: fit-content;
   font-size: 20px;
   padding: 10px;

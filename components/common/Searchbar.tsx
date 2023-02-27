@@ -47,7 +47,7 @@ const Input = styled.input`
   padding: 5px 10px;
   padding-left: 5px;
   font-size: 16px;
-  background-color: #c9c9c9;
+  background-color: ${(props) => props.theme.searchColor};
   border-radius: 20px;
   border: none;
   height: 40px;
