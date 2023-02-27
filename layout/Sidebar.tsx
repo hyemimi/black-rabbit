@@ -15,7 +15,7 @@ export default function Sidebar() {
       <Logo>
         <h1>데이필름</h1>
       </Logo>
-      <div style={{ marginTop: "50px" }}>
+      <Div>
         <MenuButton onClick={() => router.push("/")}>
           <Image width={32} height={32} src={homeIcon} alt="" /> 홈
         </MenuButton>
@@ -39,11 +39,13 @@ export default function Sidebar() {
           <Image width={30} height={30} src={loginIcon} alt="" />
           로그인
         </MenuButton>
-      </div>
+      </Div>
     </Side>
   );
 }
-
+const Div = styled.div`
+  margin-top: 50px;
+`;
 const Side = styled.div`
   position: fixed;
   padding-top: 30px;
