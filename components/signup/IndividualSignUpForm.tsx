@@ -5,15 +5,11 @@ import { useState, useCallback, InputHTMLAttributes, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
-
-interface SignUp {
-  email: string;
-  password: string;
-  passwordCheck: string;
-  nickname: string;
-}
+import AgreeTerms from "./AgreeTerms";
 
 const IndividualSignUpForm = () => {
+ 
+
   //react-hook-form 사용을 위한 함수 호출
   const { register, handleSubmit } = useForm();
 
@@ -39,7 +35,7 @@ const IndividualSignUpForm = () => {
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
   const router = useRouter();
 
-  const REGISTER_USERS_URL = "/sign/user";
+  const REGISTER_USERS_URL = "http://15.165.101.95:8080/sign/user";
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -54,7 +50,7 @@ const IndividualSignUpForm = () => {
           .then((res) => {
             console.log("response:", res);
             if (res.status === 200) {
-              router.push("/sign_up/profile_start");
+              router.push("/signup/completed");
             }
           });
       } catch (err) {
@@ -135,6 +131,9 @@ const IndividualSignUpForm = () => {
     []
   );
 
+  const nickNameCheckHandler = () => {
+    //서버에 닉네임 중복 검사
+  };
   return (
     <SytledForm onSubmit={submitHandler}>
       <Div>
@@ -194,47 +193,24 @@ const IndividualSignUpForm = () => {
 
         <div>
           <StyledLabel htmlFor="nickname">닉네임*</StyledLabel>
-          <StyledInput
-            id="nickname"
-            type="string"
-            placeholder="닉네임"
-            onChange={nicknameChangeHandler}
-          />
+          <CheckDiv>
+            <StyledInput
+              id="nickname"
+              type="string"
+              placeholder="닉네임"
+              onChange={nicknameChangeHandler}
+            />
+            <CheckButton onClick={nickNameCheckHandler}>
+              중복
+              <br />
+              확인
+            </CheckButton>
+          </CheckDiv>
         </div>
       </Div>
 
       <Div>
-        <StyledH1>약관동의</StyledH1>
-        <input type="checkbox" name="terms" />
-        <StyledLabel htmlFor="allTermsAgree">
-          약관에 모두 동의합니다.
-        </StyledLabel>
-        <StyledHr />
-
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>서비스 이용 약관(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>개인정보 처리방침(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>위치기반 서비스 이용 약관(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>프로모션 알림 메일 및 SMS 수신(선택)</StyledLabel>
-          </Link>
-        </div>
+       <AgreeTerms/>
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -284,4 +260,24 @@ const StyledSpan = styled.span`
   font-size: small;
   color: ${(props) =>
     props.className == "message error" ? "#e01c1c" : "#02A913"};
+`;
+
+const CheckButton = styled.button`
+  margin-left: 1rem;
+  height: 2.5rem;
+  width: 4rem;
+  background: #b9d9c0;
+  border-radius: 10px;
+  border: 0;
+  text-align: center;
+  cursor: pointer;
+
+  &:hover {
+    background: #d9d9d9;
+  }
+`;
+
+const CheckDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 `;

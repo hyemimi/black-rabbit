@@ -1,21 +1,26 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, InputHTMLAttributes } from "react";
+import { useState, useCallback, useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
-import Link from "next/link";
-
-interface SignUp {
-  email: string;
-  password: string;
-  passwordCheck: string;
-  nickname: string;
-}
+import AgreeTerms from "./AgreeTerms";
 
 const CorporationSignUpForm = () => {
   //react-hook-form 사용을 위한 함수 호출
   const { register, handleSubmit } = useForm();
+  const BUSSINESS_AUTH_KEY =
+    "OhzwRjXz5TiQ9y44+heIWfvQ4P8K113/hapRaX+6e6RqvGdreUpBYkL7p9h8fgp84iaaP00+4Dx6fcbYBrEHzg==";
+
+  const BUSSINESS_URL = `http://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${BUSSINESS_AUTH_KEY}`;
+  const SIGN_STORE_URL = "15.165.101.95:8080/sign/store";
+
+  //입력값
+  const corporationNumberInputRef = useRef<HTMLInputElement>(null);
+  const corporationNumber = corporationNumberInputRef.current?.value;
+
+  const representatorNameInputRef = useRef<HTMLInputElement>(null);
+  const brandNameInputRef = useRef<HTMLInputElement>(null);
 
   //각 입력의 조건 확인
   const [enteredEmail, setEnteredEmail] = useState<string>(
@@ -39,33 +44,36 @@ const CorporationSignUpForm = () => {
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
   const router = useRouter();
 
+  //가입하기(forrm제출) handler
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log({ enteredEmail, nickname, password, passwordConfirm });
-      // try {
-      //   await axios
-      //     .post(REGISTER_USERS_URL, {
-      //       username: name,
-      //       password: password,
-      //       email: email,
-      //     })
-      //     .then((res) => {
-      //       console.log('response:', res)
-      //       if (res.status === 200) {
-      //         router.push('/sign_up/profile_start')
-      //       }
-      //     })
-      // } catch (err) {
-      //   console.error(err)
-      // }
+      // console.log({ enteredEmail, nickname, password, passwordConfirm });
+      try {
+        await axios
+          .post(SIGN_STORE_URL, {
+            username: name,
+            password: password,
+          })
+          .then((res) => {
+            console.log("response:", res);
+            if (res.status === 200) {
+              router.push("/sign_up/profile_start");
+            }
+          });
+      } catch (err) {
+        console.error(err);
+      }
     },
     [enteredEmail, nickname, password, router]
   );
+
   //사업자 등록번호 확인
   async function corporationNumberHandler() {
     try {
-      const response = await axios.post("/user?ID=12345");
+      const response = await axios.post(BUSSINESS_URL, {
+        b_no: corporationNumber,
+      });
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -129,21 +137,6 @@ const CorporationSignUpForm = () => {
     [password]
   );
 
-  // 닉네임
-  const nicknameChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNickname(e.target.value);
-      if (e.target.value.length < 2 || e.target.value.length > 5) {
-        setNicknameMessage("2글자 이상 5글자 미만으로 입력해주세요.");
-        setIsNickname(false);
-      } else {
-        setNicknameMessage("사용 가능한 닉네임입니다.");
-        setIsNickname(true);
-      }
-    },
-    []
-  );
-
   return (
     <SytledForm onSubmit={submitHandler}>
       <Div>
@@ -153,10 +146,9 @@ const CorporationSignUpForm = () => {
           </StyledLabel>
           <CheckDiv>
             <StyledInput
-              id="number"
               type="integer"
               placeholder="-없이 숫자만 입력"
-              onChange={passwordConfirmChangeHandler}
+              ref={corporationNumberInputRef}
             />
             <CheckButton onClick={corporationNumberHandler}>확인</CheckButton>
           </CheckDiv>
@@ -168,11 +160,17 @@ const CorporationSignUpForm = () => {
             id="representator-name"
             type="text"
             placeholder="대표자명"
+            ref={representatorNameInputRef}
           />
         </div>
         <div>
           <StyledLabel htmlFor="brand-name">상호*</StyledLabel>
-          <StyledInput id="brand-name" type="text" placeholder="상호" />
+          <StyledInput
+            id="brand-name"
+            type="text"
+            placeholder="상호"
+            ref={brandNameInputRef}
+          />
         </div>
 
         <div>
@@ -196,10 +194,9 @@ const CorporationSignUpForm = () => {
         <div>
           <StyledLabel htmlFor="passwordCheck">입점 담당자명*</StyledLabel>
           <StyledInput
-            id="passwordCheck"
-            type="password"
+            id="manager-name"
+            type="text"
             placeholder="입점 담당자명"
-            onChange={passwordConfirmChangeHandler}
           />
         </div>
 
@@ -270,38 +267,7 @@ const CorporationSignUpForm = () => {
       </Div>
 
       <Div>
-        <StyledH1>약관동의</StyledH1>
-        <input type="checkbox" name="terms" />
-        <StyledLabel htmlFor="allTermsAgree">
-          약관에 모두 동의합니다.
-        </StyledLabel>
-        <StyledHr />
-
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>서비스 이용 약관(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>개인정보 처리방침(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <Link href="#">
-            <input name="terms" type="checkbox" />
-
-            <StyledLabel>위치기반 서비스 이용 약관(필수)</StyledLabel>
-          </Link>
-        </div>
-        <div>
-          <input name="terms" type="checkbox" />
-          <Link href="">
-            <StyledLabel>프로모션 알림 메일 및 SMS 수신(선택)</StyledLabel>
-          </Link>
-        </div>
+        <AgreeTerms />
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -336,11 +302,6 @@ const StyledInput = styled.input`
 const Div = styled.div`
   margin: 2.5rem auto;
   text-align: left;
-`;
-
-const StyledH1 = styled.h1`
-  font-weight: 500;
-  line-height: 2rem;
 `;
 
 const StyledHr = styled.hr`
