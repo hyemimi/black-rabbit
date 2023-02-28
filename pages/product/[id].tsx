@@ -38,12 +38,37 @@ export default function detail() {
       setMethod(event.currentTarget.value);
     }
   };
+
+  /* 이미지 슬라이더 */
+  const onToggleImage = (idx: number) => {
+    setClicked(idx);
+  };
+  const data = ["0", "1", "2", "3", "4"];
+  const [clicked, setClicked] = useState(0);
+
   return (
     <Wrapper>
       <InfoDiv>
         <div>
           <h1>카테고리 {`>`} 카메라</h1>
-          <ProductImage></ProductImage>
+          <ProductImage width="464px" height="380px">
+            {data[clicked]}
+          </ProductImage>
+          <Row>
+            {data.map((ele, idx) => (
+              <>
+                <ProductImage
+                  highlight={idx === clicked}
+                  onClick={() => onToggleImage(idx)}
+                  width="80px"
+                  height="80px"
+                  key={ele}
+                >
+                  {ele}
+                </ProductImage>
+              </>
+            ))}
+          </Row>
         </div>
         <DetailDiv>
           <h1>언더독렌탈</h1>
@@ -125,12 +150,26 @@ const TitleDiv = styled.div`
   align-items: center;
   justify-content: space-between;
 `;
-const ProductImage = styled.div`
+const ProductImage = styled.div<{
+  width?: string;
+  height?: string;
+  highlight?: boolean;
+}>`
   background-color: ${(props) => props.theme.searchColor};
-  width: 464px;
-  height: 380px;
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  border: ${(props) => props.highlight && "2px solid red"};
+  position: relative;
 `;
 
+const Row = styled.div`
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  width: 460px;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+`;
 const Title = styled.h1`
   font-size: 30px;
   font-weight: bold;
