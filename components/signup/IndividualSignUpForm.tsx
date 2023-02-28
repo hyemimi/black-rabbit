@@ -3,12 +3,16 @@ import styled from "styled-components";
 import { StyledButton } from "../common/Button";
 import { useState, useCallback, InputHTMLAttributes, useRef } from "react";
 import { useRouter } from "next/router";
-import axios from "axios";
 import Link from "next/link";
 import AgreeTerms from "./AgreeTerms";
+import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 
 const IndividualSignUpForm = () => {
- 
+  interface SignUp {
+    enteredemail: string;
+    nickname: string;
+    password: string;
+  }
 
   //react-hook-form 사용을 위한 함수 호출
   const { register, handleSubmit } = useForm();
@@ -33,32 +37,18 @@ const IndividualSignUpForm = () => {
   const [isEmail, setIsEmail] = useState<boolean>(false);
   const [isPassword, setIsPassword] = useState<boolean>(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
-  const router = useRouter();
+  const [errorstate, setError] = useState<string>("");
 
-  const REGISTER_USERS_URL = "http://15.165.101.95:8080/sign/user";
-  const submitHandler = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      console.log({ enteredEmail, nickname, password, passwordConfirm });
-      try {
-        await axios
-          .post(REGISTER_USERS_URL, {
-            email: enteredEmail,
-            nickname: nickname,
-            pw: password,
-          })
-          .then((res) => {
-            console.log("response:", res);
-            if (res.status === 200) {
-              router.push("/signup/completed");
-            }
-          });
-      } catch (err) {
-        console.error(err);
-      }
-    },
-    [enteredEmail, nickname, password, router]
-  );
+  const route = useRouter();
+  const { mutate, isLoading, isError, error, isSuccess } =
+    UseUserSignupMutation();
+
+  const submitHandler = (e: any) => {
+    e.preventDefault();
+
+    mutate({ nickname: nickname, email: enteredEmail, pw: password });
+  };
+
   //이메일
   const emailChangeHandler = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -210,7 +200,7 @@ const IndividualSignUpForm = () => {
       </Div>
 
       <Div>
-       <AgreeTerms/>
+        <AgreeTerms />
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
