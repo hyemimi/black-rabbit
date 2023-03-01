@@ -3,27 +3,45 @@ import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
 import { DaumPostcodeEmbed } from "react-daum-postcode";
 import SearchAddress from "@/components/common/SearchAddress";
+import { useState } from "react";
 
 export default function addresslist() {
+  const [addAddress, setAddAddress] = useState(false);
+
+  const onAddHandler = () => {
+    if (addAddress === true) {
+      setAddAddress(false);
+      return;
+    }
+    setAddAddress(true);
+  };
+
   return (
     <Wrapper>
       <TitleDiv>
         <h1>배송지 관리</h1>
       </TitleDiv>
-      <SearchAddress />
-      <ItemDiv>
-        <SelectBox>
-          <input type="checkbox"></input>
-        </SelectBox>
-        <ItemBox>
-          <Item>
-            <h1>경기도 화성시</h1>
-          </Item>
-        </ItemBox>
-      </ItemDiv>
       <ButtonDiv>
-        <Button color="delete">삭제</Button>
+        {!addAddress ? (
+          <Button onClick={onAddHandler}>배송지 추가</Button>
+        ) : (
+          <Button onClick={onAddHandler}>배송지 목록</Button>
+        )}
       </ButtonDiv>
+      {addAddress ? (
+        <SearchAddress />
+      ) : (
+        <ItemDiv>
+          <SelectBox>
+            <input type="checkbox"></input>
+          </SelectBox>
+          <ItemBox>
+            <Item>
+              <h1>경기도 화성시</h1>
+            </Item>
+          </ItemBox>
+        </ItemDiv>
+      )}
     </Wrapper>
   );
 }
@@ -52,6 +70,8 @@ const Item = styled.div`
 
 const ButtonDiv = styled.div`
   display: flex;
+  flex-direction: row-reverse;
+  width: 900px;
 `;
 const Button = styled.button<{ color?: string }>`
   background-color: ${(props) =>

@@ -7,13 +7,9 @@ const SearchAddress = () => {
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
-  const [isOpenPost, setIsOpenPost] = useState(false); // 모달 열기 & 닫기
   const [RoadAddress, setRoadAddress] = useState(""); // 도로명 주소
   const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
-
-  const onChangeOpenPost = () => {
-    setIsOpenPost(!isOpenPost);
-  };
+  const [postNumber, setPostNumber] = useState(""); // 우편번호
 
   /* 도로명 주소를 받습니다*/
   const handleComplete = (data: any) => {
@@ -30,7 +26,9 @@ const SearchAddress = () => {
       }
       fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
     }
-    setRoadAddress(`${"[" + data.zonecode + "] "}` + fullAddress);
+    setPostNumber(data.zonecode);
+    setRoadAddress(fullAddress);
+    //setRoadAddress(`${"[" + data.zonecode + "] "}` + fullAddress);
     console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
   };
 
@@ -41,38 +39,57 @@ const SearchAddress = () => {
 
   /* 배송지 저장 제출*/
   const submitAddressHandler = () => {
+    setPostNumber("");
     setRoadAddress("");
     setDetailAddress("");
   };
 
   return (
-    <FormDiv>
+    <>
       <Div>
         <BoxInput
-          width="500px"
+          width="300px"
           height="50px"
-          name="storeRoadAddress"
-          value={RoadAddress}
+          name="postnumber"
+          value={postNumber}
           type="text"
-          onChange={(e) => setRoadAddress(e.target.value)}
-          placeholder="도로명 주소 검색"
+          onChange={(e) => setPostNumber(e.target.value)}
+          placeholder="우편번호"
           required
           readOnly
         />
-        <Button onClick={searchAddressHandler}>주소 찾기</Button>
+
+        <Button onClick={searchAddressHandler}>우편번호 검색</Button>
       </Div>
       <BoxInput
-        width="500px"
+        width="800px"
+        height="50px"
+        name="storeRoadAddress"
+        value={RoadAddress}
+        type="text"
+        onChange={(e) => setRoadAddress(e.target.value)}
+        placeholder="주소지"
+        required
+        readOnly
+      />
+      <BoxInput
+        width="800px"
         height="50px"
         type="text"
         value={detailAddress}
-        placeholder="상세 주소 입력"
+        placeholder="상세 주소를 입력해주세요."
         onChange={(e) => setDetailAddress(e.currentTarget.value)}
       ></BoxInput>
-      <Button color="yes" onClick={submitAddressHandler}>
-        저장
-      </Button>
-    </FormDiv>
+      <Div>
+        <input type="checkbox" />
+        <h3>기본배송지로 선택</h3>
+      </Div>
+      <ButtonDiv>
+        <Button color="yes" onClick={submitAddressHandler}>
+          저장
+        </Button>
+      </ButtonDiv>
+    </>
   );
 };
 
@@ -80,10 +97,9 @@ export default SearchAddress;
 
 const Div = styled.div`
   display: flex;
+  width: 820px;
 `;
-const FormDiv = styled.div`
-  justify-content: space-around;
-`;
+
 const Button = styled.button<{ color?: string }>`
   background-color: ${(props) =>
     props.color ? props.theme.searchColor : props.theme.pointColor};
@@ -92,4 +108,8 @@ const Button = styled.button<{ color?: string }>`
   width: 70px;
   cursor: pointer;
   margin: 5px;
+`;
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: center;
 `;
