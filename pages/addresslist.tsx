@@ -1,7 +1,6 @@
 import { TitleDiv } from "@/components/common/TitleDiv";
 import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
-import { DaumPostcodeEmbed } from "react-daum-postcode";
 import SearchAddress from "@/components/common/SearchAddress";
 import { useState } from "react";
 

@@ -76,21 +76,22 @@ export default function detail() {
             <Title>Canon EOS Rebel T7 18-55mm 번들 세트</Title>
             <Heartbutton />
           </TitleDiv>
-          <hr />
           <ContentDiv>
+            <GreenBox>가격정보</GreenBox>
             <TitleItem>
-              <BoxName>가격</BoxName>
-              <Box>{pricePerOne}원 / 1일</Box>
+              <GrayBox>1일 대여료</GrayBox>
+              <GrayBox>{pricePerOne}</GrayBox>
             </TitleItem>
             <TitleItem>
-              <BoxName>수량</BoxName>{" "}
-              <Select onChange={onSelectHandler} name="count">
-                <option value="">선택</option>
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-              </Select>
+              <GrayBox>5일 이상 대여시</GrayBox>
+              <GrayBox>{pricePerOne}</GrayBox>
             </TitleItem>
+            <TitleItem>
+              <GrayBox>10일 이상 대여시</GrayBox>
+              <GrayBox>{pricePerOne}</GrayBox>
+            </TitleItem>
+            <GreenBox>옵션선택</GreenBox>
+
             <TitleItem>
               <BoxName>거래 방법</BoxName>{" "}
               <Select onChange={onSelectHandler} name="method">
@@ -102,11 +103,10 @@ export default function detail() {
             </TitleItem>
             <TitleItem>
               <BoxName>예약기간</BoxName>
-
               <DatePick pricePerOne={pricePerOne} count={count} />
             </TitleItem>
           </ContentDiv>
-          <br />
+          <GreenBox>내역</GreenBox>
           <ButtonDiv>
             <Button color="reservation">예약하기</Button>
             <Button
@@ -196,7 +196,17 @@ const Select = styled.select`
     padding: 0px 2px 1px;
   }
 `;
-
+const GreenBox = styled.div`
+  background-color: ${(props) => props.theme.pointColor};
+  width: 100%;
+  font-weight: bold;
+  height: 30px;
+  padding: 5px;
+`;
+const GrayBox = styled.div`
+  padding: 5px;
+  width: 100%;
+`;
 const TitleItem = styled.div`
   display: flex;
   margin: 10px;
@@ -224,6 +234,7 @@ const ContentDiv = styled.div`
 const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-around;
+  margin-top: 100px;
 `;
 
 const Button = styled.button`
