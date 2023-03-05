@@ -8,6 +8,7 @@ import ReviewProduct from "@/components/detail/ReviewProduct";
 import { useRouter } from "next/router";
 import DatePicker from "react-datepicker";
 import DatePick from "@/components/common/DatePick";
+import { GreenBox } from "@/components/common/GreenBox";
 
 export default function detail() {
   const [selected, setSelected] = useState(true);
@@ -108,7 +109,9 @@ export default function detail() {
           </ContentDiv>
           <GreenBox>내역</GreenBox>
           <ButtonDiv>
-            <Button color="reservation">예약하기</Button>
+            <Button onClick={() => router.push("/payment")} color="reservation">
+              예약하기
+            </Button>
             <Button
               onClick={() => {
                 goCartPage(user_id);
@@ -196,13 +199,7 @@ const Select = styled.select`
     padding: 0px 2px 1px;
   }
 `;
-const GreenBox = styled.div`
-  background-color: ${(props) => props.theme.pointColor};
-  width: 100%;
-  font-weight: bold;
-  height: 30px;
-  padding: 5px;
-`;
+
 const GrayBox = styled.div`
   padding: 5px;
   width: 100%;
