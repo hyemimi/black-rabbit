@@ -2,8 +2,10 @@ import { Wrapper } from "@/components/common/Wrapper";
 import { GreenBox } from "@/components/common/GreenBox";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { useDaumPostcodePopup } from "react-daum-postcode";
 import { BoxInput } from "@/components/common/Box";
-import SearchAddress from "./../../components/common/SearchAddress";
+
 interface FormData {
   name: string;
   phone_1: string;
@@ -21,6 +23,9 @@ const requestList = [
   { value: "직접입력" },
 ];
 export default function payment() {
+  const open = useDaumPostcodePopup(
+    "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+  );
   const {
     register,
     handleSubmit,
@@ -28,6 +33,31 @@ export default function payment() {
     watch,
     formState: { errors },
   } = useForm<FormData>();
+
+  const [RoadAddress, setRoadAddress] = useState(""); // 도로명 주소
+  const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
+  const [postNumber, setPostNumber] = useState(""); // 우편번호
+
+  const handleComplete = (data: any) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+    setRoadAddress(fullAddress);
+    setPostNumber(data.zonecode);
+  };
+  const searchAddressHandler = () => {
+    open({ onComplete: handleComplete, autoClose: true });
+  };
 
   const handleValid = ({
     name,
@@ -45,9 +75,10 @@ export default function payment() {
     setValue("road_address", "");
     setValue("detail_address", "");
   };
+
   return (
     <Wrapper>
-      <Box as="form" height="100%">
+      <Box height="100%">
         <GreenBox>배송정보</GreenBox>
         <Box width="100%" height="100%">
           <Row>
@@ -66,6 +97,20 @@ export default function payment() {
           <hr />
           <Row>
             <H1>주소</H1>
+            <AddressInput>
+              <BoxInput
+                value={`${"[" + postNumber + "]" + RoadAddress}`}
+                type="text"
+                placeholder="검색버튼을 눌러 주소지를 입력해주세요"
+                required
+                readOnly
+                width="500px"
+                height="30px"
+              />
+              <button onClick={searchAddressHandler}>우편번호 검색</button>
+
+              <BoxInput width="400px" height="30px" />
+            </AddressInput>
           </Row>
           <hr />
           <Row>
@@ -83,7 +128,22 @@ export default function payment() {
         <GreenBox>상품정보 / 결제금액</GreenBox>
         <Box width="100%"></Box>
         <GreenBox>결제정보</GreenBox>
-        <Box width="100%"></Box>
+        <Box width="100%">
+          <Row>
+            <H1>결제수단</H1>
+            일반결제
+            <input type="checkbox" />
+          </Row>
+          <hr />
+          <Row>
+            <H1>환불안내</H1>
+          </Row>
+          <hr />
+          <Row>
+            <H1>주문자 동의</H1>
+          </Row>
+          <hr />
+        </Box>
       </Box>
     </Wrapper>
   );
@@ -108,4 +168,7 @@ export const Box = styled.div<{ height?: string; width?: string }>`
   border-radius: 10px;
   margin-top: 10px;
   margin-bottom: 15px;
+`;
+const AddressInput = styled.div`
+  flex-direction: column;
 `;
