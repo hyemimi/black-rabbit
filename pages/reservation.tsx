@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { BoxInput } from "@/components/common/Box";
+import Modal from "@/components/common/modal/Modal";
+import AddressModal from "@/components/common/modal/AddressModal";
 
 interface FormData {
   name: string;
@@ -26,17 +28,15 @@ export default function payment() {
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm<FormData>();
-
+  const [name, setName] = useState(""); // 이름
+  const [phone, setPhone] = useState({ first: "", second: "" }); // 연락처
   const [RoadAddress, setRoadAddress] = useState(""); // 도로명 주소
   const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
   const [postNumber, setPostNumber] = useState(""); // 우편번호
+  const [message, setMessage] = useState(""); // 배송메시지
+  const [inputmessage, setinputMessage] = useState(""); // 배송메시지 - 직접입력
+  const [isOpen, setIsOpen] = useState(false);
+  const [addressname, setAddressName] = useState("");
 
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
@@ -58,48 +58,61 @@ export default function payment() {
   const searchAddressHandler = () => {
     open({ onComplete: handleComplete, autoClose: true });
   };
-
-  const handleValid = ({
-    name,
-    phone_1,
-    phone_2,
-    post_number,
-    road_address,
-    detail_address,
-  }: FormData) => {
-    //Api 호출
-    setValue("name", "");
-    setValue("phone_1", "");
-    setValue("phone_2", "");
-    setValue("post_number", "");
-    setValue("road_address", "");
-    setValue("detail_address", "");
-  };
-
   return (
     <Wrapper>
       <Box height="100%">
         <GreenBox>배송정보</GreenBox>
+
         <Box width="100%" height="100%">
           <Row>
             <H1>배송지</H1>
+            <BoxInput
+              width="300px"
+              height="30px"
+              value={addressname}
+              onChange={(e) => setAddressName(e.target.value)}
+            />
+            <Button onClick={() => setIsOpen(true)} color="no">
+              배송지 변경
+            </Button>
           </Row>
           <hr />
+          {isOpen && (
+            <Modal>
+              <AddressModal></AddressModal>
+            </Modal>
+          )}
           <Row>
             <H1>이름</H1>
-            <BoxInput width="600px" height="30px" />
+            <BoxInput
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              width="600px"
+              height="30px"
+            />
           </Row>
           <hr />
           <Row>
             <H1>연락처</H1>
-            <BoxInput width="600px" height="30px" />
+            <BoxInput
+              width="300px"
+              height="30px"
+              value={phone.first}
+              onChange={(e) => setPhone({ ...phone, first: e.target.value })}
+            />
+            <BoxInput
+              width="300px"
+              height="30px"
+              value={phone.second}
+              onChange={(e) => setPhone({ ...phone, second: e.target.value })}
+            />
           </Row>
           <hr />
           <Row>
             <H1>주소</H1>
             <AddressInput>
               <BoxInput
-                value={`${"[" + postNumber + "]" + RoadAddress}`}
+                value={`${postNumber + " " + RoadAddress}`}
                 type="text"
                 placeholder="검색버튼을 눌러 주소지를 입력해주세요"
                 required
@@ -107,15 +120,21 @@ export default function payment() {
                 width="500px"
                 height="30px"
               />
-              <button onClick={searchAddressHandler}>우편번호 검색</button>
-
-              <BoxInput width="400px" height="30px" />
+              <Button onClick={searchAddressHandler}>우편번호 검색</Button>
+              <BoxInput
+                placeholder="상세 주소를 입력해주세요"
+                type="text"
+                width="500px"
+                height="30px"
+                value={detailAddress}
+                onChange={(e) => setDetailAddress(e.target.value)}
+              />
             </AddressInput>
           </Row>
           <hr />
           <Row>
             <H1>배송 요청사항</H1>
-            <select>
+            <select onChange={(e) => setMessage(e.target.value)}>
               <option value="">배송시 요청사항을 선택해주세요</option>
               {requestList.map((request) => (
                 <option key={request.value} value={request.value}>
@@ -123,6 +142,17 @@ export default function payment() {
                 </option>
               ))}
             </select>
+            {message === "직접입력" && (
+              <BoxInput
+                height="50px"
+                type="textarea"
+                placeholder="최대 50자입니다"
+                value={inputmessage}
+                onChange={(e) => {
+                  setinputMessage(e.target.value);
+                }}
+              />
+            )}
           </Row>
         </Box>
         <GreenBox>상품정보 / 결제금액</GreenBox>
@@ -157,7 +187,7 @@ const Row = styled.div`
 const H1 = styled.h1`
   font-weight: bold;
   font-size: 15px;
-  margin-right: 30px;
+  margin-right: 5px;
   width: 100px;
 `;
 export const Box = styled.div<{ height?: string; width?: string }>`
@@ -171,4 +201,13 @@ export const Box = styled.div<{ height?: string; width?: string }>`
 `;
 const AddressInput = styled.div`
   flex-direction: column;
+`;
+const Button = styled.button<{ color?: string }>`
+  background-color: ${(props) =>
+    props.color ? props.theme.searchColor : props.theme.pointColor};
+  border: none;
+  height: 50px;
+  width: 100px;
+  cursor: pointer;
+  margin: 5px;
 `;

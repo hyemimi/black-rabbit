@@ -109,7 +109,10 @@ export default function detail() {
           </ContentDiv>
           <GreenBox>내역</GreenBox>
           <ButtonDiv>
-            <Button onClick={() => router.push("/payment")} color="reservation">
+            <Button
+              onClick={() => router.push("/reservation")}
+              color="reservation"
+            >
               예약하기
             </Button>
             <Button
