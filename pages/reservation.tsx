@@ -7,6 +7,8 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import { BoxInput } from "@/components/common/Box";
 import Modal from "@/components/common/modal/Modal";
 import AddressModal from "@/components/common/modal/AddressModal";
+import { AnimatePresence, motion, useScroll } from "framer-motion";
+import { isOptionalChain } from "typescript";
 
 interface FormData {
   name: string;
@@ -67,7 +69,7 @@ export default function payment() {
           <Row>
             <H1>배송지</H1>
             <BoxInput
-              width="300px"
+              width="300*6px"
               height="30px"
               value={addressname}
               onChange={(e) => setAddressName(e.target.value)}
@@ -77,11 +79,7 @@ export default function payment() {
             </Button>
           </Row>
           <hr />
-          {isOpen && (
-            <Modal>
-              <AddressModal></AddressModal>
-            </Modal>
-          )}
+
           <Row>
             <H1>이름</H1>
             <BoxInput
@@ -175,6 +173,20 @@ export default function payment() {
           <hr />
         </Box>
       </Box>
+      {isOpen && (
+        <>
+          <AnimatePresence>
+            <Overlay
+              onClick={() => setIsOpen(false)}
+              exit={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            />
+          </AnimatePresence>
+          <Modal>
+            <AddressModal isOpen={isOpen} setIsOpen={setIsOpen}></AddressModal>
+          </Modal>
+        </>
+      )}
     </Wrapper>
   );
 }
@@ -190,7 +202,7 @@ const H1 = styled.h1`
   margin-right: 5px;
   width: 100px;
 `;
-export const Box = styled.div<{ height?: string; width?: string }>`
+const Box = styled.div<{ height?: string; width?: string }>`
   width: ${(props) => (props.width ? props.width : "900px")};
   height: ${(props) => (props.height ? props.height : "300px")};
   border: 1px solid #d9d9d9;
@@ -210,4 +222,12 @@ const Button = styled.button<{ color?: string }>`
   width: 100px;
   cursor: pointer;
   margin: 5px;
+`;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 120%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
 `;
