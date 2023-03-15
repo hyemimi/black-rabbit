@@ -2,14 +2,18 @@ import { Wrapper } from "@/components/common/Wrapper";
 import { GreenBox } from "@/components/common/GreenBox";
 import styled from "styled-components";
 import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { BoxInput } from "@/components/common/Box";
 import Modal from "@/components/common/modal/Modal";
 import AddressModal from "@/components/common/modal/AddressModal";
 import { AnimatePresence, motion, useScroll } from "framer-motion";
-import { isOptionalChain } from "typescript";
-
+import {
+  loadPaymentWidget,
+  PaymentWidgetInstance,
+} from "@tosspayments/payment-widget-sdk";
+import { ANONYMOUS } from "@tosspayments/payment-widget-sdk";
+import { nanoid } from "nanoid";
 interface FormData {
   name: string;
   phone_1: string;
@@ -26,6 +30,11 @@ const requestList = [
   { value: "파손 위험, 주의 바랍니다" },
   { value: "직접입력" },
 ];
+/*직접 개발자센터에서 내 클라이언트 키를 사용하거나, 아래 예시에 있는 키를 사용*/
+const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
+/*결제 고객 식별 : 상점에서 사용하는 고유값 비회원 결제시 ANONYMOUS 사용*/
+const customerKey = ANONYMOUS;
+
 export default function payment() {
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -39,6 +48,7 @@ export default function payment() {
   const [inputmessage, setinputMessage] = useState(""); // 배송메시지 - 직접입력
   const [isOpen, setIsOpen] = useState(false);
   const [addressname, setAddressName] = useState("");
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
@@ -60,6 +70,21 @@ export default function payment() {
   const searchAddressHandler = () => {
     open({ onComplete: handleComplete, autoClose: true });
   };
+  const startPayment = () => {
+    setIsPaymentOpen(true);
+  };
+  const paymentWidgetRef = useRef<PaymentWidgetInstance | null>(null);
+  const price = 50_000;
+  useEffect(() => {
+    (async () => {
+      const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
+
+      paymentWidget.renderPaymentMethods("#payment-widget", price);
+
+      paymentWidgetRef.current = paymentWidget;
+    })();
+  }, []);
+
   return (
     <Wrapper>
       <Box height="100%">
@@ -156,12 +181,11 @@ export default function payment() {
         <GreenBox>상품정보 / 결제금액</GreenBox>
         <Box width="100%"></Box>
         <GreenBox>결제정보</GreenBox>
-        <Box width="100%">
+        <Box width="100%" height="100%">
           <Row>
             <H1>결제수단</H1>
-            일반결제
-            <input type="checkbox" />
           </Row>
+          <div id="payment-widget" />
           <hr />
           <Row>
             <H1>환불안내</H1>
@@ -187,6 +211,25 @@ export default function payment() {
           </Modal>
         </>
       )}
+      <Button
+        onClick={() => {
+          const paymentWidget = paymentWidgetRef.current;
+          try {
+            paymentWidget?.requestPayment({
+              orderId: nanoid(),
+              orderName: "토스 티셔츠 외 2건",
+              customerName: "김토스",
+              customerEmail: "customer123@gmail.com",
+              successUrl: `${window.location.origin}/success`,
+              failUrl: `${window.location.origin}/fail`,
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }}
+      >
+        결제하기
+      </Button>
     </Wrapper>
   );
 }
