@@ -45,7 +45,7 @@ export default function myreview() {
             animate={{ opacity: 1 }}
           />
           <Modal>
-            <ReviewModal></ReviewModal>
+            <ReviewModal setIsOpen={setIsOpen}></ReviewModal>
           </Modal>
         </AnimatePresence>
       )}

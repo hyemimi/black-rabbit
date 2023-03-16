@@ -1,6 +1,6 @@
 import { Ireview } from "@/temp/reviews";
 import styled from "styled-components";
-
+import { useMakeStars } from "@/hooks/review/useMakeStars";
 export default function Review({
   Item_id,
   user_id,
@@ -9,22 +9,11 @@ export default function Review({
   score,
   createTime,
 }: Ireview) {
-  const MakeStars = (score: number) => {
-    let star = "";
-    for (let i = 1; i <= 5; i++) {
-      if (i <= score) {
-        star += "⭐";
-      } else {
-        star += "☆";
-      }
-    }
-    return star;
-  };
-
+  const stars = useMakeStars(score);
   return (
     <ReviewDiv>
       <Header>
-        <span>{MakeStars(score)}</span>
+        <span>{stars}</span>
         <span>{createTime}</span>
       </Header>
       <Content>{detail}</Content>
