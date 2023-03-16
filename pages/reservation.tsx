@@ -80,7 +80,7 @@ export default function payment() {
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
 
       paymentWidget.renderPaymentMethods("#payment-widget", price);
-
+      const paymentAgreement = paymentWidget.renderAgreement("#agreement");
       paymentWidgetRef.current = paymentWidget;
     })();
   }, []);
@@ -194,6 +194,7 @@ export default function payment() {
           <Row>
             <H1>주문자 동의</H1>
           </Row>
+          <div id="agreement" />
           <hr />
         </Box>
       </Box>
