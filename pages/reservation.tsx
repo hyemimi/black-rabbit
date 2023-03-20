@@ -31,6 +31,7 @@ const requestList = [
   { value: "직접입력" },
 ];
 /*직접 개발자센터에서 내 클라이언트 키를 사용하거나, 아래 예시에 있는 키를 사용*/
+//const clientKey = "test_ck_Z0RnYX2w532BPRwZBZK3NeyqApQE";
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 /*결제 고객 식별 : 상점에서 사용하는 고유값 비회원 결제시 ANONYMOUS 사용*/
 const customerKey = ANONYMOUS;
@@ -74,7 +75,7 @@ export default function payment() {
     setIsPaymentOpen(true);
   };
   const paymentWidgetRef = useRef<PaymentWidgetInstance | null>(null);
-  const price = 50_000;
+  const price = 1;
   useEffect(() => {
     (async () => {
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
@@ -218,7 +219,7 @@ export default function payment() {
           try {
             paymentWidget?.requestPayment({
               orderId: nanoid(),
-              orderName: "토스 티셔츠 외 2건",
+              orderName: "test",
               customerName: "김토스",
               customerEmail: "customer123@gmail.com",
               successUrl: `${window.location.origin}/success`,

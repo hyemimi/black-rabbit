@@ -22,7 +22,7 @@ export default function Success() {
   );
 }
 
-const Section = styled.div`
+export const Section = styled.div`
   background-color: ${(props) => props.theme.pointColor};
   margin-top: 100px;
   width: 900px;
@@ -30,7 +30,7 @@ const Section = styled.div`
   text-align: center;
   padding: 120px;
 `;
-const Title = styled.h1`
+export const Title = styled.h1`
   font-size: 40px;
 `;
 const Button = styled.button<{ color?: string }>`
