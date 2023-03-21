@@ -14,6 +14,7 @@ import {
 } from "@tosspayments/payment-widget-sdk";
 import { ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
+import { useGetAddressList } from "@/hooks/api/user/GetAddressList";
 interface FormData {
   name: string;
   phone_1: string;
@@ -35,7 +36,8 @@ const requestList = [
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 /*결제 고객 식별 : 상점에서 사용하는 고유값 비회원 결제시 ANONYMOUS 사용*/
 const customerKey = ANONYMOUS;
-
+const { addressList } = useGetAddressList(1);
+console.log(addressList);
 export default function payment() {
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -99,6 +101,7 @@ export default function payment() {
               height="30px"
               value={addressname}
               onChange={(e) => setAddressName(e.target.value)}
+              required
             />
             <Button onClick={() => setIsOpen(true)} color="no">
               배송지 변경
@@ -113,6 +116,7 @@ export default function payment() {
               onChange={(e) => setName(e.target.value)}
               width="600px"
               height="30px"
+              required
             />
           </Row>
           <hr />
@@ -123,12 +127,14 @@ export default function payment() {
               height="30px"
               value={phone.first}
               onChange={(e) => setPhone({ ...phone, first: e.target.value })}
+              required
             />
             <BoxInput
               width="300px"
               height="30px"
               value={phone.second}
               onChange={(e) => setPhone({ ...phone, second: e.target.value })}
+              required
             />
           </Row>
           <hr />
@@ -152,6 +158,7 @@ export default function payment() {
                 height="30px"
                 value={detailAddress}
                 onChange={(e) => setDetailAddress(e.target.value)}
+                required
               />
             </AddressInput>
           </Row>
@@ -180,7 +187,15 @@ export default function payment() {
           </Row>
         </Box>
         <GreenBox>상품정보 / 결제금액</GreenBox>
-        <Box width="100%"></Box>
+        <Box width="100%">
+          <TitleDiv>
+            <Title>상품정보</Title>
+            <Title>예약기간</Title>
+            <Title>금액</Title>
+            <Title>거래방법</Title>
+          </TitleDiv>
+          <Hr />
+        </Box>
         <GreenBox>결제정보</GreenBox>
         <Box width="100%" height="100%">
           <Row>
@@ -275,4 +290,15 @@ const Overlay = styled(motion.div)`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   opacity: 0;
+`;
+
+const TitleDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+const Title = styled.h1`
+  margin: 10px;
+`;
+const Hr = styled.hr`
+  background-color: ${(props) => props.theme.pointColor};
 `;
