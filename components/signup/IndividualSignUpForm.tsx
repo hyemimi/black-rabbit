@@ -5,7 +5,8 @@ import { useState, useCallback, InputHTMLAttributes } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
-
+import UseUserSignupMutation from "@/hooks/api/auth/UserSignUpMutation";
+import { useUser } from "@/hooks/user/login";
 interface SignUp {
   email: string;
   password: string;
@@ -38,11 +39,23 @@ const IndividualSignUpForm = () => {
   const [isPassword, setIsPassword] = useState<boolean>(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
   const router = useRouter();
+  const {
+    mutate: signupMutate,
+    data: signupMutationData,
+    error: signupMutationError,
+  } = UseUserSignupMutation();
+
+  const onSignUpClick = () => {};
 
   const submitHandler = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       console.log({ enteredEmail, nickname, password, passwordConfirm });
+      signupMutate({
+        email: enteredEmail,
+        nickname: nickname,
+        pw: password,
+      });
       // try {
       //   await axios
       //     .post(REGISTER_USERS_URL, {

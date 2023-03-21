@@ -35,8 +35,7 @@ const requestList = [
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 /*결제 고객 식별 : 상점에서 사용하는 고유값 비회원 결제시 ANONYMOUS 사용*/
 const customerKey = ANONYMOUS;
-const { addressList } = useGetAddressList(1);
-console.log(addressList);
+
 export default function payment() {
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
@@ -52,6 +51,8 @@ export default function payment() {
   const [addressname, setAddressName] = useState("");
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
 
+  const { addressList } = useGetAddressList(1);
+  console.log(addressList);
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
     let extraAddress = "";

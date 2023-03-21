@@ -14,29 +14,27 @@ export function useUser() {
    * @param accessToken 엑세스 토큰 값
    * @param refreshToken 리프레시 토큰 값
    */
-  const userLogin = useCallback(
-    ({
-      accessToken,
-      refreshToken,
-    }: {
-      accessToken: string;
-      refreshToken: string;
-    }) => {
-      if (
-        accessToken === undefined ||
-        refreshToken === undefined ||
-        accessToken === "" ||
-        refreshToken === ""
-      ) {
-        throw Error("로그인 토큰이 올바르지 않습니다.");
-      }
-      replaceAccessTokenForRequestInstance(accessToken);
-      localStorage.setItem("dayfilm-user", accessToken);
-      localStorage.setItem("dayfilm-user-re", refreshToken);
-      queryClient.clear();
-    },
-    [queryClient]
-  );
+  const userLogin = ({
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken: string;
+    refreshToken: string;
+  }) => {
+    if (
+      accessToken === undefined ||
+      refreshToken === undefined ||
+      accessToken === "" ||
+      refreshToken === ""
+    ) {
+      throw Error("로그인 토큰이 올바르지 않습니다.");
+    }
+    replaceAccessTokenForRequestInstance(accessToken);
+    console.log(accessToken);
+    localStorage.setItem("dayfilm-user", accessToken);
+    localStorage.setItem("dayfilm-user-re", refreshToken);
+    queryClient.clear();
+  };
 
   const userLogout = () => {
     localStorage.removeItem("dayfilm-user");
