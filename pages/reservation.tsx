@@ -1,7 +1,6 @@
 import { Wrapper } from "@/components/common/Wrapper";
 import { GreenBox } from "@/components/common/GreenBox";
 import styled from "styled-components";
-import { useForm } from "react-hook-form";
 import { useEffect, useRef, useState } from "react";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { BoxInput } from "@/components/common/Box";
@@ -81,7 +80,6 @@ export default function payment() {
   useEffect(() => {
     (async () => {
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
-
       paymentWidget.renderPaymentMethods("#payment-widget", price);
       const paymentAgreement = paymentWidget.renderAgreement("#agreement");
       paymentWidgetRef.current = paymentWidget;

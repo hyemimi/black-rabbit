@@ -1,15 +1,16 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { instance } from "@/libs/api/client";
 /* 주소지 목록  */
 
 export function useGetAddressList(userId: number) {
   const fetchAddressList = () => {
-    return axios.get("15.165.101.95:8080/user/address", {
+    return instance.get("/user/address", {
       params: { userId: userId },
     });
   };
   const { data: addressList } = useQuery(
-    ["allAddress", userId],
+    ["allAddres", userId],
     async () => await fetchAddressList()
   );
   return { addressList };
