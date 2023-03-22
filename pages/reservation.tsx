@@ -31,8 +31,8 @@ const requestList = [
   { value: "직접입력" },
 ];
 /*직접 개발자센터에서 내 클라이언트 키를 사용하거나, 아래 예시에 있는 키를 사용*/
-//const clientKey = "test_ck_Z0RnYX2w532BPRwZBZK3NeyqApQE";
-const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
+const clientKey = "test_ck_Z0RnYX2w532BPRwZBZK3NeyqApQE";
+//const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 /*결제 고객 식별 : 상점에서 사용하는 고유값 비회원 결제시 ANONYMOUS 사용*/
 const customerKey = ANONYMOUS;
 
