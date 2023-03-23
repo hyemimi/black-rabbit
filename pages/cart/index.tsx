@@ -5,8 +5,10 @@ import { items } from "@/temp/items";
 import CartItem from "@/components/cart/CartItem";
 import { useState } from "react";
 import { Item } from "@/components/common/Box";
+import { useRouter } from "next/router";
 export default function Cart() {
   const [checkItems, setCheckItems] = useState<number[]>([]);
+  const router = useRouter();
   const handleAllCheck = (checked: boolean) => {
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
@@ -73,7 +75,16 @@ export default function Cart() {
         <Button height="86px" width="290px" color="delete">
           삭제하기
         </Button>
-        <Button height="86px" width="290px">
+        <Button
+          height="86px"
+          width="290px"
+          onClick={() => {
+            router.push(
+              { pathname: "/reservation", query: { basketIds: checkItems } },
+              "reservation"
+            );
+          }}
+        >
           결제하기
         </Button>
       </ButtonDiv>

@@ -14,6 +14,9 @@ import {
 import { ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/router";
+import { useGetOrderList } from "@/hooks/api/payment/GetOrderInfo";
+
 interface FormData {
   addressname: string;
   name: string;
@@ -22,6 +25,11 @@ interface FormData {
   post_number: string;
   road_address: string;
   detail_address: string;
+}
+interface pickupFormData {
+  name: string;
+  phone1: string;
+  phone2: string;
 }
 const requestList = [
   { value: "부재 시 경비실에 맡겨주세요" },
@@ -40,51 +48,27 @@ const customerKey = "cyxvwiRl9bBlieSh4r6W6";
 //const customerKey = ANONYMOUS;
 
 export default function payment() {
+  const router = useRouter();
+  console.log(router.query);
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
-  //const [name, setName] = useState(""); // 이름
-  //const [phone, setPhone] = useState({ first: "", second: "" }); // 연락처
   const [RoadAddress, setRoadAddress] = useState(""); // 도로명 주소
   const [detailAddress, setDetailAddress] = useState(""); // 상세 주소
   const [postNumber, setPostNumber] = useState(""); // 우편번호
   const [message, setMessage] = useState(""); // 배송메시지
   const [inputmessage, setinputMessage] = useState(""); // 배송메시지 - 직접입력
   const [isOpen, setIsOpen] = useState(false);
-  //const [addressname, setAddressName] = useState("");
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
   const [isaddressvalid, setIsAddressValid] = useState({
     road_postaddress: false,
     detail: false,
   });
+  const [isAllVisit, setIsAllVisit] = useState(false); // 전체 픽업 여부
 
-  // 폼 유효성 검사
-  /*  const [isValid, setIsValid] = useState({
-    isName: false,
-    isPhone: { first: false, second: false },
-    isRoadAddress: false,
-    isDetailAddress: false,
-    isPostNumber: false,
-    isAddressName: false,
-  }); */
+  let pickupaddress = "경기 화성시"; // temp data
 
-  // 핸드폰번호 유효성 검사
-  /*  const onChangePhone = (e: any) => {
-    
-    const phoneRegExp = /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/;
-    if (!phoneRegExp.test(phone.first)) {
-      setValidText("번호를 올바르게 입력해주세요");
-      setIsValid({
-        ...isValid,
-        isPhone: { second: isValid.isPhone.second, first: false },
-      });
-    } else {
-      setIsValid({
-        ...isValid,
-        isPhone: { second: isValid.isPhone.second, first: true },
-      });
-    }
-  }; */
+  //const { OrderInfo } = useGetOrderList(router.query.basketIds, 1); // 주문 정보
   /* 주소 검색 시스템 */
   const handleComplete = (data: any) => {
     let fullAddress = data.address;
@@ -122,7 +106,7 @@ export default function payment() {
     })();
   }, []);
 
-  /* form 시스템 */
+  /* form 시스템 : 배송 포함 */
   const {
     register,
     watch,
@@ -130,6 +114,7 @@ export default function payment() {
     formState: { errors },
     setError,
   } = useForm<FormData>();
+
   const handleValid = (data: FormData) => {
     //Api 호출
 
@@ -140,6 +125,11 @@ export default function payment() {
       isaddressvalid.road_postaddress === true
     ) {
       console.log(data, RoadAddress, postNumber, detailAddress);
+      if (message === "직접입력") {
+        console.log(inputmessage);
+      } else {
+        console.log(message);
+      }
       const paymentWidget = paymentWidgetRef.current;
       try {
         paymentWidget?.requestPayment({
@@ -157,136 +147,228 @@ export default function payment() {
       window.confirm("주소를 입력해주세요");
     }
   };
+
+  /* form 시스템 : 전체 픽업 */
+  const {
+    register: pickupregister,
+    handleSubmit: pickuphandleSubmit,
+    formState: { errors: pickuperrors },
+  } = useForm<pickupFormData>();
+
+  const handlepickupValid = (data: pickupFormData) => {
+    //Api 호출
+
+    /* setValue("userID", "");
+    setValue("userPW", ""); */
+    console.log(data);
+    console.log(pickupaddress);
+
+    const paymentWidget = paymentWidgetRef.current;
+    try {
+      paymentWidget?.requestPayment({
+        orderId: nanoid(),
+        orderName: "test",
+        customerName: "김토스",
+        customerEmail: "customer123@gmail.com",
+        successUrl: `${window.location.origin}/success`,
+        failUrl: `${window.location.origin}/fail`,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //const { OrderInfo } = useGetOrderList(router?.query?.basketIds, 1);
+
   return (
     <Wrapper>
-      <form onSubmit={handleSubmit(handleValid)}>
+      <form
+        onSubmit={
+          !isAllVisit
+            ? handleSubmit(handleValid)
+            : pickuphandleSubmit(handlepickupValid)
+        }
+      >
         <Box height="100%">
-          <GreenBox>배송정보</GreenBox>
+          {!isAllVisit ? (
+            <>
+              <GreenBox>배송정보</GreenBox>
+              <Box width="100%" height="100%">
+                <Row>
+                  <H1>배송지</H1>
+                  <BoxInput
+                    {...register("addressname", {
+                      required: "배송지 이름을 입력해주세요",
+                    })}
+                    width="300*6px"
+                    height="30px"
+                    required
+                  />
 
-          <Box width="100%" height="100%">
-            <Row>
-              <H1>배송지</H1>
-              <BoxInput
-                {...register("addressname", {
-                  required: "배송지 이름을 입력해주세요",
-                })}
-                width="300*6px"
-                height="30px"
-                // value={addressname}
-                //onChange={(e) => setAddressName(e.target.value)}
-                required
-              />
+                  <Button onClick={() => setIsOpen(true)} color="no">
+                    배송지 변경
+                  </Button>
+                </Row>
+                <hr />
 
-              <Button onClick={() => setIsOpen(true)} color="no">
-                배송지 변경
-              </Button>
-            </Row>
-            <hr />
-
-            <Row>
-              <H1>이름</H1>
-              <BoxInput
-                //value={name}
-                //onChange={(e) => setName(e.target.value)}
-                width="600px"
-                height="30px"
-                required
-                {...register("name", {
-                  required: "이름을 입력해주세요",
-                })}
-              />
-            </Row>
-            <hr />
-            <Row>
-              <H1>연락처</H1>
-              <BoxInput
-                width="300px"
-                height="30px"
-                placeholder="ex) 010-1234-5678"
-                //value={phone.first}
-                //onChange={(e) => setPhone({ ...phone, first: e.target.value })}
-                {...register("phone_1", {
-                  required: "연락처를 입력해주세요",
-                  pattern: {
-                    value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
-                    message: "올바른 입력처를 입력해주세요",
-                  },
-                })}
-                required
-              />
-              <StyledSpan>
-                {errors?.phone_1 && errors?.phone_1.message}
-              </StyledSpan>
-              <BoxInput
-                width="300px"
-                height="30px"
-                //value={phone.second}
-                //onChange={(e) => setPhone({ ...phone, second: e.target.value })}
-                {...register("phone_2", {
-                  required: "연락처를 입력해주세요",
-                  pattern: {
-                    value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
-                    message: "올바른 연락처를 입력해주세요",
-                  },
-                })}
-                required
-              />
-              <StyledSpan>
-                {errors?.phone_2 && errors?.phone_2.message}
-              </StyledSpan>
-            </Row>
-            <hr />
-            <Row>
-              <H1>주소</H1>
-              <AddressInput>
-                <BoxInput
-                  value={`${postNumber + " " + RoadAddress}`}
-                  type="text"
-                  placeholder="검색버튼을 눌러 주소지를 입력해주세요"
-                  required
-                  readOnly
-                  width="500px"
-                  height="30px"
-                />
-                <Button onClick={searchAddressHandler}>우편번호 검색</Button>
-                <BoxInput
-                  placeholder="상세 주소를 입력해주세요"
-                  type="text"
-                  width="500px"
-                  height="30px"
-                  value={detailAddress}
-                  onChange={(e) => {
-                    setDetailAddress(e.target.value);
-                    setIsAddressValid({ ...isaddressvalid, detail: true });
-                  }}
-                  required
-                />
-              </AddressInput>
-            </Row>
-            <hr />
-            <Row>
-              <H1>배송 요청사항</H1>
-              <select onChange={(e) => setMessage(e.target.value)}>
-                <option value="">배송시 요청사항을 선택해주세요</option>
-                {requestList.map((request) => (
-                  <option key={request.value} value={request.value}>
-                    {request.value}
-                  </option>
-                ))}
-              </select>
-              {message === "직접입력" && (
-                <BoxInput
-                  height="50px"
-                  type="textarea"
-                  placeholder="최대 50자입니다"
-                  value={inputmessage}
-                  onChange={(e) => {
-                    setinputMessage(e.target.value);
-                  }}
-                />
-              )}
-            </Row>
-          </Box>
+                <Row>
+                  <H1>이름</H1>
+                  <BoxInput
+                    width="600px"
+                    height="30px"
+                    required
+                    {...register("name", {
+                      required: "이름을 입력해주세요",
+                    })}
+                  />
+                </Row>
+                <hr />
+                <Row>
+                  <H1>연락처</H1>
+                  <BoxInput
+                    width="300px"
+                    height="30px"
+                    placeholder="ex) 010-1234-5678"
+                    {...register("phone_1", {
+                      required: "연락처를 입력해주세요",
+                      pattern: {
+                        value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+                        message: "올바른 입력처를 입력해주세요",
+                      },
+                    })}
+                    required
+                  />
+                  <StyledSpan>
+                    {errors?.phone_1 && errors?.phone_1.message}
+                  </StyledSpan>
+                  <BoxInput
+                    width="300px"
+                    height="30px"
+                    {...register("phone_2", {
+                      required: "연락처를 입력해주세요",
+                      pattern: {
+                        value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+                        message: "올바른 연락처를 입력해주세요",
+                      },
+                    })}
+                    required
+                  />
+                  <StyledSpan>
+                    {errors?.phone_2 && errors?.phone_2.message}
+                  </StyledSpan>
+                </Row>
+                <hr />
+                <Row>
+                  <H1>주소</H1>
+                  <AddressInput>
+                    <BoxInput
+                      value={`${postNumber + " " + RoadAddress}`}
+                      type="text"
+                      placeholder="검색버튼을 눌러 주소지를 입력해주세요"
+                      required
+                      readOnly
+                      width="500px"
+                      height="30px"
+                    />
+                    <Button onClick={searchAddressHandler}>
+                      우편번호 검색
+                    </Button>
+                    <BoxInput
+                      placeholder="상세 주소를 입력해주세요"
+                      type="text"
+                      width="500px"
+                      height="30px"
+                      value={detailAddress}
+                      onChange={(e) => {
+                        setDetailAddress(e.target.value);
+                        setIsAddressValid({ ...isaddressvalid, detail: true });
+                      }}
+                      required
+                    />
+                  </AddressInput>
+                </Row>
+                <hr />
+                <Row>
+                  <H1>배송 요청사항</H1>
+                  <select onChange={(e) => setMessage(e.target.value)}>
+                    <option value="">배송시 요청사항을 선택해주세요</option>
+                    {requestList.map((request) => (
+                      <option key={request.value} value={request.value}>
+                        {request.value}
+                      </option>
+                    ))}
+                  </select>
+                  {message === "직접입력" && (
+                    <BoxInput
+                      height="50px"
+                      type="textarea"
+                      placeholder="최대 50자입니다"
+                      value={inputmessage}
+                      onChange={(e) => {
+                        setinputMessage(e.target.value);
+                      }}
+                    />
+                  )}
+                </Row>
+              </Box>
+            </>
+          ) : (
+            <>
+              <GreenBox>픽업정보</GreenBox>
+              <Box width="100%" height="100%">
+                <Row>
+                  <H1>픽업주소</H1>
+                  <BoxInput
+                    value={pickupaddress}
+                    type="text"
+                    readOnly
+                    width="500px"
+                    height="30px"
+                  />
+                </Row>
+                <Row>
+                  <H1>이름</H1>
+                  <BoxInput
+                    type="text"
+                    width="600px"
+                    height="30px"
+                    required
+                    {...pickupregister("name", {
+                      required: "이름을 입력해주세요",
+                    })}
+                  />
+                </Row>
+                <Row>
+                  <H1>연락처</H1>
+                  <BoxInput
+                    width="300px"
+                    height="30px"
+                    placeholder="ex) 010-1234-5678"
+                    {...pickupregister("phone1", {
+                      required: "연락처를 입력해주세요",
+                      pattern: {
+                        value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+                        message: "올바른 연락처를 입력해주세요",
+                      },
+                    })}
+                  />
+                  <BoxInput
+                    width="300px"
+                    height="30px"
+                    placeholder="ex) 010-1234-5678"
+                    {...pickupregister("phone2", {
+                      required: "연락처를 입력해주세요",
+                      pattern: {
+                        value: /^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$/,
+                        message: "올바른 연락처를 입력해주세요",
+                      },
+                    })}
+                    type="text"
+                  />
+                </Row>
+              </Box>
+            </>
+          )}
           <GreenBox>상품정보 / 결제금액</GreenBox>
           <Box width="100%">
             <TitleDiv>
@@ -295,6 +377,8 @@ export default function payment() {
               <Title>금액</Title>
               <Title>거래방법</Title>
             </TitleDiv>
+            <Hr />
+            <ItemBox>아이템 박스1</ItemBox>
             <Hr />
           </Box>
           <GreenBox>결제정보</GreenBox>
@@ -391,4 +475,19 @@ const Hr = styled.hr`
 const StyledSpan = styled.span`
   font-size: small;
   color: red;
+`;
+const ImageDiv = styled.div`
+  width: 200px;
+`;
+const ItemBox = styled.div`
+  width: 800px;
+  height: 118px;
+  display: flex;
+`;
+const Item = styled.div`
+  width: 158px;
+
+  text-align: center;
+  align-items: center;
+  padding: 20px;
 `;
