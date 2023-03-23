@@ -50,6 +50,8 @@ const customerKey = "cyxvwiRl9bBlieSh4r6W6";
 export default function payment() {
   const router = useRouter();
   console.log(router.query);
+  let basketIds = router.query.basketIds;
+
   const open = useDaumPostcodePopup(
     "https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
   );
