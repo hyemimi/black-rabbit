@@ -16,9 +16,15 @@ export default function Product({
 }: IItem) {
   const router = useRouter();
   return (
-    <Box onClick={() => router.push(`/product/${Item_id}`)}>
+    <Box>
       <InnerBox>
-        <Image src={tempimage} alt="" width={240} height={200}></Image>
+        <Image
+          onClick={() => router.push(`/product/${Item_id}`)}
+          src={tempimage}
+          alt=""
+          width={240}
+          height={200}
+        ></Image>
         <Wrapper>
           <Overview>
             <h1>{modelName}</h1> <br />

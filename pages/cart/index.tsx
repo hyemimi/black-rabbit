@@ -16,6 +16,7 @@ export interface IBasket {
   title: string;
 }
 export default function Cart() {
+  /* 장바구니 목록 임시데이터 입니다 */
   const tempbasket = [
     {
       basketId: 1,
@@ -75,7 +76,6 @@ export default function Cart() {
     }
   };
 
-  console.log(totalPrice);
   return (
     <Wrapper>
       <TitleDiv>
