@@ -1,8 +1,10 @@
 import { IItem } from "@/temp/items";
+import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Box, Item } from "../common/Box";
 
 export default function Order({ brandName, modelName, image }: IItem) {
+  const router = useRouter();
   return (
     <>
       <Box>
@@ -18,7 +20,9 @@ export default function Order({ brandName, modelName, image }: IItem) {
           <Item width="200px">
             <Button>배송상태</Button>
             <Button>교환/반품 신청</Button>
-            <Button>리뷰 작성하기</Button>
+            <Button onClick={() => router.push("/mypage-user/writeReview")}>
+              리뷰 작성하기
+            </Button>
           </Item>
         </InnerBox>
       </Box>
