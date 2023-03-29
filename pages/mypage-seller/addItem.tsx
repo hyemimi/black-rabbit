@@ -1,28 +1,30 @@
 import styled from "styled-components";
-import QuilEditor from "@/components/mypage/seller/QuilEditor";
 import { StyledButton } from "@/components/common/Button";
-// import AddImage from "@/components/mypage/seller/addImage";
-
-import { useEffect, useState, useRef } from "react";
-import { useForm } from "react-hook-form";
+import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
-import { Url } from "url";
+import axios from "axios";
+import Link from "next/link";
+import AddressSelectModal from "@/components/mypage/seller/AddressSlelectModal";
+import InnerModal from "../../components/mypage/seller/InnerModal";
 
 const QuillEditor = dynamic(
   () => import("../../components/mypage/seller/QuilEditor"),
   {
     ssr: false,
   }
-); // client 사이드에서만 동작되기 때문에 ssr false로 설정
+);
 
 interface ItemForm {
+  storeId: number;
   itemTitle: string;
   itemCategory: string;
   itemNumber: number;
   itemBrand: string;
   itemModel: string;
   transactionWay: string;
-  region: string;
+  postalCode: number;
+  address: string;
+  addressDetail: string;
   feePerDay: number;
   fee5Day: number;
   fee10Day: number;
@@ -31,52 +33,105 @@ interface ItemForm {
 }
 
 const addItem = () => {
+  //state
   const [showImages, setShowImages] = useState([]);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    control,
-    watch,
-  } = useForm();
-
-  console.log(watch("image"));
-  const onSubmit = (data: ItemForm) => {
-    console.log(data);
-  };
-
   const [htmlStr, setHtmlStr] = useState<string>("");
+  const [selectModal, setSelectModal] = useState<boolean>(false);
+  const [itemCategory, setItemCategory] = useState<string>("CAMERA");
+  const [transMethod, setTransMethod] = useState<string>("PARCEL");
+  const [postalCode, setPostalCode] = useState<string>(null);
+  const [address, setAddress] = useState<string>("");
+  const [addressDetail, setAddressDetail] = useState<string>("");
+  const [imageList, setImageList] = useState<File[]>([]);
 
   // ref
   const viewContainerRef = useRef<HTMLDivElement>(null);
+  const itemTitleRef = useRef<HTMLInputElement>(null);
+  const itemNumberRef = useRef<HTMLInputElement>(null);
+  const itemBrandRef = useRef<HTMLInputElement>(null);
+  const itemModelRef = useRef<HTMLInputElement>(null);
+  const pricePerOneRef = useRef<HTMLInputElement>(null);
+  const pricePerFiveRef = useRef<HTMLInputElement>(null);
+  const pricePerTenRef = useRef<HTMLInputElement>(null);
+  const itemImagesRef = useRef<HTMLImageElement>(null);
 
-  // useEffect
-  useEffect(() => {
-    if (viewContainerRef.current) {
-      viewContainerRef.current.innerHTML =
-        "<h2>html 코드를 이용하여 만들어지는 View입니다.</h2>";
-      viewContainerRef.current.innerHTML += htmlStr;
+  const itemCategoryHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemCategory(e.target!.value);
+    //콘솔시 이전값 찍히는데 왜?
+  };
+
+  const transMethodHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTransMethod(e.target!.value);
+    //콘솔시 이전값 찍히는데 왜?
+  };
+
+  const closeModal = () => {
+    setSelectModal((prev) => !prev);
+    console.log(selectModal);
+  };
+
+  const handleAddImages = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files !== null && imageList.length < 10) {
+      const imageLists = event.target.files;
+      let imageUrlLists: any = [...showImages];
+      for (let i = 0; i < imageLists.length; i++) {
+        const currentImageUrl = URL.createObjectURL(imageLists[i]);
+        imageUrlLists.push(currentImageUrl);
+        setImageList([...imageList, imageLists[i]]);
+      }
+      if (imageUrlLists.length > 10) {
+        imageUrlLists = imageUrlLists.slice(0, 10);
+        alert("사진은 최대 10장까지만 등록 가능합니다.");
+      }
+      setShowImages(imageUrlLists);
     }
-  }, [htmlStr]);
-
-  const handleAddImages = (event: any) => {
-    const imageLists = event.target.files;
-    let imageUrlLists: any = [...showImages];
-
-    for (let i = 0; i < imageLists.length; i++) {
-      const currentImageUrl = URL.createObjectURL(imageLists[i]);
-      imageUrlLists.push(currentImageUrl);
-    }
-
-    if (imageUrlLists.length > 10) {
-      imageUrlLists = imageUrlLists.slice(0, 10);
-    }
-
-    setShowImages(imageUrlLists);
   };
 
   const handleDeleteImage = (id: number) => {
     setShowImages(showImages.filter((_, index) => index !== id));
+    setImageList(imageList.filter((_, index) => index !== id));
+  };
+
+  const SubmitHandler = (event: React.FormEvent) => {
+    event.preventDefault();
+    const enteredItemTitle = itemTitleRef.current!.value;
+    const enteredQuantity = itemNumberRef.current!.value;
+    const enteredBrand = itemBrandRef.current!.value;
+    const enteredModel = itemModelRef.current!.value;
+    const enteredPricePerOne = pricePerOneRef.current!.value;
+    const enteredPricePerFive = pricePerFiveRef.current!.value;
+    const enteredPricePerTen = pricePerTenRef.current!.value;
+
+    const formData = new FormData();
+
+    formData.append("title", JSON.stringify(enteredItemTitle));
+    formData.append("category", JSON.stringify(itemCategory));
+    formData.append("quantity", JSON.stringify(enteredQuantity));
+    formData.append("brandName", JSON.stringify(enteredBrand));
+    formData.append("modelName", JSON.stringify(enteredModel));
+    formData.append("method", JSON.stringify(transMethod));
+    formData.append("postalCode", JSON.stringify(postalCode));
+    formData.append("address", JSON.stringify(address));
+    formData.append("addressDetail", JSON.stringify(addressDetail));
+    formData.append("pricePerOne", JSON.stringify(enteredPricePerOne));
+    formData.append("pricePerFive ", JSON.stringify(enteredPricePerFive));
+    formData.append("pricePerTen", JSON.stringify(enteredPricePerTen));
+    formData.append("detail", JSON.stringify(htmlStr));
+    for (var i = 0; i < imageList.length; i++) {
+      formData.append("images", imageList[i]);
+    }
+    for (var i = 0; i < imageList.length; i++) {
+      formData.append("infoImages", imageList[i]);
+    }
+
+    try {
+      axios.post("15.165.101.95:8080/items/store-write", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      for (let value of formData.values()) {
+        console.log(value);
+      }
+    } catch (e) {}
   };
 
   return (
@@ -84,22 +139,21 @@ const addItem = () => {
       <WholeDiv>
         <StyledTitle>상품 등록</StyledTitle>
         <hr />
-        <form onSubmit={handleSubmit((data) => console.log(data))}>
+        <form onSubmit={SubmitHandler}>
           <Div>
             <Label>제목</Label>
             <Input
               type="text"
-              {...register("itemTitle", {
-                required: "해당 필드는 필수입니다.",
-                minLength: { value: 1, message: "1글자 이상 입력해주세요" },
-              })}
+              name="title"
+              ref={itemTitleRef}
+              placeholder="브랜드명 + 모델명으로 구성된 제목을 적어주세요."
             />
             {/* {errors?.itemTitle && <span>{errors?.itemTitle?.message}</span>} */}
           </Div>
 
           <Div>
-            <Label htmlFor="itemCategory">카테고리</Label>
-            <Select name="itemCategory">
+            <Label htmlFor="category">카테고리</Label>
+            <Select name="category" onChange={itemCategoryHandler}>
               <option value="CAMERA">카메라</option>
               <option value="LENS">렌즈</option>
               <option value="CAMCORDER">캠코더</option>
@@ -110,13 +164,12 @@ const addItem = () => {
               <option value="ETC">기타</option>
             </Select>
 
-            <Label htmlFor="itemNumber">수량</Label>
+            <Label htmlFor="quantity">수량</Label>
             <Input
               type="number"
-              {...register("itemNumber", {
-                required: "해당 필드는 필수입니다.",
-                min: { value: 1, message: "1개 이상을 입력해주세요." },
-              })}
+              name="quantity"
+              ref={itemNumberRef}
+              placeholder="수량"
             />
           </Div>
 
@@ -124,83 +177,100 @@ const addItem = () => {
             <Label>브랜드명</Label>
             <Input
               type="text"
-              {...register("itemBrand", {
-                required: "해당 필드는 필수입니다.",
-                minLength: { value: 1, message: "1글자 이상 입력해주세요." },
-              })}
+              name="itemBrand"
+              ref={itemBrandRef}
+              placeholder="예) 캐논"
             />
             <Label>모델명</Label>
             <Input
               type="text"
-              {...register("itemModel", {
-                required: "해당 필드는 필수입니다.",
-                minLength: { value: 1, message: "1글자 이상 입력해주세요." },
-              })}
+              name="itemModel"
+              ref={itemModelRef}
+              placeholder="예) ES303"
             />
           </Div>
           <Div>
-            <Label htmlFor="transactionWay">거래방법</Label>
-            <Select name="transactionWay">
+            <Label htmlFor="method">거래방법</Label>
+            <Select name="method" onChange={transMethodHandler}>
               <option value="PARCEL">택배수령</option>
               <option value="VISIT">방문수령</option>
             </Select>
-
-            <Label htmlFor="region">지역</Label>
-            <Input
-              type="text"
-              {...register("region", {
-                required: "해당 필드는 필수입니다.",
-                minLength: { value: 1, message: "1글자 이상 입력해주세요." },
-              })}
-            />
           </Div>
 
+          <AddressDiv>
+            <Label htmlFor="address">거래주소</Label>
+            <ButtonDiv>
+              <Input
+                type="number"
+                name="postalCode"
+                value={postalCode}
+                placeholder="우편번호"
+              />
+              <Button onClick={closeModal}>선택</Button>
+              <Link href={"/mypage-seller/addAddress"}>
+                <Button>추가</Button>
+              </Link>
+            </ButtonDiv>
+            <div>
+              {selectModal && (
+                <AddressSelectModal>
+                  <InnerModal
+                    closeModal={closeModal}
+                    setPostalCode={setPostalCode}
+                    setAddress={setAddress}
+                    setAddressDetail={setAddressDetail}
+                  ></InnerModal>
+                </AddressSelectModal>
+              )}
+            </div>
+            <Input
+              type="text"
+              name="address"
+              value={address}
+              placeholder="기본주소"
+            />
+            <Input
+              type="text"
+              name="addressDetail"
+              value={addressDetail}
+              placeholder="상세주소"
+            />
+          </AddressDiv>
+
           <Prices>
-            <Rlabel>대여료</Rlabel>
-            <Prices>
-              <Div>
-                <Label htmlFor="feePerDay">1일</Label>
+            <Label>대여료</Label>
+            <AddressDiv>
+              <PriceDiv>
+                <Label htmlFor="pricePerOne">1일</Label>
                 <Input
                   type="price"
-                  {...register("feePerDay", {
-                    required: "해당 필드는 필수입니다.",
-                    min: {
-                      value: 1,
-                      message: "1원 이상 입력해주세요.",
-                    },
-                  })}
+                  name="pricePerOne"
+                  ref={pricePerOneRef}
+                  placeholder="가격/1일"
                 />
                 <Label>원</Label>
-              </Div>
-              <Div>
-                <Label htmlFor="fee5Day">5일 이상</Label>
+              </PriceDiv>
+              <PriceDiv>
+                <Label htmlFor="pricePerFive">5일 이상</Label>
                 <Input
                   type="text"
-                  {...register("fee5Day", {
-                    required: "해당 필드는 필수입니다.",
-                    min: {
-                      value: 1,
-                      message: "1원 이상 입력해주세요.",
-                    },
-                  })}
+                  name="pricePerFive"
+                  ref={pricePerFiveRef}
+                  placeholder="가격/1일"
                 />
                 <Label>원</Label>
-              </Div>
-              <Div>
-                <Label htmlFor="fee10Day">10일 이상</Label>
+              </PriceDiv>
+              <PriceDiv>
+                <Label htmlFor="pricePerTen">10일 이상</Label>
                 <Input
                   type="text"
-                  {...register("fee10Day", {
-                    required: "해당 필드는 필수입니다.",
-                    min: {
-                      value: 1,
-                      message: "1원 이상 입력해주세요.",
-                    },
-                  })}
+                  name="pricePerTen"
+                  ref={pricePerTenRef}
+                  placeholder="가격/1일"
                 />
                 <Label>원</Label>
-              </Div>
-            </Prices>
+              </PriceDiv>
+            </AddressDiv>
           </Prices>
 
           <Div>
@@ -210,21 +280,6 @@ const addItem = () => {
             </EditorContainer>
           </Div>
 
-          {/* <Div>
-            <Contents.Container>
-              <Contents.ViewContainer ref={viewContainerRef} />
-            </Contents.Container>
-          </Div> */}
-
-          {/* <Contents.Container>
-              <Contents.HtmlContainer>
-                <h2>Editor를 통해 만들어진 html 코드입니다.</h2>
-                {htmlStr}
-              </Contents.HtmlContainer>
-
-              <Contents.ViewContainer ref={viewContainerRef} />
-            </Contents.Container> */}
-
           <ImageDiv>
             <Label>이미지등록</Label>
             <ImageUploadLabel htmlFor="itemImages">사진 선택</ImageUploadLabel>
@@ -232,7 +287,7 @@ const addItem = () => {
 
             <Div>
               <FileInput
-                {...register("image")}
+                name="image"
                 id="itemImages"
                 type="file"
                 accept="image/*"
@@ -261,6 +316,7 @@ const addItem = () => {
     </Wrapper>
   );
 };
+
 export default addItem;
 
 const StyledTitle = styled.h1`
@@ -318,7 +374,7 @@ const Div = styled.div`
   flex-direction: row;
   justify-content: left;
   text-align: left;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
   line-height: 30px;
   vertical-align: center;
 `;
@@ -329,13 +385,6 @@ const Prices = styled.div`
   justify-content: left;
   text-align: left;
   width: 100%;
-  margin-top: 2rem;
-`;
-
-const Rlabel = styled.label`
-  text-align: left;
-  width: 10rem;
-  font-weight: 400;
 `;
 
 const ImageUploadLabel = styled.label`
@@ -446,4 +495,47 @@ const DeleteButton = styled.button`
   &:hover {
     background: #b9d9c0;
   }
+`;
+
+const Button = styled.button`
+  width: 40px;
+  height: 40px;
+  margin: 0 3px;
+  border: 0;
+  background: #d9d9d9;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background: #2f3640;
+    color: white;
+  }
+`;
+
+const ButtonDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: left;
+  vertical-align: center;
+`;
+
+const AddressDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 1rem;
+`;
+
+const PriceDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: left;
+  margin: 0rem 0;
+  line-height: 30px;
+  vertical-align: center;
 `;
