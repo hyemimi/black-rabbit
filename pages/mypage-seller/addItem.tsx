@@ -6,6 +6,7 @@ import axios from "axios";
 import Link from "next/link";
 import AddressSelectModal from "@/components/mypage/seller/AddressSlelectModal";
 import InnerModal from "../../components/mypage/seller/InnerModal";
+import { NextPage } from "next";
 
 const QuillEditor = dynamic(
   () => import("../../components/mypage/seller/QuilEditor"),
@@ -32,14 +33,14 @@ interface ItemForm {
   itemImages: HTMLImageElement;
 }
 
-const addItem = () => {
+const AddItem = () => {
   //state
   const [showImages, setShowImages] = useState([]);
   const [htmlStr, setHtmlStr] = useState<string>("");
   const [selectModal, setSelectModal] = useState<boolean>(false);
   const [itemCategory, setItemCategory] = useState<string>("CAMERA");
   const [transMethod, setTransMethod] = useState<string>("PARCEL");
-  const [postalCode, setPostalCode] = useState<string>(null);
+  const [postalCode, setPostalCode] = useState<number>(1);
   const [address, setAddress] = useState<string>("");
   const [addressDetail, setAddressDetail] = useState<string>("");
   const [imageList, setImageList] = useState<File[]>([]);
@@ -317,7 +318,7 @@ const addItem = () => {
   );
 };
 
-export default addItem;
+export default AddItem;
 
 const StyledTitle = styled.h1`
   text-align: left;
