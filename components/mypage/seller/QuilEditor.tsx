@@ -27,13 +27,11 @@ const QuillEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
       const formData = new FormData();
 
       if (file) {
-        formData.append("multipartFiles", file[0]);
+        formData.append("infoImages", file[0]);
       }
+
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
-      const res = await axios.post(
-        "http://localhost:8080/uploadImage",
-        formData
-      );
+      const res = await axios.post("/items/store-write", formData);
 
       if (quillRef.current) {
         // 현재 Editor 커서 위치에 서버로부터 전달받은 이미지 불러오는 url을 이용하여 이미지 태그 추가
@@ -80,9 +78,9 @@ const QuillEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
         ],
 
         // custom 핸들러 설정
-        handlers: {
-          image: imageHandler, // 이미지 tool 사용에 대한 핸들러 설정
-        },
+        // handlers: {
+        //   image: imageHandler, // 이미지 tool 사용에 대한 핸들러 설정
+        // },
       },
     }),
     []
