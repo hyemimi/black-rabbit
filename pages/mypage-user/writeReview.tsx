@@ -2,8 +2,29 @@ import { Box, BoxInput } from "@/components/common/Box";
 import { TitleDiv } from "@/components/common/TitleDiv";
 import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
+import { useState, useRef } from "react";
+import tempimage from "../../public/help.png";
+import Image from "next/image";
 
 export default function writeReview() {
+  const [image, setImage] = useState(tempimage);
+  const fileInput = useRef<HTMLInputElement | null>(null);
+  const handleImage = async (e: any) => {
+    // 내가 받을 파일은 하나기 때문에 index 0값의 이미지를 가짐
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // 이미지 화면에 띄우기
+    const reader = new FileReader();
+    // 파일을 불러오는 메서드, 종료되는 시점에 readyState는 Done(2)이 되고 onLoad 시작
+    reader.readAsDataURL(file);
+    reader.onload = (e: any) => {
+      if (reader.readyState === 2) {
+        // 파일 onLoad가 성공하면 2, 진행 중은 1, 실패는 0 반환
+        setImage(e.target.result);
+      }
+    };
+  };
   return (
     <Wrapper>
       <TitleDiv>
@@ -26,9 +47,31 @@ export default function writeReview() {
           <BoxInput as="textarea" height="400px"></BoxInput>
         </Row>
         <Row>
-          <input type="file" accept="image/*" />
+          <input
+            type="file"
+            name="image_URL"
+            id="input-file"
+            accept="image/*"
+            style={{ display: "none" }}
+            ref={fileInput}
+            onChange={handleImage}
+          />
+          <button
+            onClick={() => {
+              fileInput.current?.click();
+            }}
+          >
+            이미지 업로드
+          </button>
         </Row>
-        <ImageDiv></ImageDiv>
+        <ImageDiv>
+          <Image
+            src={image}
+            alt="이미지를 업로드 해주세요"
+            width={200}
+            height={100}
+          ></Image>
+        </ImageDiv>
         <Button>작성하기</Button>
       </Box>
     </Wrapper>
