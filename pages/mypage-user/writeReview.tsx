@@ -7,23 +7,17 @@ import tempimage from "../../public/help.png";
 import Image from "next/image";
 
 export default function writeReview() {
-  const [image, setImage] = useState(tempimage);
+  const [images, setImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement | null>(null);
-  const handleImage = async (e: any) => {
-    // 내가 받을 파일은 하나기 때문에 index 0값의 이미지를 가짐
-    const file = e.target.files[0];
-    if (!file) return;
-
-    // 이미지 화면에 띄우기
-    const reader = new FileReader();
-    // 파일을 불러오는 메서드, 종료되는 시점에 readyState는 Done(2)이 되고 onLoad 시작
-    reader.readAsDataURL(file);
-    reader.onload = (e: any) => {
-      if (reader.readyState === 2) {
-        // 파일 onLoad가 성공하면 2, 진행 중은 1, 실패는 0 반환
-        setImage(e.target.result);
-      }
-    };
+  console.log(images);
+  /* 이미지들의 url을 string 배열로 넣습니다 */
+  const handleChange = (e: React.ChangeEvent) => {
+    const targetFiles = (e.target as HTMLInputElement).files as FileList;
+    const targetFilesArray = Array.from(targetFiles);
+    const selectedFiles: string[] = targetFilesArray.map((file) => {
+      return URL.createObjectURL(file);
+    });
+    setImages((prev) => prev.concat(selectedFiles));
   };
   return (
     <Wrapper>
@@ -54,26 +48,33 @@ export default function writeReview() {
             accept="image/*"
             style={{ display: "none" }}
             ref={fileInput}
-            onChange={handleImage}
+            multiple
+            onChange={handleChange}
           />
-          <button
+          <Button
             onClick={() => {
               fileInput.current?.click();
             }}
           >
             이미지 업로드
-          </button>
+          </Button>
         </Row>
         <ImageDiv>
-          <Image
-            src={image}
-            alt="이미지를 업로드 해주세요"
-            width={200}
-            height={100}
-          ></Image>
+          {images.map((url, i) => (
+            <div key={url}>
+              <Image
+                src={url}
+                width="200"
+                height="160"
+                alt={`image${i}`}
+              ></Image>
+            </div>
+          ))}
         </ImageDiv>
-        <Button>작성하기</Button>
       </Box>
+      <ButtonDiv>
+        <Button>작성하기</Button>
+      </ButtonDiv>
     </Wrapper>
   );
 }
@@ -91,7 +92,10 @@ const H1 = styled.h1`
 const ImageDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
-  color: gray;
+`;
+const ButtonDiv = styled.div`
+  margin-top: 100px;
+  justify-content: center;
 `;
 const Button = styled.button`
   background-color: ${(props) => props.theme.pointColor};
@@ -99,7 +103,6 @@ const Button = styled.button`
   margin-left: 30px;
   height: 50px;
   width: 130px;
-  margin-left: 400px;
   cursor: pointer;
 `;
 const ReviewBox = styled(Box)`
