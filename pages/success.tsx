@@ -2,9 +2,21 @@ import { Wrapper } from "@/components/common/Wrapper";
 import Card from "@/layout/Card";
 import { useRouter } from "next/router";
 import styled from "styled-components";
-
+import { useEffect } from "react";
+import { instance } from "@/libs/api/client";
 export default function Success() {
   const router = useRouter();
+  const { paymentKey, orderId, amount } = router.query;
+  useEffect(() => {
+    const init = async () => {
+      // ... 대충 결제에 성공하면 백단에 정보 저장하는 API
+      await instance
+        .get("/toss/redirect/success", {
+          params: { amount: amount, orderId: orderId, paymentKey: paymentKey },
+        })
+        .then((res) => console.log(res));
+    };
+  }, []);
   return (
     <Wrapper>
       <Section>

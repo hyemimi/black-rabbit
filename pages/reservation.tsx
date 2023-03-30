@@ -16,6 +16,7 @@ import { nanoid } from "nanoid";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useGetOrderList } from "@/hooks/api/payment/GetOrderInfo";
+import { loadTossPayments } from "@tosspayments/payment-sdk";
 
 interface FormData {
   addressname: string;
@@ -99,7 +100,7 @@ export default function payment() {
   };
   const paymentWidgetRef = useRef<PaymentWidgetInstance | null>(null);
   const price = 1;
-  useEffect(() => {
+  /* useEffect(() => {
     (async () => {
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
       paymentWidget.renderPaymentMethods("#payment-widget", price);
@@ -107,7 +108,7 @@ export default function payment() {
       paymentWidgetRef.current = paymentWidget;
     })();
   }, []);
-
+ */
   /* form 시스템 : 배송 포함 */
   const {
     register,
@@ -132,22 +133,26 @@ export default function payment() {
       } else {
         console.log(message);
       }
-      const paymentWidget = paymentWidgetRef.current;
-      try {
-        paymentWidget?.requestPayment({
-          orderId: nanoid(),
-          orderName: "test",
-          customerName: "김토스",
-          customerEmail: "customer123@gmail.com",
-          successUrl: `${window.location.origin}/success`,
-          failUrl: `${window.location.origin}/fail`,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    } else {
-      window.confirm("주소를 입력해주세요");
     }
+    loadTossPayments(clientKey).then((tossPayments) => {
+      tossPayments
+        .requestPayment("카드", {
+          amount: 100,
+          orderId: "7uR3G6jfuVGf23QRG1ElU", // 대충 날짜를 조합하든가 uuid를 사용하는 방법도..
+          orderName: "토스 티셔츠 외 2건",
+          customerName: "박토스",
+          successUrl: "http://localhost:3000/success", // ${결제 성공 후 redirect할 url}
+          failUrl: "http://localhost:3000/fail", //  ${결제 실패한 경우 redirect할 url}
+        })
+        .catch(function (error) {
+          console.log(error);
+          if (error.code === "USER_CANCEL") {
+            console.log("실패");
+          } else if (error.code === "INVALID_CARD_COMPANY") {
+            // 유효하지 않은 카드 코드에 대한 에러 처리
+          }
+        });
+    });
   };
 
   /* form 시스템 : 전체 픽업 */
@@ -157,15 +162,34 @@ export default function payment() {
     formState: { errors: pickuperrors },
   } = useForm<pickupFormData>();
 
-  const handlepickupValid = (data: pickupFormData) => {
+  const handlepickupValid = async (data: pickupFormData) => {
     //Api 호출
 
     /* setValue("userID", "");
     setValue("userPW", ""); */
     console.log(data);
     console.log(pickupaddress);
+    loadTossPayments(clientKey).then((tossPayments) => {
+      tossPayments
+        .requestPayment("카드", {
+          amount: 1000,
+          orderId: "7uR3G6jfuVGf23QRG1ElU", // 대충 날짜를 조합하든가 uuid를 사용하는 방법도..
+          orderName: "토스 티셔츠 외 2건",
+          customerName: "박토스",
+          successUrl: "http://localhost:3000/success", // ${결제 성공 후 redirect할 url}
+          failUrl: "http://localhost:3000/fail", //  ${결제 실패한 경우 redirect할 url}
+        })
+        .catch(function (error) {
+          console.log(error);
+          if (error.code === "USER_CANCEL") {
+            console.log("실패");
+          } else if (error.code === "INVALID_CARD_COMPANY") {
+            // 유효하지 않은 카드 코드에 대한 에러 처리
+          }
+        });
+    });
 
-    const paymentWidget = paymentWidgetRef.current;
+    /* const paymentWidget = paymentWidgetRef.current;
     try {
       paymentWidget?.requestPayment({
         orderId: nanoid(),
@@ -177,20 +201,14 @@ export default function payment() {
       });
     } catch (err) {
       console.log(err);
-    }
+    } */
   };
 
   //const { OrderInfo } = useGetOrderList(router?.query?.basketIds, 1);
 
   return (
     <Wrapper>
-      <form
-        onSubmit={
-          !isAllVisit
-            ? handleSubmit(handleValid)
-            : pickuphandleSubmit(handlepickupValid)
-        }
-      >
+      <form>
         <Box height="100%">
           {!isAllVisit ? (
             <>
@@ -388,7 +406,7 @@ export default function payment() {
             <Row>
               <H1>결제수단</H1>
             </Row>
-            <div id="payment-widget" />
+
             <hr />
             <Row>
               <H1>환불안내</H1>
@@ -397,12 +415,20 @@ export default function payment() {
             <Row>
               <H1>주문자 동의</H1>
             </Row>
-            <div id="agreement" />
+
             <hr />
           </Box>
         </Box>
 
-        <Button>결제하기</Button>
+        <Button
+          onClick={
+            !isAllVisit
+              ? handleSubmit(handleValid)
+              : pickuphandleSubmit(handlepickupValid)
+          }
+        >
+          결제하기
+        </Button>
       </form>
       {isOpen && (
         <>

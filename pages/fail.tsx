@@ -3,8 +3,23 @@ import Card from "@/layout/Card";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { Section, Title } from "./success";
+import { instance } from "@/libs/api/client";
+import { useEffect } from "react";
+
 export default function Success() {
   const router = useRouter();
+  const { code, message, orderId } = router.query;
+  useEffect(() => {
+    const init = async () => {
+      // ... 대충 결제에 성공하면 백단에 정보 저장하는 API
+      await instance
+        .get("/toss/redirect/fail", {
+          params: { code: code, message: message, orderId: orderId },
+        })
+        .then((res) => console.log(res.data));
+      // 재주문 요청 data 받아와서 보여줘야 함. (to-do)
+    };
+  }, []);
   return (
     <Wrapper>
       <Section>
