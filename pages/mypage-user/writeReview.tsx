@@ -9,7 +9,7 @@ import Image from "next/image";
 export default function writeReview() {
   const [images, setImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement | null>(null);
-  console.log(images);
+
   /* 이미지들의 url을 string 배열로 넣습니다 */
   const handleChange = (e: React.ChangeEvent) => {
     const targetFiles = (e.target as HTMLInputElement).files as FileList;
@@ -19,10 +19,15 @@ export default function writeReview() {
     });
     setImages((prev) => prev.concat(selectedFiles));
   };
+
+  const deleteImage = (url: string) => {
+    let newImageList = images.filter((image) => image !== url);
+    setImages(newImageList);
+  };
   return (
     <Wrapper>
       <TitleDiv>
-        <h1>상품은 어떠셨나요? 별점을 남겨주세요</h1>
+        <h1>상품은 어떠셨나요? 리뷰와 별점을 남겨주세요</h1>
       </TitleDiv>
       <Box height="1200px">
         <Row>
@@ -61,14 +66,15 @@ export default function writeReview() {
         </Row>
         <ImageDiv>
           {images.map((url, i) => (
-            <div key={url}>
+            <Div key={url}>
+              <button onClick={() => deleteImage(url)}>❌</button>
               <Image
                 src={url}
                 width="200"
                 height="160"
                 alt={`image${i}`}
               ></Image>
-            </div>
+            </Div>
           ))}
         </ImageDiv>
       </Box>
@@ -112,4 +118,8 @@ const ReviewBox = styled(Box)`
   display: flex;
   padding: 0px;
   padding-right: 10px;
+`;
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
