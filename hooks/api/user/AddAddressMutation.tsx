@@ -1,4 +1,4 @@
-//import { instance } from "@/libs/api/client";
+import { instance } from "@/libs/api/client";
 import { useMutation } from "@tanstack/react-query";
 
 /* 주소지를 추가합니다 첫 번째 주소는 무조건 default이고,
@@ -15,8 +15,8 @@ export interface AddAddressMutationRequest {
   userId: number;
 }
 
-/* export default function useAddAddressMutation() {
+export default function useAddAddressMutation() {
   return useMutation((data: AddAddressMutationRequest) =>
     instance.post<any>("/user/address", data)
   );
-} */
+}

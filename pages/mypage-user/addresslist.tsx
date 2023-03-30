@@ -3,9 +3,12 @@ import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
 import SearchAddress from "@/components/common/SearchAddress";
 import { useState } from "react";
+import useAddAddressMutation from "@/hooks/api/user/AddAddressMutation";
 
 export default function addresslist() {
+  const { mutate: addAddressMutate } = useAddAddressMutation();
   const [addAddress, setAddAddress] = useState(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
 
   const onAddHandler = () => {
     if (addAddress === true) {
