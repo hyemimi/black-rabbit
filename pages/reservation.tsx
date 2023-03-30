@@ -95,11 +95,11 @@ export default function payment() {
     open({ onComplete: handleComplete, autoClose: true });
   };
   /* 결제 시스템 */
-  const startPayment = () => {
+  /* const startPayment = () => {
     setIsPaymentOpen(true);
   };
   const paymentWidgetRef = useRef<PaymentWidgetInstance | null>(null);
-  const price = 1;
+  const price = 1; */
   /* useEffect(() => {
     (async () => {
       const paymentWidget = await loadPaymentWidget(clientKey, customerKey);
