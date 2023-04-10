@@ -1,23 +1,25 @@
 import styled from "styled-components";
 import { Wrapper } from "@/components/common/Wrapper";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Completed = (props: string) => {
-  const nickname = "검토끼";
+  const router = useRouter();
+
   return (
     <Wrapper>
       <Div>
         <Icons>📸✔️</Icons>
         <GreenBox>
           <Title>
-            {nickname}님, <br /> 회원가입이 완료되었습니다🎉
+            {router.query.nickname}님, <br /> 회원가입이 완료되었습니다🎉
           </Title>
           <SubTitle>데이필름과 함께 즐거운 촬영해요!</SubTitle>
         </GreenBox>
         <Link href="/">
           <HomeButton>홈으로</HomeButton>
         </Link>
-        <Link href="/login">
+        <Link href="/userLogin">
           <LoginButton>로그인</LoginButton>
         </Link>
       </Div>
