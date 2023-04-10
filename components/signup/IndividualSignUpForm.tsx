@@ -1,182 +1,138 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, InputHTMLAttributes, useRef } from "react";
+import { ReactEventHandler, useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
+import axios from "axios";
+
+interface SignUpForm {
+  email: string;
+  nickname: string;
+  pw: string;
+}
 
 const IndividualSignUpForm = () => {
-  interface SignUp {
-    enteredemail: string;
-    nickname: string;
-    password: string;
-  }
-
-  //react-hook-form 사용을 위한 함수 호출
-  const { register, handleSubmit } = useForm();
-
-  //각 입력의 조건 확인
-  const [enteredEmail, setEnteredEmail] = useState<string>(
-    "dayfilm@dayfilm.com"
-  );
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-
-  //오류메시지
-  const [emailMessage, setEmailMessage] = useState<string>("");
-  const [passwordMessage, setPasswordMessage] = useState<string>("");
-  const [passwordConfirmMessage, setPasswordConfirmMessage] =
-    useState<string>("");
-  const [nicknameMessage, setNicknameMessage] = useState<string>("");
-
-  // 유효성 검사
-  const [isNickname, setIsNickname] = useState<boolean>(false);
-  const [isEmail, setIsEmail] = useState<boolean>(false);
-  const [isPassword, setIsPassword] = useState<boolean>(false);
-  const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
-  const [errorstate, setError] = useState<string>("");
-
-  const route = useRouter();
-  const { mutate, isLoading, isError, error, isSuccess } =
-    UseUserSignupMutation();
-
-  const submitHandler = (e: any) => {
-    e.preventDefault();
-
-    mutate({ nickname: nickname, email: enteredEmail, pw: password });
-  };
-
-  //이메일
-  const emailChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const emailRegex =
-        /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
-      const emailCurrent = e.target.value;
-      setEnteredEmail(emailCurrent);
-
-      if (!emailRegex.test(emailCurrent)) {
-        setEmailMessage("올바르지 않은 이메일 형식입니다. 다시 확인해 주세요.");
-        setIsEmail(false);
-      } else {
-        setEmailMessage("올바른 이메일 형식입니다.");
-        setIsEmail(true);
-      }
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
+  const [isNicknameChecked, setIsNicknameChecked] = useState<boolean>(false);
+  //react-hook-form 사용을 위한 함수
+  const {
+    register,
+    formState: { errors },
+    reset,
+    handleSubmit: onSubmit,
+    getValues,
+    setError,
+    setFocus,
+  } = useForm<SignUpForm>({
+    mode: "onSubmit",
+    defaultValues: {
+      email: "",
+      pw: "",
+      nickname: "",
     },
-    []
-  );
+  });
 
-  //비밀번호
-  const passwordChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const passwordRegex =
-        /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-      const passwordCurrent = e.target.value;
-      setPassword(passwordCurrent);
+  const mutation = UseUserSignupMutation();
 
-      if (!passwordRegex.test(passwordCurrent)) {
-        setPasswordMessage(
-          "숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요."
+  const checkNickname = async () => {
+    const enteredNickname = JSON.stringify(getValues("nickname"));
+    if (enteredNickname.length > 0) {
+      try {
+        const response = await axios.get(
+          "http://15.165.101.95:8080/user/check/nickname",
+          {
+            params: { nickname: JSON.stringify(getValues("nickname")) },
+          }
         );
-        setIsPassword(false);
-      } else {
-        setPasswordMessage("안전한 비밀번호에요.");
-        setIsPassword(true);
+        const body = await response.data.code;
+        if (body === "OK") {
+          setIsNicknameChecked(true);
+        } else {
+          alert("이미 사용중인 닉네임입니다. 다른 닉네임을 사용하세요.");
+        }
+        console.log(body);
+        return true;
+      } catch (error) {
+        console.log(error);
+        return false;
       }
-    },
-    []
-  );
-
-  // 비밀번호 확인
-  const passwordConfirmChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const passwordConfirmCurrent = e.target.value;
-      setPasswordConfirm(passwordConfirmCurrent);
-
-      if (password === passwordConfirmCurrent) {
-        setPasswordConfirmMessage("비밀번호와 일치합니다.");
-        setIsPasswordConfirm(true);
-      } else {
-        setPasswordConfirmMessage("비밀번호와 다릅니다. 다시 확인해 주세요.");
-        setIsPasswordConfirm(false);
-      }
-    },
-    [password]
-  );
-
-  // 닉네임
-  const nicknameChangeHandler = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setNickname(e.target.value);
-      if (e.target.value.length < 2 || e.target.value.length > 5) {
-        setNicknameMessage("2글자 이상 5글자 미만으로 입력해주세요.");
-        setIsNickname(false);
-      } else {
-        setNicknameMessage("사용 가능한 닉네임입니다.");
-        setIsNickname(true);
-      }
-    },
-    []
-  );
-
-  const nickNameCheckHandler = () => {
-    //서버에 닉네임 중복 검사
+    }
   };
+
+  const submitHandler = async (e: any) => {
+    if (isNicknameChecked === true) {
+      await mutation.mutate({
+        nickname: getValues("nickname"),
+        email: getValues("email"),
+        pw: getValues("pw"),
+      });
+    }
+  };
+
   return (
-    <SytledForm onSubmit={submitHandler}>
+    <SytledForm onSubmit={onSubmit(submitHandler)}>
       <Div>
         <div>
           <StyledLabel htmlFor="email">이메일*</StyledLabel>
           <StyledInput
-            id="email"
-            type="email"
-            placeholder="이메일"
-            onChange={emailChangeHandler}
+            type="text"
+            {...register("email", {
+              pattern: {
+                value:
+                  /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
+                message: "이메일 형식에 맞지 않습니다.",
+              },
+            })}
           />
-          <br />
-          {enteredEmail.length > 0 && (
-            <StyledSpan className={`message ${isEmail ? "success" : "error"}`}>
-              {emailMessage}
+          {errors?.email ? (
+            <StyledSpan className="message error">
+              {errors.email?.message}
             </StyledSpan>
-          )}
+          ) : null}
         </div>
 
         <div>
           <StyledLabel htmlFor="password">비밀번호*</StyledLabel>
           <StyledInput
-            id="password"
+            {...register("pw", {
+              required: "비밀번호를 입력해주세요",
+              pattern: {
+                value:
+                  /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+                message: "숫자,영문자, 특수문자 조합 8자리 이상 입력해주세요.",
+              },
+            })}
             type="password"
             placeholder="숫자,영문자, 특수문자 조합 8자리 이상"
-            onChange={passwordChangeHandler}
           />
           <br />
-          {password.length > 0 && (
-            <StyledSpan
-              className={`message ${isPassword ? "success" : "error"}`}
-            >
-              {passwordMessage}
+          {errors.pw && errors?.pw ? (
+            <StyledSpan className="message error">
+              {errors.pw?.message}
             </StyledSpan>
-          )}
+          ) : null}
         </div>
 
         <div>
-          <StyledLabel htmlFor="passwordCheck">비밀번호 확인*</StyledLabel>
+          <StyledLabel htmlFor="passwordConfirmation">
+            비밀번호 확인*
+          </StyledLabel>
           <StyledInput
-            id="passwordCheck"
+            // {...register("pwConfirmation", {
+            //   required: "비밀번호 확인을 입력해주세요",
+            // })}
+            name="pwConfirmation"
             type="password"
             placeholder="비밀번호 확인"
-            onChange={passwordConfirmChangeHandler}
           />
           <br />
-          {passwordConfirm.length > 0 && (
-            <StyledSpan
-              className={`message ${isPasswordConfirm ? "success" : "error"}`}
-            >
-              {passwordConfirmMessage}
+          {/* {errors.pwConfirmation && errors?.pwConfirmation ? (
+            <StyledSpan className="message error">
+              {errors.pwConfirmation?.message}
             </StyledSpan>
-          )}
+          ) : null} */}
         </div>
 
         <StyledHr />
@@ -185,17 +141,19 @@ const IndividualSignUpForm = () => {
           <StyledLabel htmlFor="nickname">닉네임*</StyledLabel>
           <CheckDiv>
             <StyledInput
-              id="nickname"
-              type="string"
+              {...register("nickname", { required: true })}
+              type="text"
               placeholder="닉네임"
-              onChange={nicknameChangeHandler}
             />
-            <CheckButton onClick={nickNameCheckHandler}>
+            <CheckButton onClick={checkNickname}>
               중복
               <br />
               확인
             </CheckButton>
           </CheckDiv>
+          {isValidEmail ? (
+            <SuccessSpan>사용가능한 닉네임입니다.</SuccessSpan>
+          ) : null}
         </div>
       </Div>
 
@@ -237,19 +195,17 @@ const Div = styled.div`
   text-align: left;
 `;
 
-const StyledH1 = styled.h1`
-  font-weight: 500;
-  line-height: 2rem;
-`;
-
 const StyledHr = styled.hr`
   margin: 1rem irem 0 0;
 `;
 
 const StyledSpan = styled.span`
   font-size: small;
-  color: ${(props) =>
-    props.className == "message error" ? "#e01c1c" : "#02A913"};
+  color: #e01c1c;
+`;
+const SuccessSpan = styled.span`
+  font-size: small;
+  color: #02a913;
 `;
 
 const CheckButton = styled.button`
