@@ -1,9 +1,12 @@
 import styled from "styled-components";
 import canon1 from "../../public/canon1.jpeg";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import Link from "next/link";
 
 const ProductLists = () => {
   const ListsNum = 1;
+  const router = useRouter();
   const ItemList = [
     {
       itemId: 1,
@@ -46,6 +49,24 @@ const ProductLists = () => {
       title: "소니 FE 24-70mm GM F2.8",
     },
   ];
+
+  const handlePlan = () => {
+    console.log("r");
+    const id = 1;
+    router.push(`mypage-seller/addPlan/${id}`);
+  };
+
+  const deleteItem = () => {
+    console.log("delete");
+  };
+  const addItem = () => {
+    console.log("add");
+  };
+
+  const handlDetailPage = () => {
+    console.log("300");
+  };
+
   return (
     <Wrapper>
       <WholeDiv>
@@ -90,15 +111,27 @@ const ProductLists = () => {
 
           <FilterDiv>
             <FilterName>상품명</FilterName>
-            <FilterLists>EOS 어쩌구</FilterLists>
+            <Select>
+              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
+              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
+              <Option>EOS 어쩌구</Option>
+            </Select>
           </FilterDiv>
           <FilterDiv>
             <FilterName>기간</FilterName>
-            <FilterLists>지난 30일</FilterLists>
+            <Select>
+              <Option>지난 30일</Option>
+              <Option>지난 1년</Option>
+              <Option>지난 1주일</Option>
+            </Select>
           </FilterDiv>
           <FilterDiv>
             <FilterName>처리상태</FilterName>
-            <FilterLists>결제완료</FilterLists>
+            <Select>
+              <Option>결제완료</Option>
+              <Option>배송진행</Option>
+              <Option>배송완료</Option>
+            </Select>
           </FilterDiv>
         </SearchDiv>
 
@@ -130,7 +163,7 @@ const ProductLists = () => {
             </Thead>
             <Tbody>
               {ItemList.map((item, index) => (
-                <Tr key={item.itemId}>
+                <Tr key={item.itemId} onClick={handlDetailPage}>
                   <LeftTd>
                     <input type="checkbox" key={item.itemId}></input>
                   </LeftTd>
@@ -158,12 +191,12 @@ const ProductLists = () => {
                   <Td>{item.pricePerOne}원/일</Td>
                   <Td>{item.method}</Td>
                   <Td>
-                    <GreenButton>일정변경</GreenButton>
+                    <GreenButton onClick={handlePlan}>일정변경</GreenButton>
                   </Td>
                   <RightTd>
                     <ColumnDiv>
-                      <GrayButton>상품삭제</GrayButton>
-                      <GrayButton>상품추가</GrayButton>
+                      <GrayButton onClick={deleteItem}>상품삭제</GrayButton>
+                      <GrayButton onClick={addItem}>상품추가</GrayButton>
                     </ColumnDiv>
                   </RightTd>
                 </Tr>
@@ -224,6 +257,7 @@ const Number = styled.h1`
   padding: 5px;
 `;
 
+// 검색 및 필터링
 const SearchDiv = styled.div`
   width: 960px;
   height: 50px;
@@ -249,20 +283,36 @@ const FilterDiv = styled.div`
   margin: 10px 5px;
   border: 1px solid #329d3d;
   background: #ffffff;
+  vertical-align: middle;
 `;
 
 const FilterName = styled.p`
-  margin: 5px 5px 5px 10px;
+  margin: 6px 0px 5px 10px;
   font-size: 15px;
   font-weight: 400;
+  vertical-align: middle;
 `;
 
-const FilterLists = styled.p`
-  margin: 5px 10px 5px 5px;
-  font-size: 15px;
+const Option = styled.option`
+  margin: 5px 5px 5px 5px;
   color: #329d3d;
   font-weight: 400;
+  font-size: 15px;
+  border: none;
+  border-radius: 40px;
+  vertical-align: middle;
 `;
+
+const Select = styled.select`
+  margin: 5px 5px 5px 5px;
+  border: none;
+  width: max-content;
+  border-radius: 40px;
+  color: #329d3d;
+  font-size: 15px;
+`;
+
+//전체 상품 목록
 
 const WholeLists = styled.h1`
   margin: 30px 10px 10px 10px;
@@ -383,6 +433,11 @@ const GreenButton = styled.button`
   border-radius: 5px;
   border: none;
   padding: 5px 10px;
+  cursor: pointer;
+  &:hover {
+    background: #2f3640;
+    color: white;
+  }
 `;
 
 const GrayButton = styled.button`
@@ -391,4 +446,9 @@ const GrayButton = styled.button`
   border: none;
   padding: 5px 10px;
   margin: 5px;
+  cursor: pointer;
+  &:hover {
+    background: #2f3640;
+    color: white;
+  }
 `;
