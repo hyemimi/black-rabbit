@@ -1,163 +1,194 @@
-import styled from "styled-components";
+import {
+  Title,
+  WholeDiv,
+  Wrapper,
+  StatusDiv,
+  StatusBox,
+  StatusName,
+  Number,
+  SearchDiv,
+  FilterDiv,
+  P,
+  FilterName,
+  Select,
+  Option,
+  ColumnDiv,
+  DeleteButton,
+  DeleteDiv,
+  GreenButton,
+  ItemTitle,
+  Label,
+  LeftTd,
+  OverflowDiv,
+  RightTd,
+  Table,
+  Tbody,
+  Td,
+  Thead,
+  Tr,
+  Hr,
+  WholeLists,
+} from "@/components/detail/Seller";
+import addItem from "./addItem";
+import canon1 from "../../public/canon1.jpeg";
+import Image from "next/image";
 
 const Customer = () => {
+  const ItemList = [
+    {
+      itemId: 1,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
+      starAvg: 4.4,
+      Inquirytitle: "상품 상태 관련 ~",
+      status: "답변완료",
+    },
+    {
+      itemId: 2,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
+      starAvg: 4.4,
+      Inquirytitle: "너무조하용~",
+      status: "답변완료",
+    },
+    {
+      itemId: 3,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "소니 A7M4 미러리스 카메라",
+      starAvg: 4.4,
+      Inquirytitle: "너무조하용~",
+      status: "답변완료",
+    },
+    {
+      itemId: 4,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "소니 FE 24-70mm GM F2.8",
+      starAvg: 4.4,
+      Inquirytitle: "너무조하용~",
+      status: "답변완료",
+    },
+  ];
   return (
     <Wrapper>
-      <StyledDiv>
-        <StyledTitle>고객문의</StyledTitle>
-        <TotalListTitle>미처리현황</TotalListTitle>
-        <FlexDiv>
-          <StateBox>
-            <StateTitle>24시간 이내</StateTitle>
-            <Number>0</Number>
-            <Unit>건</Unit>
-          </StateBox>
-          <StateBox>
-            <StateTitle>24시간~72시간</StateTitle>
-            <Number>0</Number>
-            <Unit>건</Unit>
-          </StateBox>
-          <StateBox>
-            <StateTitle>72시간~30일 이내</StateTitle>
-            <Number>0</Number>
-            <Unit>건</Unit>
-          </StateBox>
-        </FlexDiv>
+      <WholeDiv>
+        <Title>고객문의</Title>
+        <StatusDiv>
+          <StatusBox>
+            <StatusName>
+              24시간<br></br>이내
+            </StatusName>
+            <Number>3건</Number>
+          </StatusBox>
 
-        <LeftDiv>
-          <Label>기간</Label>
-          <select>
-            <option>오늘</option>
-            <option>지난 7일</option>
-            <option>지난 30일</option>
-          </select>
+          <StatusBox>
+            <StatusName>
+              24시간~
+              <br />
+              72시간
+            </StatusName>
+            <Number>2건</Number>
+          </StatusBox>
+          <StatusBox>
+            <StatusName>
+              72시간~
+              <br />
+              30일 이내
+            </StatusName>
+            <Number>1건</Number>
+          </StatusBox>
+        </StatusDiv>
 
-          <Label>처리상태</Label>
-          <select>
-            <option>전체</option>
-            <option>미답변</option>
-            <option>미확인</option>
-            <option>처리완료</option>
-          </select>
-        </LeftDiv>
+        <SearchDiv>
+          <svg
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              height: 20,
+              width: 20,
+              marginTop: 15,
+              marginBottom: 15,
+              marginLeft: 20,
+              marginRight: 10,
+            }}
+          >
+            <path
+              fillRule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+          <P>검색조건</P>
 
-        <LeftDiv>
-          <TotalListTitle>상품 전체 목록 (총 0개)</TotalListTitle>
-          <hr />
-          <Tabel>
-            <thead>
+          <FilterDiv>
+            <FilterName>상품명</FilterName>
+            <Select>
+              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
+              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
+              <Option>EOS 어쩌구</Option>
+            </Select>
+          </FilterDiv>
+          <FilterDiv>
+            <FilterName>기간</FilterName>
+            <Select>
+              <Option>지난 30일</Option>
+              <Option>지난 1년</Option>
+              <Option>지난 1주일</Option>
+            </Select>
+          </FilterDiv>
+          <FilterDiv>
+            <FilterName>처리상태</FilterName>
+            <Select>
+              <Option>결제완료</Option>
+              <Option>배송진행</Option>
+              <Option>배송완료</Option>
+            </Select>
+          </FilterDiv>
+        </SearchDiv>
+
+        <WholeLists>고객문의목록 (총 {ItemList.length}개)</WholeLists>
+        <Hr />
+
+        <OverflowDiv>
+          <Table>
+            <Thead>
               <tr>
-                <th>상품상태</th>
-                <th>상품정보</th>
-                <th>대여기간</th>
-                <th>대여가격</th>
-                <th>수령방법</th>
+                <th>번호</th>
+                <th>고객명</th>
+                <th>상품명</th>
+                <th>제목</th>
+                <th>처리상태</th>
+                <th>문의일</th>
+                <th>처리</th>
               </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>대여중</td>
-                <td>(업체명+브랜드명) 50000원/1일</td>
-                <td>2023.3.1~3.3(2일)</td>
-                <td>100000원</td>
-                <td>픽업</td>
-              </tr>
-
-              <tr>
-                <td>Lorem</td>
-                <td>Ipsum</td>
-                <td>Dolor</td>
-                <td>Dolor</td>
-                <td>Dolor</td>
-              </tr>
-            </tbody>
-          </Tabel>
-        </LeftDiv>
-      </StyledDiv>
+            </Thead>
+            <Tbody>
+              {ItemList.map((item, index) => (
+                <Tr key={item.itemId}>
+                  <LeftTd>{item.itemId}</LeftTd>
+                  <Td>{item.customerId}</Td>
+                  <Td>{item.title}</Td>
+                  <Td>{item.Inquirytitle}</Td>
+                  <Td>{item.status}</Td>
+                  <Td>{item.date}</Td>
+                  <RightTd>
+                    <ColumnDiv>
+                      <button>답변</button>
+                      <button>수정</button>
+                      <button>삭제</button>
+                    </ColumnDiv>
+                  </RightTd>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </OverflowDiv>
+      </WholeDiv>
     </Wrapper>
   );
 };
 export default Customer;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0;
-  margin-left: 20px;
-  justify-content: left;
-  text-align: center;
-`;
-const StyledDiv = styled.div`
-  margin-left: 20rem;
-  margin-right: 10rem;
-  margin-top: 3rem;
-
-  justify-content: center;
-  text-align: center;
-`;
-const StateBox = styled.div`
-  border-radius: 10px;
-  border: 1px solid #d9d9d9;
-  width: 200px;
-  height: 100px;
-  padding: 10px 2px;
-  margin: 10px 10px 10px 0px;
-  display: table;
-  text-align: center;
-  line-height: 40px;
-`;
-const StyledTitle = styled.h1`
-  text-align: left;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 20px;
-  justify-content: left;
-`;
-
-const StateTitle = styled.div`
-  font-weight: medium;
-  font-size: 1rem;
-  font-weight: 400;
-`;
-
-const Number = styled.h1`
-  display : inline
-  font-weight: 500;
-  font-size: 1.5rem;
-  margin : 0 4px;
-
-`;
-
-const Unit = styled.h1`
-  display: inline;
-  font-weight: 400;
-  font-size: 1rem;
-`;
-
-const FlexDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
-
-const LeftDiv = styled.div`
-  text-align: left;
-  margin: 20px 0;
-`;
-
-const TotalListTitle = styled.h1`
-  margin-top: 20px;
-  text-align: left;
-`;
-
-const Label = styled.label`
-  margin: 0.5rem 0.5rem 0.5rem 0;
-`;
-
-const Input = styled.input`
-  margin: 0.5rem 0.5rem;
-`;
-
-const Tabel = styled.table`
-  width: 100%;
-`;
