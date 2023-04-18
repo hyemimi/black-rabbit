@@ -144,6 +144,11 @@ export const DeleteButton = styled.button`
   padding: 5px 10px;
 `;
 
+export const RowButtonDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 //상품 정보 표
 export const Table = styled.table`
   width: 960px;
