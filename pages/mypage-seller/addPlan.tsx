@@ -1,4 +1,4 @@
-import UpdateItemPlan from "@/components/mypage/seller/updateItemPlan";
+import UpdateItemPlan from "@/components/mypage/seller/Item/UpdateItemPlan";
 import styled from "styled-components";
 
 const addPlan = () => {

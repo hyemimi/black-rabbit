@@ -4,12 +4,12 @@ import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import Link from "next/link";
-import AddressSelectModal from "@/components/mypage/seller/AddressSlelectModal";
-import InnerModal from "../../components/mypage/seller/InnerModal";
+import AddressSelectModal from "@/components/mypage/seller/Item/AddressSlelectModal";
+import InnerModal from "../../components/mypage/seller/Item/InnerModal";
 import { NextPage } from "next";
 
 const QuillEditor = dynamic(
-  () => import("../../components/mypage/seller/QuilEditor"),
+  () => import("../../components/mypage/seller/Item/QuilEditor"),
   {
     ssr: false,
   }
