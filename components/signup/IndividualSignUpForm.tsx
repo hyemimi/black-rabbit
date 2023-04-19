@@ -1,18 +1,21 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
+
 import { useState, useCallback, InputHTMLAttributes, useRef } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 
-const IndividualSignUpForm = () => {
   interface SignUp {
     enteredemail: string;
     nickname: string;
     password: string;
   }
+
+const IndividualSignUpForm = () => {
+
 
   //react-hook-form 사용을 위한 함수 호출
   const { register, handleSubmit } = useForm();
@@ -37,6 +40,7 @@ const IndividualSignUpForm = () => {
   const [isEmail, setIsEmail] = useState<boolean>(false);
   const [isPassword, setIsPassword] = useState<boolean>(false);
   const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
+
   const [errorstate, setError] = useState<string>("");
 
   const route = useRouter();
@@ -48,6 +52,7 @@ const IndividualSignUpForm = () => {
 
     mutate({ nickname: nickname, email: enteredEmail, pw: password });
   };
+
 
   //이메일
   const emailChangeHandler = useCallback(
@@ -121,9 +126,11 @@ const IndividualSignUpForm = () => {
     []
   );
 
+
   const nickNameCheckHandler = () => {
     //서버에 닉네임 중복 검사
   };
+
   return (
     <SytledForm onSubmit={submitHandler}>
       <Div>
@@ -183,6 +190,7 @@ const IndividualSignUpForm = () => {
 
         <div>
           <StyledLabel htmlFor="nickname">닉네임*</StyledLabel>
+
           <CheckDiv>
             <StyledInput
               id="nickname"
@@ -196,11 +204,14 @@ const IndividualSignUpForm = () => {
               확인
             </CheckButton>
           </CheckDiv>
+
         </div>
       </Div>
 
       <Div>
+
         <AgreeTerms />
+
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -252,6 +263,7 @@ const StyledSpan = styled.span`
     props.className == "message error" ? "#e01c1c" : "#02A913"};
 `;
 
+
 const CheckButton = styled.button`
   margin-left: 1rem;
   height: 2.5rem;
@@ -271,3 +283,4 @@ const CheckDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
+
