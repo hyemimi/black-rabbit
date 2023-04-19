@@ -1,146 +1,147 @@
+import {
+  Title,
+  WholeDiv,
+  Wrapper,
+  SearchDiv,
+  FilterDiv,
+  P,
+  FilterName,
+  Select,
+  Option,
+  LeftTd,
+  OverflowDiv,
+  RightTd,
+  Table,
+  Tbody,
+  Td,
+  Thead,
+  Tr,
+  Hr,
+  WholeLists,
+} from "@/components/detail/Seller";
 import styled from "styled-components";
 
 const Review = () => {
+  const ItemList = [
+    {
+      itemId: 1,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
+      starAvg: 4.4,
+      reviewContents: "너무조하용~",
+    },
+    {
+      itemId: 2,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
+      starAvg: 4.4,
+      reviewContents: "너무조하용~",
+    },
+    {
+      itemId: 3,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "소니 A7M4 미러리스 카메라",
+      starAvg: 4.4,
+      reviewContents: "너무조하용~",
+    },
+    {
+      itemId: 4,
+      customerId: "감자",
+      date: "22/03/14 13:32",
+      title: "소니 FE 24-70mm GM F2.8",
+      starAvg: 4.4,
+      reviewContents: "너무조하용~",
+    },
+  ];
   return (
     <Wrapper>
-      <StyledDiv>
-        <StyledTitle>상품평</StyledTitle>
+      <WholeDiv>
+        <Title>상품평</Title>
 
-        <GrayDiv>
-          <Label>검색조건</Label>
-          <Label>기간</Label>
-          <select>
-            <option>오늘</option>
-            <option>지난 7일</option>
-            <option>지난 30일</option>
-          </select>
+        <SearchDiv>
+          <svg
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              height: 20,
+              width: 20,
+              marginTop: 15,
+              marginBottom: 15,
+              marginLeft: 20,
+              marginRight: 10,
+            }}
+          >
+            <path
+              fillRule="evenodd"
+              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+          <P>검색조건</P>
 
-          <Label>별점</Label>
-          <select>
-            <option>5점</option>
-            <option>4점</option>
-            <option>3점</option>
-            <option>2점</option>
-            <option>1점</option>
-          </select>
-          <Label>판매상태</Label>
-          <select>
-            <option>판매중</option>
-            <option>판매종료</option>
-          </select>
-        </GrayDiv>
+          <FilterDiv>
+            <FilterName>상품명</FilterName>
+            <Select>
+              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
+              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
+              <Option>EOS 어쩌구</Option>
+            </Select>
+          </FilterDiv>
+          <FilterDiv>
+            <FilterName>기간</FilterName>
+            <Select>
+              <Option>지난 30일</Option>
+              <Option>지난 1년</Option>
+              <Option>지난 1주일</Option>
+            </Select>
+          </FilterDiv>
+          <FilterDiv>
+            <FilterName>별점</FilterName>
+            <Select>
+              <Option>5점</Option>
+              <Option>4점</Option>
+              <Option>3점</Option>
+              <Option>2점</Option>
+              <Option>1점</Option>
+            </Select>
+          </FilterDiv>
+        </SearchDiv>
 
-        <LeftDiv>
-          <TotalListTitle>총 0개</TotalListTitle>
-          <hr />
-          <Tabel>
-            <thead>
+        <WholeLists>상품평목록(총 {ItemList.length}개)</WholeLists>
+        <Hr />
+
+        <OverflowDiv>
+          <Table>
+            <Thead>
               <tr>
-                <th>상품상태</th>
-                <th>상품정보</th>
-                <th>대여기간</th>
-                <th>대여가격</th>
-                <th>수령방법</th>
+                <th>번호</th>
+                <th>고객명</th>
+                <th>등록일</th>
+                <th>상품명</th>
+                <th>별점</th>
+                <th>상품평</th>
               </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>대여중</td>
-                <td>(업체명+브랜드명) 50000원/1일</td>
-                <td>2023.3.1~3.3(2일)</td>
-                <td>100000원</td>
-                <td>픽업</td>
-              </tr>
-
-              <tr>
-                <td>Lorem</td>
-                <td>Ipsum</td>
-                <td>Dolor</td>
-                <td>Dolor</td>
-                <td>Dolor</td>
-              </tr>
-            </tbody>
-          </Tabel>
-        </LeftDiv>
-      </StyledDiv>
+            </Thead>
+            <Tbody>
+              {ItemList.map((item, index) => (
+                <Tr key={item.itemId}>
+                  <LeftTd>{item.itemId}</LeftTd>
+                  <Td>{item.customerId}</Td>
+                  <Td>{item.date}</Td>
+                  <Td>{item.title}</Td>
+                  <Td>{item.starAvg}점</Td>
+                  <RightTd>{item.reviewContents}</RightTd>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </OverflowDiv>
+      </WholeDiv>
     </Wrapper>
   );
 };
 export default Review;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0;
-  margin-left: 20px;
-  justify-content: left;
-  text-align: center;
-`;
-const StyledDiv = styled.div`
-  margin-left: 20rem;
-  margin-right: 10rem;
-  margin-top: 3rem;
-
-  justify-content: center;
-  text-align: center;
-`;
-
-const StyledTitle = styled.h1`
-  text-align: left;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 20px;
-  justify-content: left;
-`;
-
-const StateTitle = styled.div`
-  font-weight: medium;
-  font-size: 1rem;
-  font-weight: 400;
-`;
-
-const Number = styled.h1`
-  display : inline
-  font-weight: 500;
-  font-size: 1.5rem;
-  margin : 0 4px;
-
-`;
-
-const Unit = styled.h1`
-  display: inline;
-  font-weight: 400;
-  font-size: 1rem;
-`;
-
-const GrayDiv = styled.div`
-  text-align: left;
-  margin: 20px 0;
-  background: #f1f1f1;
-  border-radius: 30px;
-  line-height: 50px;
-  padding: 0 15px;
-`;
-
-const LeftDiv = styled.div`
-  text-align: left;
-  margin: 20px 0;
-`;
-
-const TotalListTitle = styled.h1`
-  margin-top: 20px;
-  text-align: left;
-`;
-
-const Label = styled.label`
-  margin: 0.5rem 0.5rem 0.5rem 0;
-`;
-
-const Input = styled.input`
-  margin: 0.5rem 0.5rem;
-`;
-
-const Tabel = styled.table`
-  width: 100%;
-`;

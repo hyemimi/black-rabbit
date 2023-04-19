@@ -1,14 +1,27 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, useRef } from "react";
+
+
+
+import { useState, useCallback, InputHTMLAttributes,useRef } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Link from "next/link";
 import AgreeTerms from "./AgreeTerms";
+
+interface SignUp {
+  email: string;
+  password: string;
+  passwordCheck: string;
+  nickname: string;
+}
+
 
 const CorporationSignUpForm = () => {
   //react-hook-form 사용을 위한 함수 호출
   const { register, handleSubmit } = useForm();
+
   const BUSSINESS_AUTH_KEY =
     "OhzwRjXz5TiQ9y44+heIWfvQ4P8K113/hapRaX+6e6RqvGdreUpBYkL7p9h8fgp84iaaP00+4Dx6fcbYBrEHzg==";
 
@@ -21,6 +34,7 @@ const CorporationSignUpForm = () => {
 
   const representatorNameInputRef = useRef<HTMLInputElement>(null);
   const brandNameInputRef = useRef<HTMLInputElement>(null);
+  
 
   //각 입력의 조건 확인
   const [enteredEmail, setEnteredEmail] = useState<string>(
@@ -74,6 +88,7 @@ const CorporationSignUpForm = () => {
       const response = await axios.post(BUSSINESS_URL, {
         b_no: corporationNumber,
       });
+  
       console.log(response);
     } catch (error) {
       console.error(error);
@@ -137,6 +152,24 @@ const CorporationSignUpForm = () => {
     [password]
   );
 
+
+
+  // 닉네임
+  const nicknameChangeHandler = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setNickname(e.target.value);
+      if (e.target.value.length < 2 || e.target.value.length > 5) {
+        setNicknameMessage("2글자 이상 5글자 미만으로 입력해주세요.");
+        setIsNickname(false);
+      } else {
+        setNicknameMessage("사용 가능한 닉네임입니다.");
+        setIsNickname(true);
+      }
+    },
+    []
+  );
+
+
   return (
     <SytledForm onSubmit={submitHandler}>
       <Div>
@@ -146,9 +179,11 @@ const CorporationSignUpForm = () => {
           </StyledLabel>
           <CheckDiv>
             <StyledInput
+
               type="integer"
               placeholder="-없이 숫자만 입력"
               ref={corporationNumberInputRef}
+
             />
             <CheckButton onClick={corporationNumberHandler}>확인</CheckButton>
           </CheckDiv>
@@ -160,17 +195,21 @@ const CorporationSignUpForm = () => {
             id="representator-name"
             type="text"
             placeholder="대표자명"
+
             ref={representatorNameInputRef}
+
           />
         </div>
         <div>
           <StyledLabel htmlFor="brand-name">상호*</StyledLabel>
+
           <StyledInput
             id="brand-name"
             type="text"
             placeholder="상호"
             ref={brandNameInputRef}
           />
+
         </div>
 
         <div>
@@ -194,9 +233,11 @@ const CorporationSignUpForm = () => {
         <div>
           <StyledLabel htmlFor="passwordCheck">입점 담당자명*</StyledLabel>
           <StyledInput
+
             id="manager-name"
             type="text"
             placeholder="입점 담당자명"
+
           />
         </div>
 
@@ -267,7 +308,9 @@ const CorporationSignUpForm = () => {
       </Div>
 
       <Div>
+
         <AgreeTerms />
+
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -303,6 +346,13 @@ const Div = styled.div`
   margin: 2.5rem auto;
   text-align: left;
 `;
+
+
+const StyledH1 = styled.h1`
+  font-weight: 500;
+  line-height: 2rem;
+`;
+
 
 const StyledHr = styled.hr`
   margin: 1rem irem 0 0;

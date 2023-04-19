@@ -1,11 +1,13 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { ReactEventHandler, useState } from "react";
+import { useState, useCallback, InputHTMLAttributes, useRef,ReactEventHandler } from "react";
+
 import { useRouter } from "next/router";
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 import axios from "axios";
+
 
 interface SignUpForm {
   email: string;
@@ -31,6 +33,7 @@ const IndividualSignUpForm = () => {
       email: "",
       pw: "",
       nickname: "",
+
     },
   });
 
@@ -61,6 +64,7 @@ const IndividualSignUpForm = () => {
     }
   };
 
+
   const submitHandler = async (e: any) => {
     if (isNicknameChecked === true) {
       await mutation.mutate({
@@ -69,6 +73,7 @@ const IndividualSignUpForm = () => {
         pw: getValues("pw"),
       });
     }
+
   };
 
   return (
@@ -139,6 +144,7 @@ const IndividualSignUpForm = () => {
 
         <div>
           <StyledLabel htmlFor="nickname">닉네임*</StyledLabel>
+
           <CheckDiv>
             <StyledInput
               {...register("nickname", { required: true })}
@@ -151,14 +157,18 @@ const IndividualSignUpForm = () => {
               확인
             </CheckButton>
           </CheckDiv>
+
           {isValidEmail ? (
             <SuccessSpan>사용가능한 닉네임입니다.</SuccessSpan>
           ) : null}
+
         </div>
       </Div>
 
       <Div>
+
         <AgreeTerms />
+
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -208,6 +218,7 @@ const SuccessSpan = styled.span`
   color: #02a913;
 `;
 
+
 const CheckButton = styled.button`
   margin-left: 1rem;
   height: 2.5rem;
@@ -227,3 +238,4 @@ const CheckDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
+

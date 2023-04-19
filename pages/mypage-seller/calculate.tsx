@@ -26,78 +26,84 @@ import {
   Td,
   Thead,
   Tr,
-  Hr,
   WholeLists,
+  RowDiv,
 } from "@/components/detail/Seller";
-import addItem from "./addItem";
-import canon1 from "../../public/canon1.jpeg";
-import Image from "next/image";
 
-const Customer = () => {
+import styled from "styled-components";
+import { ReactEventHandler, useState } from "react";
+import { useRouter } from "next/router";
+import Paycompleted from "@/components/mypage/seller/order/rental/paycompleted";
+import DeliveryCompleted from "../../components/mypage/seller/order/rental/deliverycompleted";
+import RentalCompleted from "@/components/mypage/seller/order/rental/rentalCompleted";
+const Calculate = () => {
+  const router = useRouter();
   const ItemList = [
     {
       itemId: 1,
-      customerId: "감자",
-      date: "22/03/14 13:32",
-      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
+      pricePerOne: 123,
+      likeCount: 1,
+      method: "PARCEL",
+
+      reviewCount: 5,
       starAvg: 4.4,
-      Inquirytitle: "상품 상태 관련 ~",
-      status: "답변완료",
+      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
     },
     {
       itemId: 2,
-      customerId: "감자",
-      date: "22/03/14 13:32",
+      pricePerOne: 20000,
+
+      likeCount: 23,
+      method: "PARCEL",
+      reviewCount: 12,
+      starAvg: 4.0,
       title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
-      starAvg: 4.4,
-      Inquirytitle: "너무조하용~",
-      status: "답변완료",
     },
     {
-      itemId: 3,
-      customerId: "감자",
-      date: "22/03/14 13:32",
+      itemId: 1,
+      pricePerOne: 12324,
+
+      likeCount: 1,
+      method: "PARCEL",
+      reviewCount: 5,
+      starAvg: 4.4,
       title: "소니 A7M4 미러리스 카메라",
-      starAvg: 4.4,
-      Inquirytitle: "너무조하용~",
-      status: "답변완료",
     },
     {
-      itemId: 4,
-      customerId: "감자",
-      date: "22/03/14 13:32",
+      itemId: 2,
+      pricePerOne: 20000,
+
+      likeCount: 23,
+      method: "PARCEL",
+      reviewCount: 12,
+      starAvg: 4.0,
       title: "소니 FE 24-70mm GM F2.8",
-      starAvg: 4.4,
-      Inquirytitle: "너무조하용~",
-      status: "답변완료",
     },
   ];
+  const [tab, setTab] = useState<string>("결제완료");
+
+  const handleTabClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const button: HTMLButtonElement = e.currentTarget;
+    setTab(button.value);
+  };
   return (
     <Wrapper>
       <WholeDiv>
-        <Title>고객문의</Title>
+        <Title>정산현황</Title>
         <StatusDiv>
           <StatusBox>
-            <StatusName>
-              24시간<br></br>이내
-            </StatusName>
+            <StatusName>?</StatusName>
             <Number>3건</Number>
           </StatusBox>
 
           <StatusBox>
-            <StatusName>
-              24시간~
-              <br />
-              72시간
-            </StatusName>
+            <StatusName>?</StatusName>
             <Number>2건</Number>
           </StatusBox>
           <StatusBox>
-            <StatusName>
-              72시간~
-              <br />
-              30일 이내
-            </StatusName>
+            <StatusName>?</StatusName>
             <Number>1건</Number>
           </StatusBox>
         </StatusDiv>
@@ -149,46 +155,30 @@ const Customer = () => {
             </Select>
           </FilterDiv>
         </SearchDiv>
-
-        <WholeLists>고객문의목록 (총 {ItemList.length}개)</WholeLists>
-        <Hr />
-
-        <OverflowDiv>
-          <Table>
-            <Thead>
-              <tr>
-                <th>번호</th>
-                <th>고객명</th>
-                <th>상품명</th>
-                <th>제목</th>
-                <th>처리상태</th>
-                <th>문의일</th>
-                <th>처리</th>
-              </tr>
-            </Thead>
-            <Tbody>
-              {ItemList.map((item, index) => (
-                <Tr key={item.itemId}>
-                  <LeftTd>{item.itemId}</LeftTd>
-                  <Td>{item.customerId}</Td>
-                  <Td>{item.title}</Td>
-                  <Td>{item.Inquirytitle}</Td>
-                  <Td>{item.status}</Td>
-                  <Td>{item.date}</Td>
-                  <RightTd>
-                    <ColumnDiv>
-                      <button>답변</button>
-                      <button>수정</button>
-                      <button>삭제</button>
-                    </ColumnDiv>
-                  </RightTd>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </OverflowDiv>
+        <WholeLists>결제완료목록(총 {1}개)</WholeLists>
       </WholeDiv>
     </Wrapper>
   );
 };
-export default Customer;
+export default Calculate;
+
+const StateButton = styled.button`
+  width: 320px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  font-size: 20px;
+  background: #b6dcbe;
+  &:active {
+    background-color: #b6dcbe;
+  }
+`;
+
+const WhiteButton = styled.button`
+  width: 320px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  font-size: 20px;
+  background: white;
+`;
