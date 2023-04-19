@@ -14,7 +14,9 @@ interface product {
 }
 
 const ProductDeleteModal = ({ closeModal }: closeModalProps) => {
-  const handleClose = () => {};
+  const onDeleteItem = () => {
+    //선택된 아이템 서버로 보냄
+  };
   const items = [
     { id: "1", state: "fix", value: "12344" },
     { id: "2", state: "rental", value: "234234" },
