@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
 export const StyledButton = styled.button`
-  /* Rectangle 39 */
-
-  width: 476px;
-  height: 60px;
-  left: 474px;
-  top: 1281px;
-
-  background: #ffffff;
+  width: 100%;
+  height: 2.5rem;
+  margin: 1rem auto;
+  border: 0;
+  background: #d9d9d9;
   border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background: #b9d9c0;
+  }
 `;
