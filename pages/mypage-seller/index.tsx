@@ -2,11 +2,28 @@ import styled from "styled-components";
 import canon1 from "../../public/canon1.jpeg";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Link from "next/link";
+import Modal from "@/components/common/modal/Modal";
+import ProductDeleteModal from "@/components/mypage/seller/Item/ProductDeleteModal";
+import ProductAddModal from "@/components/mypage/seller/Item/ProductAddModal";
+import SellerMypageSidebar from "@/layout/SellerMypageSidebar";
 
 const ProductLists = () => {
   const ListsNum = 1;
   const router = useRouter();
+  const [selectModal, setSelectModal] = useState<boolean>(false);
+  const [selectAddModal, setSelectAddModal] = useState<boolean>(false);
+
+  const closeModal = () => {
+    setSelectModal((prev) => !prev);
+    console.log(selectModal);
+  };
+
+  const closeAddModal = () => {
+    setSelectAddModal((prev) => !prev);
+  };
+
   const ItemList = [
     {
       itemId: 1,
@@ -51,161 +68,176 @@ const ProductLists = () => {
   ];
 
   const handlePlan = () => {
-    console.log("r");
-    const id = 1;
-    router.push(`mypage-seller/addPlan/${id}`);
-  };
-
-  const deleteItem = () => {
-    console.log("delete");
-  };
-  const addItem = () => {
-    console.log("add");
+    // console.log("r");
+    // const id = 1;
+    // router.push(`/mypage-seller/addPlan`);
   };
 
   const handlDetailPage = () => {
-    console.log("300");
+    // console.log("300");
+    // const id = 1;
+    // router.push(`/mypage-seller/addPlan`);
   };
 
   return (
-    <Wrapper>
-      <WholeDiv>
-        <Title>상품 조회 및 수정 </Title>
-        <StatusDiv>
-          <StatusBox>
-            <StatusName>대여가능</StatusName>
-            <Number>3건</Number>
-          </StatusBox>
+    <>
+      <SellerMypageSidebar />
+      <Wrapper>
+        <WholeDiv>
+          <Title>상품 조회 및 수정 </Title>
+          <StatusDiv>
+            <StatusBox>
+              <StatusName>대여가능</StatusName>
+              <Number>3건</Number>
+            </StatusBox>
 
-          <StatusBox>
-            <StatusName>대여중</StatusName>
-            <Number>2건</Number>
-          </StatusBox>
-          <StatusBox>
-            <StatusName>수리중</StatusName>
-            <Number>1건</Number>
-          </StatusBox>
-        </StatusDiv>
+            <StatusBox>
+              <StatusName>대여중</StatusName>
+              <Number>2건</Number>
+            </StatusBox>
+            <StatusBox>
+              <StatusName>수리중</StatusName>
+              <Number>1건</Number>
+            </StatusBox>
+          </StatusDiv>
 
-        <SearchDiv>
-          <svg
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            style={{
-              height: 20,
-              width: 20,
-              marginTop: 15,
-              marginBottom: 15,
-              marginLeft: 20,
-              marginRight: 10,
-            }}
-          >
-            <path
-              fillRule="evenodd"
-              d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-              clipRule="evenodd"
-            ></path>
-          </svg>
-          <P>검색조건</P>
+          <SearchDiv>
+            <svg
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                height: 20,
+                width: 20,
+                marginTop: 15,
+                marginBottom: 15,
+                marginLeft: 20,
+                marginRight: 10,
+              }}
+            >
+              <path
+                fillRule="evenodd"
+                d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                clipRule="evenodd"
+              ></path>
+            </svg>
+            <P>검색조건</P>
 
-          <FilterDiv>
-            <FilterName>상품명</FilterName>
-            <Select>
-              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
-              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
-              <Option>EOS 어쩌구</Option>
-            </Select>
-          </FilterDiv>
-          <FilterDiv>
-            <FilterName>기간</FilterName>
-            <Select>
-              <Option>지난 30일</Option>
-              <Option>지난 1년</Option>
-              <Option>지난 1주일</Option>
-            </Select>
-          </FilterDiv>
-          <FilterDiv>
-            <FilterName>처리상태</FilterName>
-            <Select>
-              <Option>결제완료</Option>
-              <Option>배송진행</Option>
-              <Option>배송완료</Option>
-            </Select>
-          </FilterDiv>
-        </SearchDiv>
+            <FilterDiv>
+              <FilterName>상품명</FilterName>
+              <Select>
+                <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
+                <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
+                <Option>EOS 어쩌구</Option>
+              </Select>
+            </FilterDiv>
+            <FilterDiv>
+              <FilterName>기간</FilterName>
+              <Select>
+                <Option>지난 30일</Option>
+                <Option>지난 1년</Option>
+                <Option>지난 1주일</Option>
+              </Select>
+            </FilterDiv>
+            <FilterDiv>
+              <FilterName>처리상태</FilterName>
+              <Select>
+                <Option>결제완료</Option>
+                <Option>배송진행</Option>
+                <Option>배송완료</Option>
+              </Select>
+            </FilterDiv>
+          </SearchDiv>
 
-        <WholeLists>상품 전체목록 (총 {ListsNum}개)</WholeLists>
-        {/* <Hr /> */}
-        <DeleteDiv>
-          <Label>
-            <input type="checkbox" />
-            전체선택
-          </Label>
-          <DeleteButton> 선택삭제</DeleteButton>
-        </DeleteDiv>
+          <WholeLists>상품 전체목록 (총 {ListsNum}개)</WholeLists>
+          {/* <Hr /> */}
+          <DeleteDiv>
+            <Label>
+              <input type="checkbox" />
+              전체선택
+            </Label>
+            <DeleteButton> 선택삭제</DeleteButton>
+          </DeleteDiv>
 
-        <OverflowDiv>
-          <Table>
-            <Thead>
-              <tr>
-                <th>선택</th>
-                <th>번호</th>
-                <th>상품 정보</th>
-                <th>상태</th>
-                <th>평균별점</th>
-                <th>리뷰 수</th>
-                <th>대여가격</th>
-                <th>거래방법</th>
-                <th>일정</th>
-                <th>수정</th>
-              </tr>
-            </Thead>
-            <Tbody>
-              {ItemList.map((item, index) => (
-                <Tr key={item.itemId} onClick={handlDetailPage}>
-                  <LeftTd>
-                    <input type="checkbox" key={item.itemId}></input>
-                  </LeftTd>
-                  <Td>{index + 1}</Td>
-                  <Td>
-                    <ColumnDiv>
-                      <ItemTitle>{item.title}</ItemTitle>
-                      <ItemImg
-                        src={item.img}
-                        width="120"
-                        height="80"
-                        alt="itemImage"
-                      ></ItemImg>
-                    </ColumnDiv>
-                  </Td>
+          <OverflowDiv>
+            <Table>
+              <Thead>
+                <tr>
+                  <th>선택</th>
 
-                  <Td>
-                    <p>
-                      대여중 : 1 <br />
-                      수리중 : 1<br /> 대여가능 : 1
-                    </p>
-                  </Td>
-                  <Td>{item.starAvg}점</Td>
-                  <Td>{item.reviewCount}개</Td>
-                  <Td>{item.pricePerOne}원/일</Td>
-                  <Td>{item.method}</Td>
-                  <Td>
-                    <GreenButton onClick={handlePlan}>일정변경</GreenButton>
-                  </Td>
-                  <RightTd>
-                    <ColumnDiv>
-                      <GrayButton onClick={deleteItem}>상품삭제</GrayButton>
-                      <GrayButton onClick={addItem}>상품추가</GrayButton>
-                    </ColumnDiv>
-                  </RightTd>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </OverflowDiv>
-      </WholeDiv>
-    </Wrapper>
+                  <th>번호</th>
+                  <th>상품 정보</th>
+                  <th>상태</th>
+                  <th>평균별점</th>
+                  <th>리뷰 수</th>
+                  <th>대여가격</th>
+                  <th>거래방법</th>
+                  <th>일정</th>
+                  <th>수정</th>
+                </tr>
+              </Thead>
+              <Tbody>
+                {ItemList.map((item, index) => (
+                  <Tr key={item.itemId} onClick={handlDetailPage}>
+                    <LeftTd>
+                      <input type="checkbox" key={item.itemId}></input>
+                    </LeftTd>
+                    <Td>{index + 1}</Td>
+                    <Td>
+                      <ColumnDiv>
+                        <ItemTitle>{item.title}</ItemTitle>
+                        <ItemImg
+                          src={item.img}
+                          width="120"
+                          height="80"
+                          alt="itemImage"
+                        ></ItemImg>
+                      </ColumnDiv>
+                    </Td>
+
+                    <Td>
+                      <p>
+                        대여중 : 1 <br />
+                        수리중 : 1<br /> 대여가능 : 1
+                      </p>
+                    </Td>
+                    <Td>{item.starAvg}점</Td>
+                    <Td>{item.reviewCount}개</Td>
+                    <Td>{item.pricePerOne}원/일</Td>
+                    <Td>{item.method}</Td>
+                    <Td>
+                      <GreenButton onClick={handlePlan}>일정변경</GreenButton>
+                    </Td>
+                    <RightTd>
+                      <ColumnDiv>
+                        <GrayButton onClick={closeModal}>상품삭제</GrayButton>
+                        {selectModal && (
+                          <Modal>
+                            <ProductDeleteModal
+                              closeModal={closeModal}
+                            ></ProductDeleteModal>
+                          </Modal>
+                        )}
+                        <GrayButton onClick={closeAddModal}>
+                          상품추가
+                        </GrayButton>
+                        {selectAddModal && (
+                          <Modal>
+                            <ProductAddModal
+                              closeAddModal={closeAddModal}
+                            ></ProductAddModal>
+                          </Modal>
+                        )}
+                      </ColumnDiv>
+                    </RightTd>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </OverflowDiv>
+        </WholeDiv>
+      </Wrapper>
+    </>
   );
 };
 export default ProductLists;
@@ -351,6 +383,7 @@ const DeleteButton = styled.button`
   padding: 5px 10px;
 `;
 
+//상품 정보 표
 const Table = styled.table`
   width: 960px;
   text-align: center;
@@ -368,6 +401,7 @@ const Thead = styled.thead`
 
 const Tr = styled.tr`
   width: 960px;
+  cursor: pointer;
 `;
 
 const Td = styled.td`
