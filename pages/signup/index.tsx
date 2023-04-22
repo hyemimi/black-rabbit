@@ -55,12 +55,15 @@ const StyledTitle = styled.h1`
   font-size: 1.5rem;
   font-weight: 500;
   line-height: 2rem;
+
+  padding: 1rem 1rem;
+
 `;
 
 const Div = styled.div`
   width: 20rem;
   margin: 3rem 2rem;
-  padding: 1rem 1rem;
+
   text-align: center;
   justify-items: center;
 

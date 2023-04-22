@@ -1,7 +1,11 @@
 import useLoginMutation from "@/hooks/api/auth/LoginMutation";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 import styled from "styled-components";
+
+import useLoginMutation from "@/hooks/api/auth/LoginMutation";
+
 
 interface FormData {
   userID: string;
@@ -14,6 +18,7 @@ function LoginForm() {
     setValue,
     formState: { errors },
   } = useForm<FormData>();
+<<<<<<< HEAD
   const {
     mutate: loginMutate,
     data: loginMutationData,
@@ -33,6 +38,22 @@ function LoginForm() {
   useEffect(() => {
     console.log(loginMutationData);
   }, [loginMutationData]);
+=======
+
+  const { mutate, isSuccess } = useLoginMutation();
+  const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
+
+  const handleValid = ({ userID, userPW }: FormData) => {
+    //Api 호출
+    setValue("userID", "");
+    setValue("userPW", "");
+    mutate({ email: userID, pw: userPW });
+
+    if (isSuccess) {
+      setIsLoggedIn(true);
+    }
+  };
+>>>>>>> b8052aa2e834724c7768f47c086b3764e68cb764
 
   return (
     <Form onSubmit={handleSubmit(handleValid)}>

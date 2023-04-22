@@ -35,7 +35,7 @@ export default function Sidebar() {
           <Image width={30} height={30} src={helpIcon} alt="" />
           도움
         </MenuButton>
-        <MenuButton onClick={() => router.push("/login")}>
+        <MenuButton onClick={() => router.push("/userLogin")}>
           <Image width={30} height={30} src={loginIcon} alt="" />
           로그인
         </MenuButton>
