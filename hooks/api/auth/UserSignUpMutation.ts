@@ -31,7 +31,6 @@ export default function UseUserSignupMutation() {
         console.log(accessToken);
         replaceAccessTokenForRequestInstance(accessToken);
         axios.defaults.headers.common["Authorization"] = accessToken;
-
         alert("회원가입 성공");
         Router.push({
           pathname: "/signup/completed",

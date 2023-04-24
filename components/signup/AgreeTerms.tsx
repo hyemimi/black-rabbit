@@ -2,24 +2,24 @@ import styled from "styled-components";
 import Link from "next/link";
 import { useState } from "react";
 
-const AgreeTerms = () => {
-  const [checkItems, setCheckItems] = useState<number[]>([]);
+const AgreeTerms = ({ checkItems, setCheckItems }: any) => {
+  // const [checkItems, setCheckItems] = useState<number[]>([]);
 
   const data = [
-    { id: 0, title: "선택 1" },
-    { id: 1, title: "선택 2" },
-    { id: 2, title: "선택 3" },
-    { id: 3, title: "선택 4" },
+    { id: "service", title: "선택 1" },
+    { id: "personal", title: "선택 2" },
+    { id: "location", title: "선택 3" },
+    { id: "alert", title: "선택 4" },
   ];
 
   // 체크박스 단일 선택
-  const handleSingleCheck = (checked: boolean, id: number) => {
+  const handleSingleCheck = (checked: boolean, id: string) => {
     if (checked) {
       // 단일 선택 시 체크된 아이템을 배열에 추가
       setCheckItems((prev: number[]) => [...prev, id]);
     } else {
       // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
-      setCheckItems(checkItems.filter((el) => el !== id));
+      setCheckItems(checkItems.filter((el: any) => el !== id));
     }
   };
 
@@ -27,7 +27,7 @@ const AgreeTerms = () => {
   const handleAllCheck = (checked: boolean) => {
     if (checked) {
       // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
-      const idArray: number[] = [];
+      const idArray: string[] = [];
       data.forEach((el) => idArray.push(el.id));
       setCheckItems(idArray);
     } else {

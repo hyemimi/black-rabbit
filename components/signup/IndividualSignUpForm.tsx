@@ -1,13 +1,12 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, InputHTMLAttributes, useRef,ReactEventHandler } from "react";
+import { useCallback, useRef, useState } from "react";
 
-import { useRouter } from "next/router";
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 import axios from "axios";
-
+import { P } from "../detail/Seller";
 
 interface SignUpForm {
   email: string;
@@ -18,12 +17,18 @@ interface SignUpForm {
 const IndividualSignUpForm = () => {
   const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState<boolean>(false);
+  const [checkItems, setCheckItems] = useState<string[]>([]);
+  const [pwConfirm, setPwConfirm] = useState<string>("");
+  const [pwConfirmMsg, setPwConfirmMsg] = useState<string>("");
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(true);
+  const [btnDisabled, setBtnDisabled] = useState<boolean>(false);
+
   //react-hook-form 사용을 위한 함수
   const {
     register,
     formState: { errors },
     reset,
-    handleSubmit: onSubmit,
+    handleSubmit: onChange,
     getValues,
     setError,
     setFocus,
@@ -33,62 +38,89 @@ const IndividualSignUpForm = () => {
       email: "",
       pw: "",
       nickname: "",
-
     },
   });
-
   const mutation = UseUserSignupMutation();
 
-  const checkNickname = async () => {
-    const enteredNickname = JSON.stringify(getValues("nickname"));
-    if (enteredNickname.length > 0) {
-      try {
-        const response = await axios.get(
-          "http://15.165.101.95:8080/user/check/nickname",
-          {
-            params: { nickname: JSON.stringify(getValues("nickname")) },
-          }
-        );
-        const body = await response.data.code;
-        if (body === "OK") {
-          setIsNicknameChecked(true);
-        } else {
-          alert("이미 사용중인 닉네임입니다. 다른 닉네임을 사용하세요.");
-        }
-        console.log(body);
-        return true;
-      } catch (error) {
-        console.log(error);
+  const onPwConfirm = (e: any) => {
+    e.preventDefault();
+    const enteredPwconfirm = setPwConfirm(e.target.value);
+    if (e.target.value!.length > 0) {
+      if (e.target.value !== getValues("pw")) {
+        setIsConfirmed(false);
+        setPwConfirmMsg("비밀번호와 일치하지 않습니다.");
+        setBtnDisabled(true);
         return false;
+      } else {
+        setIsConfirmed(true);
+        return true;
       }
     }
   };
 
+  const onNicknameChange = (e: any) => {
+    setBtnDisabled(false);
+    setIsNicknameChecked(false);
+  };
 
-  const submitHandler = async (e: any) => {
-    if (isNicknameChecked === true) {
-      await mutation.mutate({
+  const checkNickname = async () => {
+    const enteredNickname = getValues("nickname");
+    if (enteredNickname.length > 0) {
+      const response = await axios.get(
+        "http://15.165.101.95:8080/user/check/nickname",
+        {
+          params: { nickname: enteredNickname },
+        }
+      );
+      const body = await response.data.code;
+      if (body === "OK") {
+        setIsNicknameChecked(true);
+        alert("사용가능한 닉네임입니다.");
+        setBtnDisabled(true);
+      } else {
+        alert("사용불가한 닉네임입니다. 다른 닉네임을 사용하세요.");
+      }
+    }
+  };
+
+  const onValid = () => {
+    if (
+      checkItems.includes("service") === true &&
+      checkItems.includes("personal") === true &&
+      checkItems.includes("location") === true
+    ) {
+      return true;
+    } else {
+      alert("필수 약관에 모두 동의해주세요.");
+    }
+  };
+
+  const submitHandler = () => {
+    if (isNicknameChecked && onValid() && isConfirmed && checkItems) {
+      mutation.mutate({
         nickname: getValues("nickname"),
         email: getValues("email"),
         pw: getValues("pw"),
       });
     }
-
   };
 
   return (
-    <SytledForm onSubmit={onSubmit(submitHandler)}>
+    <SytledForm onSubmit={onChange(submitHandler)}>
       <Div>
         <div>
           <StyledLabel htmlFor="email">이메일*</StyledLabel>
           <StyledInput
             type="text"
+            placeholder="이메일"
             {...register("email", {
+              required: "이메일을 입력해주세요.",
               pattern: {
                 value:
                   /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i,
                 message: "이메일 형식에 맞지 않습니다.",
               },
+              validate: {},
             })}
           />
           {errors?.email ? (
@@ -125,19 +157,17 @@ const IndividualSignUpForm = () => {
             비밀번호 확인*
           </StyledLabel>
           <StyledInput
-            // {...register("pwConfirmation", {
-            //   required: "비밀번호 확인을 입력해주세요",
-            // })}
-            name="pwConfirmation"
             type="password"
             placeholder="비밀번호 확인"
+            onChange={onPwConfirm}
+            value={pwConfirm}
           />
-          <br />
-          {/* {errors.pwConfirmation && errors?.pwConfirmation ? (
+          {isConfirmed ? null : (
             <StyledSpan className="message error">
-              {errors.pwConfirmation?.message}
+              비밀번호와 일치하지 않습니다.
             </StyledSpan>
-          ) : null} */}
+          )}
+          <br />
         </div>
 
         <StyledHr />
@@ -147,28 +177,26 @@ const IndividualSignUpForm = () => {
 
           <CheckDiv>
             <StyledInput
-              {...register("nickname", { required: true })}
+              {...register("nickname", { required: "닉네임을 입력해주세요" })}
               type="text"
               placeholder="닉네임"
+              onChange={onNicknameChange}
             />
-            <CheckButton onClick={checkNickname}>
+            <CheckButton onClick={checkNickname} disabled={btnDisabled}>
               중복
               <br />
               확인
             </CheckButton>
           </CheckDiv>
 
-          {isValidEmail ? (
+          {isNicknameChecked ? (
             <SuccessSpan>사용가능한 닉네임입니다.</SuccessSpan>
           ) : null}
-
         </div>
       </Div>
 
       <Div>
-
-        <AgreeTerms />
-
+        <AgreeTerms checkItems={checkItems} setCheckItems={setCheckItems} />
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -218,7 +246,6 @@ const SuccessSpan = styled.span`
   color: #02a913;
 `;
 
-
 const CheckButton = styled.button`
   margin-left: 1rem;
   height: 2.5rem;
@@ -238,4 +265,3 @@ const CheckDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
-
