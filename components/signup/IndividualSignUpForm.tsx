@@ -1,25 +1,20 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-<<<<<<< HEAD
-import { useState, useCallback, InputHTMLAttributes } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import Link from "next/link";
-import UseUserSignupMutation from "@/hooks/api/auth/UserSignUpMutation";
-import { useUser } from "@/hooks/user/login";
-interface SignUp {
-=======
-import { useState, useCallback, InputHTMLAttributes, useRef,ReactEventHandler } from "react";
+import {
+  useState,
+  useCallback,
+  InputHTMLAttributes,
+  useRef,
+  ReactEventHandler,
+} from "react";
 
 import { useRouter } from "next/router";
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 import axios from "axios";
 
-
 interface SignUpForm {
->>>>>>> b8052aa2e834724c7768f47c086b3764e68cb764
   email: string;
   nickname: string;
   pw: string;
@@ -43,64 +38,6 @@ const IndividualSignUpForm = () => {
       email: "",
       pw: "",
       nickname: "",
-
-<<<<<<< HEAD
-  //각 입력의 조건 확인
-  const [enteredEmail, setEnteredEmail] = useState<string>(
-    "dayfilm@dayfilm.com"
-  );
-  const [password, setPassword] = useState<string>("");
-  const [passwordConfirm, setPasswordConfirm] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
-
-  //오류메시지
-  const [emailMessage, setEmailMessage] = useState<string>("");
-  const [passwordMessage, setPasswordMessage] = useState<string>("");
-  const [passwordConfirmMessage, setPasswordConfirmMessage] =
-    useState<string>("");
-  const [nicknameMessage, setNicknameMessage] = useState<string>("");
-
-  // 유효성 검사
-  const [isNickname, setIsNickname] = useState<boolean>(false);
-  const [isEmail, setIsEmail] = useState<boolean>(false);
-  const [isPassword, setIsPassword] = useState<boolean>(false);
-  const [isPasswordConfirm, setIsPasswordConfirm] = useState<boolean>(false);
-  const router = useRouter();
-  const {
-    mutate: signupMutate,
-    data: signupMutationData,
-    error: signupMutationError,
-  } = UseUserSignupMutation();
-
-  const onSignUpClick = () => {};
-
-  const submitHandler = useCallback(
-    async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      console.log({ enteredEmail, nickname, password, passwordConfirm });
-      signupMutate({
-        email: enteredEmail,
-        nickname: nickname,
-        pw: password,
-      });
-      // try {
-      //   await axios
-      //     .post(REGISTER_USERS_URL, {
-      //       username: name,
-      //       password: password,
-      //       email: email,
-      //     })
-      //     .then((res) => {
-      //       console.log('response:', res)
-      //       if (res.status === 200) {
-      //         router.push('/sign_up/profile_start')
-      //       }
-      //     })
-      // } catch (err) {
-      //   console.error(err)
-      // }
-=======
->>>>>>> b8052aa2e834724c7768f47c086b3764e68cb764
     },
   });
 
@@ -131,7 +68,6 @@ const IndividualSignUpForm = () => {
     }
   };
 
-
   const submitHandler = async (e: any) => {
     if (isNicknameChecked === true) {
       await mutation.mutate({
@@ -140,7 +76,6 @@ const IndividualSignUpForm = () => {
         pw: getValues("pw"),
       });
     }
-
   };
 
   return (
@@ -228,14 +163,11 @@ const IndividualSignUpForm = () => {
           {isValidEmail ? (
             <SuccessSpan>사용가능한 닉네임입니다.</SuccessSpan>
           ) : null}
-
         </div>
       </Div>
 
       <Div>
-
         <AgreeTerms />
-
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>
@@ -285,7 +217,6 @@ const SuccessSpan = styled.span`
   color: #02a913;
 `;
 
-
 const CheckButton = styled.button`
   margin-left: 1rem;
   height: 2.5rem;
@@ -305,4 +236,3 @@ const CheckDiv = styled.div`
   display: flex;
   flex-direction: row;
 `;
-

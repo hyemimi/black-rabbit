@@ -4,9 +4,6 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import styled from "styled-components";
 
-import useLoginMutation from "@/hooks/api/auth/LoginMutation";
-
-
 interface FormData {
   userID: string;
   userPW: string;
@@ -18,27 +15,6 @@ function LoginForm() {
     setValue,
     formState: { errors },
   } = useForm<FormData>();
-<<<<<<< HEAD
-  const {
-    mutate: loginMutate,
-    data: loginMutationData,
-    error: loginMutationError,
-  } = useLoginMutation();
-  const handleValid = ({ userID, userPW }: FormData) => {
-    //Api 호출
-    loginMutate({
-      email: userID,
-      pw: userPW,
-    });
-    console.log(userID);
-    console.log(userPW);
-    setValue("userID", "");
-    setValue("userPW", "");
-  };
-  useEffect(() => {
-    console.log(loginMutationData);
-  }, [loginMutationData]);
-=======
 
   const { mutate, isSuccess } = useLoginMutation();
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
@@ -53,7 +29,6 @@ function LoginForm() {
       setIsLoggedIn(true);
     }
   };
->>>>>>> b8052aa2e834724c7768f47c086b3764e68cb764
 
   return (
     <Form onSubmit={handleSubmit(handleValid)}>
