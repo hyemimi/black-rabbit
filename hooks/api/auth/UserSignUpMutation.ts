@@ -20,26 +20,19 @@ interface UserSignupMutationResponse {
 /*회원가입 - 개인 유저*/
 
 export default function UseUserSignupMutation() {
-  // const router = useRouter();
-
   return useMutation(
     (data: UserSignupMutationRequest) => instance.post("/sign/user", data),
     {
       onSuccess: (res) => {
-        console.log(res);
-        const { accessToken } = res.headers.authorization;
-        console.log(accessToken);
-        replaceAccessTokenForRequestInstance(accessToken);
-        axios.defaults.headers.common["Authorization"] = accessToken;
         alert("회원가입 성공");
         Router.push({
           pathname: "/signup/completed",
           query: { nickname: res.data.nickname },
         });
       },
-      onError: (res: any) => {
-        confirm("회원가입 실패");
-        console.log(res.data.detail);
+      onError: (errors) => {
+        alert("회원가입실패");
+        console.log(errors);
       },
     }
   );

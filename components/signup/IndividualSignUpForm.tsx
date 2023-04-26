@@ -15,7 +15,6 @@ interface SignUpForm {
 }
 
 const IndividualSignUpForm = () => {
-  const [isValidEmail, setIsValidEmail] = useState<boolean>(false);
   const [isNicknameChecked, setIsNicknameChecked] = useState<boolean>(false);
   const [checkItems, setCheckItems] = useState<string[]>([]);
   const [pwConfirm, setPwConfirm] = useState<string>("");
