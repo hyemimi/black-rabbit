@@ -1,8 +1,13 @@
-import { instance } from "@/libs/api/client";
+import {
+  instance,
+  replaceAccessTokenForRequestInstance,
+} from "@/libs/api/client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { replaceAccessTokenForRequestInstance } from "@/libs/api/client";
 import { useRouter } from "next/router";
+import axios, { AxiosError } from "axios";
+import { useGetAllProduct } from "../product/GetAllProduct";
 
 export interface LoginMutationRequest {
   email: string;
@@ -20,13 +25,16 @@ export default function useLoginMutation() {
       instance.post<LoginMutationResponse>("/login", data),
     {
       onSuccess: (res) => {
-        console.log(res);
         alert("로그인 되었습니다.");
         router.push("/");
+        const accessToken = res.headers.authorization;
+        localStorage.setItem("accessToken", accessToken);
+        replaceAccessTokenForRequestInstance(accessToken);
+        axios.defaults.headers.common["Authorization"] = accessToken;
       },
-      onError: (error) => {
-        console.log(error);
-        alert(error);
+      onError: (error: AxiosError) => {
+        const ob = Object(error.response!.data);
+        alert(ob.detail);
       },
     }
   );

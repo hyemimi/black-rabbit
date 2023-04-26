@@ -26,12 +26,8 @@ export default function UseUserSignupMutation() {
   return useMutation(
     (data: UserSignupMutationRequest) => instance.post("/sign/user", data),
     {
-      onSuccess: (res: any) => {
-        console.log(res);
-        const { accessToken } = res.headers.authorization;
-        console.log(accessToken);
-        replaceAccessTokenForRequestInstance(accessToken);
-        axios.defaults.headers.common["Authorization"] = accessToken;
+
+      onSuccess: (res) => {
 
         alert("회원가입 성공");
         Router.push({
@@ -39,9 +35,9 @@ export default function UseUserSignupMutation() {
           query: { nickname: res.data.nickname },
         });
       },
-      onError: (res: any) => {
-        confirm("회원가입 실패");
-        console.log(res.data.detail);
+      onError: (errors) => {
+        alert("회원가입실패");
+        console.log(errors);
       },
     }
   );
