@@ -14,7 +14,7 @@ function Header() {
           <Searchbar></Searchbar>
         </Col>
         <Col>
-          <Button onClick={() => router.push("/login")}>Login</Button>
+          <Button onClick={() => router.push("/userLogin")}>Login</Button>
         </Col>
       </Nav>
     </>
