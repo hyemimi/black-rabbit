@@ -1,36 +1,33 @@
 import styled from "styled-components";
 import { ModalDiv } from "./ModalDiv";
+import { reviews } from "@/temp/reviews";
 import {
   ModalSection,
-  ModalHeader,
-  HeaderButton,
-  ModalMain,
   ModalButton,
+  ModalHeader,
   ModalFooter,
+  ModalMain,
+  HeaderButton,
 } from "./ModalComponent";
-import { reviews } from "@/temp/reviews";
-import { useMakeStars } from "@/hooks/review/useMakeStars";
-export default function ReviewModal({ setIsOpen }: any) {
+import Searchbar from "../Searchbar";
+
+export default function ListModal({ setIsOpen, isOpen }: any) {
   const closeModal = () => {
     setIsOpen(false);
   };
-  const review = reviews[0];
-  const stars = useMakeStars(review.score);
+
   return (
     <ModalDiv>
       <ModalSection>
         <ModalHeader>
-          (상품명)
+          상품 조회
           <HeaderButton onClick={closeModal}>X</HeaderButton>
         </ModalHeader>
         <ModalMain>
-          {review.title}
-          <Box>
-            <h1>{review.detail}</h1>
-          </Box>
+          <Searchbar></Searchbar>
         </ModalMain>
         <ModalFooter>
-          <button onClick={closeModal}>닫기</button>
+          <ModalButton onClick={closeModal}>닫기</ModalButton>
         </ModalFooter>
       </ModalSection>
     </ModalDiv>
@@ -39,7 +36,7 @@ export default function ReviewModal({ setIsOpen }: any) {
 export const Box = styled.div`
   width: 750px;
   max-width: 750px;
-  height: 100%;
+  height: 80px;
   font-weight: bold;
   background-color: rgb(230, 230, 230);
   border-radius: 20px;
@@ -56,4 +53,9 @@ export const Box = styled.div`
   button {
     color: rgb(230, 230, 230);
   }
+`;
+
+const Circle = styled.div`
+  border-radius: 30px;
+  background-color: ${(props) => props.theme.pointColor};
 `;

@@ -14,8 +14,8 @@ export default function test() {
   const onSignUpClick = () => {
     loginMutate({
       email: "hyemi7375@gmail.com",
-      nickname: "testt",
-      pw: "abc1234",
+      nickname: "ㅠㅠ",
+      pw: "abcdd",
     });
   };
 

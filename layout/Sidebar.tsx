@@ -19,11 +19,11 @@ export default function Sidebar() {
         <MenuButton onClick={() => router.push("/")}>
           <Image width={32} height={32} src={homeIcon} alt="" /> 홈
         </MenuButton>
-        <MenuButton onClick={() => router.push(`/like/${user_id}`)}>
+        <MenuButton onClick={() => router.push(`/like`)}>
           <Image width={30} height={30} src={likeIcon} alt="" />
           좋아요
         </MenuButton>
-        <MenuButton onClick={() => router.push(`/cart/${user_id}`)}>
+        <MenuButton onClick={() => router.push(`/cart`)}>
           <Image width={30} height={30} src={cartIcon} alt="" />
           장바구니
         </MenuButton>

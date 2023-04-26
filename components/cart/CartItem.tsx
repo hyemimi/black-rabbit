@@ -1,27 +1,28 @@
 import { IItem } from "@/temp/items";
 import styled from "styled-components";
 import { useState } from "react";
+import { IBasket } from "@/pages/cart";
 
 export default function CartItem({
-  Item_id,
-  modelName,
-  image,
-  title,
-  pricePerOne,
-  brandName,
+  basketId,
+  ended,
+  imagePath,
   method,
-}: IItem) {
+  price,
+  started,
+  title,
+}: IBasket) {
   return (
     <ItemBox>
-      <ImageDiv>{image}</ImageDiv>
+      <ImageDiv>{imagePath}</ImageDiv>
       <Item>
-        <h1>
-          {brandName} {modelName}
-        </h1>
+        <h1>{title}</h1>
       </Item>
-      <Item>{pricePerOne}</Item>
-      <Item>{pricePerOne}</Item>
-      <Item>{pricePerOne}</Item>
+      <Item>{price}</Item>
+      <Item>
+        {started} ~ {ended}
+      </Item>
+      <Item>{method}</Item>
     </ItemBox>
   );
 }
