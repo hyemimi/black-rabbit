@@ -9,24 +9,28 @@ import {
   HeaderButton,
 } from "./ModalComponent";
 
-export default function QuestionModal({ setIsOpen, isOpen }: any) {
+export interface IQuestion {
+  setIsOpen: any;
+  title: string;
+  isAnswered: boolean;
+  createdAt: string;
+  answer: string;
+  store: string;
+  content: string;
+}
+
+export default function QuestionModal({
+  setIsOpen,
+  createdAt,
+  isAnswered,
+  title,
+  answer,
+  store,
+  content,
+}: IQuestion) {
   const closeModal = () => {
     setIsOpen(false);
   };
-  const addresslist = [
-    {
-      name: "집",
-      postalCode: 1234,
-      address: "경기 화성시 서동탄로 11",
-      addressDetail: "205동 개인정보 어쩌구",
-    },
-    {
-      name: "자취방",
-      postalCode: 1234,
-      address: "경기 용인시 국",
-      addressDetail: "전자정보대...가기싫다",
-    },
-  ];
 
   return (
     <ModalDiv>
@@ -36,7 +40,18 @@ export default function QuestionModal({ setIsOpen, isOpen }: any) {
           <HeaderButton onClick={closeModal}>X</HeaderButton>
         </ModalHeader>
         <ModalMain>
-          <ContentDiv>야호~</ContentDiv>
+          <ContentDiv>
+            <DetailDiv>
+              문의일 : {createdAt} 답변여부 : {isAnswered ? "완료" : "미완료"}
+            </DetailDiv>
+            {content}
+            <Hr />
+          </ContentDiv>
+
+          <ContentDiv>
+            <DetailDiv>{store}</DetailDiv>
+            {answer}
+          </ContentDiv>
         </ModalMain>
         <ModalFooter>
           <ModalButton onClick={closeModal}>닫기</ModalButton>
@@ -48,4 +63,14 @@ export default function QuestionModal({ setIsOpen, isOpen }: any) {
 
 const ContentDiv = styled.div`
   min-width: 700px;
+`;
+const Hr = styled.hr`
+  border: 1.5px solid black;
+  margin-top: 50px;
+`;
+
+const DetailDiv = styled.div`
+  justify-content: space-end;
+  text-align: right;
+  margin-bottom: 30px;
 `;

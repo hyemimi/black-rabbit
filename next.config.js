@@ -4,7 +4,13 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-  async rewrites() {
+};
+
+module.exports = nextConfig;
+
+/* 
+
+async rewrites() {
     return [
       {
         source: "/:path*",
@@ -12,11 +18,4 @@ const nextConfig = {
       },
     ];
   },
-};
-
-module.exports = nextConfig;
-
-/* 
-
-
 */
