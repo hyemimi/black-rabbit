@@ -2,7 +2,6 @@ import { useMutation } from "@tanstack/react-query";
 import { replaceAccessTokenForRequestInstance } from "@/libs/api/client";
 import { useRouter } from "next/router";
 import axios, { AxiosError } from "axios";
-import { useGetAllProduct } from "../product/GetAllProduct";
 import { instance } from "@/libs/api/client";
 
 export interface LoginMutationRequest {
