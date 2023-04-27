@@ -25,7 +25,7 @@ export default function Question() {
       <MenuBar>
         <Name>번호</Name>
         <Name>유형</Name>
-        <NameTag>제목</NameTag>
+        <Name>제목</Name>
         <Name>답변여부</Name>
         <Name>작성자</Name>
         <Name>등록일</Name>
@@ -93,7 +93,3 @@ const MenuBar = styled.div`
 `;
 
 const Name = styled.div``;
-const NameTag = styled.div`
-  margin-left: 30px;
-  margin-right: 30px;
-`;

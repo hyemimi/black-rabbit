@@ -46,18 +46,16 @@ const Questionlist = () => {
         <h1>문의목록</h1>
 
         <MenuBar>
-          <Title>
-            <NameTag>상품정보</NameTag>
-            <Name>답변여부</Name>
-            <Name>유형</Name>
-            <Name>등록일</Name>
-          </Title>
+          <Name>상품정보</Name>
+          <Name>답변여부</Name>
+          <Name>유형</Name>
+          <Name>등록일</Name>
         </MenuBar>
         <Hr />
         {questionlist.map((item, idx) => (
           <>
             <Title onClick={() => onClickedQuestion(item.id)}>
-              <NameTag>{item.title}</NameTag>
+              <Name>{item.title}</Name>
               <Name>
                 {item.isAnswered ? (
                   <ColorText isAnswered={item.isAnswered}>완료</ColorText>
@@ -111,25 +109,26 @@ const ColorText = styled.h2<{ isAnswered: boolean }>`
   font-style: bold;
 `;
 const MenuBar = styled.div`
-  display: flex;
   padding: 10px;
   justify-content: space-between;
   margin-top: 20px;
+  width: 100%;
+  display: grid;
+  text-align: center;
+  grid-template-columns: 300px 100px 100px 100px;
 `;
 
 const Title = styled.div`
-  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 300px 100px 100px 100px;
   text-align: center;
-  width: 900px;
-  cursor: pointer;
+
+  padding: 10px;
 `;
-const Name = styled.div`
-  margin-left: 100px;
-  width: 100px;
-`;
-const NameTag = styled.div`
-  width: 400px;
-`;
+const Name = styled.div``;
+
 const Overlay = styled(motion.div)`
   position: fixed;
   top: 0;
