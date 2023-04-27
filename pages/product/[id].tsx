@@ -9,16 +9,21 @@ import { useRouter } from "next/router";
 import DatePicker from "react-datepicker";
 import DatePick from "@/components/common/DatePick";
 import { GreenBox } from "@/components/common/GreenBox";
+import Question from "@/components/detail/Question";
 
 export default function detail() {
-  const [selected, setSelected] = useState(true);
+  const [currentmenu, setCurrentMenu] = useState("detail");
   const [count, setCount] = useState<number>(0);
   const [method, setMethod] = useState<string | null>("");
+
+  /* 탭 메뉴 관리 */
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     if (event.currentTarget.name === "detail") {
-      setSelected(true);
+      setCurrentMenu("detail");
+    } else if (event.currentTarget.name === "review") {
+      setCurrentMenu("review");
     } else {
-      setSelected(false);
+      setCurrentMenu("question");
     }
   };
   let user_id = 1;
@@ -128,14 +133,18 @@ export default function detail() {
 
       <Div>
         <TabDiv>
-          <Tab name="detail" onClick={onClick} selected={selected}>
+          <Tab name="detail" onClick={onClick} selected={currentmenu}>
             상품 설명
           </Tab>
-          <Tab name="review" onClick={onClick} selected={!selected}>
+          <Tab name="review" onClick={onClick} selected={currentmenu}>
             상품 리뷰
           </Tab>
+          <Tab name="question" onClick={onClick} selected={currentmenu}>
+            Q & A
+          </Tab>
         </TabDiv>
-        {selected ? <></> : <ReviewProduct />}
+        {currentmenu === "review" && <ReviewProduct />}
+        {currentmenu === "question" && <Question />}
       </Div>
     </Wrapper>
   );
@@ -250,9 +259,11 @@ const TabDiv = styled.div`
   display: flex;
   width: 900px;
 `;
-const Tab = styled(Button)<{ selected: boolean }>`
+const Tab = styled(Button)<{ name: string; selected: string }>`
   background-color: ${(props) =>
-    props.selected ? props.theme.pointColor : props.theme.searchColor};
+    props.selected === props.name
+      ? props.theme.pointColor
+      : props.theme.searchColor};
   width: 100%;
   justify-content: center;
   align-items: center;
