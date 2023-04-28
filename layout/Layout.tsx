@@ -2,8 +2,10 @@ import { Wrapper } from "@/components/common/Wrapper";
 import styled from "styled-components";
 import Header from "./Header";
 import Sidebar from "./Sidebar";
+import { useState } from "react";
 
 export default function Layout() {
+  // 유저인지 사업자인지
   return (
     <LayoutDiv>
       <Sidebar />
