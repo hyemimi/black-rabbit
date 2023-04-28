@@ -124,7 +124,7 @@ const Title = styled.div`
   display: grid;
   grid-template-columns: 300px 100px 100px 100px;
   text-align: center;
-
+  cursor: pointer;
   padding: 10px;
 `;
 const Name = styled.div``;
