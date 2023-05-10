@@ -1,20 +1,47 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
+import { AnimatePresence } from "framer-motion";
+import Modal from "../common/modal/Modal";
+import QuestionModal from "../common/modal/QuestionModal";
+import { motion } from "framer-motion";
+
+interface IList {
+  id: number;
+  title: string;
+  isAnswered: boolean;
+  type: string;
+  createdAt: string;
+  answer: string;
+  store: string;
+  content: string;
+  user: string;
+}
 
 export default function Question() {
-  const templist = [
+  const tempList = [
     {
-      num: 1,
+      id: 1,
+      title: "Canon EOS Rebel T7  18-55mm 번들 세트",
+      isAnswered: true,
       type: "배송문의",
-      title: "문의합니다",
-      isAnswerd: true,
+      createdAt: "2022-04-25",
+      answer: "기다리세요",
+      store: "언더독렌탈",
+      content: "언제 배송되나요?",
       user: "김토끼",
-      createdAt: "2023-04-27",
     },
   ];
-  const [questionlist, setQuestionList] = useState(templist);
+  const [questionlist, setQuestionList] = useState(tempList);
+  const [targetquestion, setTargetQuestion] = useState<IList[]>([]);
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const onClickedQuestion = (id: number) => {
+    let target = questionlist.filter((it) => it.id === id);
+    setTargetQuestion(target);
+    setIsOpen(true);
+  };
+
   return (
     <>
       <Div>
@@ -31,16 +58,36 @@ export default function Question() {
         <Name>등록일</Name>
       </MenuBar>
       <Hr />
-      {questionlist.map((question) => (
-        <ReviewDiv>
-          <Name>{question.num}</Name>
+      {questionlist.map((question, idx) => (
+        <ReviewDiv onClick={() => onClickedQuestion(question.id)}>
+          <Name>{idx + 1}</Name>
           <Name>{question.type}</Name>
           <Name>{question.title}</Name>
-          <Name>{question.isAnswerd ? "완료" : "미완료"}</Name>
+          <Name>{question.isAnswered ? "완료" : "미완료"}</Name>
           <Name>{question.user}</Name>
           <Name>{question.createdAt}</Name>
         </ReviewDiv>
       ))}
+      {isOpen && (
+        <AnimatePresence>
+          <Overlay
+            onClick={() => setIsOpen(false)}
+            exit={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          />
+          <Modal>
+            <QuestionModal
+              title={targetquestion[0]?.title}
+              content={targetquestion[0]?.content}
+              setIsOpen={setIsOpen}
+              isAnswered={targetquestion[0]?.isAnswered}
+              createdAt={targetquestion[0]?.createdAt}
+              answer={targetquestion[0]?.answer}
+              store={targetquestion[0]?.store}
+            ></QuestionModal>
+          </Modal>
+        </AnimatePresence>
+      )}
     </>
   );
 }
@@ -71,16 +118,6 @@ const ReviewDiv = styled.div`
   border-bottom: 1px solid gray;
   padding: 5px;
 `;
-const Header = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin: 5px;
-`;
-
-const Content = styled.div`
-  width: 100%;
-  padding: 5px;
-`;
 
 const MenuBar = styled.div`
   padding: 10px;
@@ -93,3 +130,11 @@ const MenuBar = styled.div`
 `;
 
 const Name = styled.div``;
+const Overlay = styled(motion.div)`
+  position: fixed;
+  top: 0;
+  width: 1000px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+`;
