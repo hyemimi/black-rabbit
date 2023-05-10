@@ -103,7 +103,7 @@ export default function writeReview() {
               onChange={handleChange}
             />
             <Button
-              onClick={() => {
+              onClick={(e) => {
                 fileInput.current?.click();
               }}
             >
