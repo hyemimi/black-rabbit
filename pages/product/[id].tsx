@@ -13,8 +13,9 @@ import Question from "@/components/detail/Question";
 
 export default function detail() {
   const [currentmenu, setCurrentMenu] = useState("detail");
-  const [count, setCount] = useState<number>(0);
+  const [count, setCount] = useState<number>(1);
   const [method, setMethod] = useState<string | null>("");
+  const [total, setTotal] = useState<number>(0);
 
   /* 탭 메뉴 관리 */
   const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -109,10 +110,17 @@ export default function detail() {
             </TitleItem>
             <TitleItem>
               <BoxName>예약기간</BoxName>
-              <DatePick pricePerOne={pricePerOne} count={count} />
+              <DatePick
+                pricePerOne={pricePerOne}
+                count={count}
+                setTotal={setTotal}
+              />
             </TitleItem>
           </ContentDiv>
           <GreenBox>내역</GreenBox>
+          <PriceDiv>
+            <Pricebox> {total >= 0 && total} </Pricebox>원
+          </PriceDiv>
           <ButtonDiv>
             <Button
               onClick={() => router.push("/reservation")}
@@ -268,4 +276,21 @@ const Tab = styled(Button)<{ name: string; selected: string }>`
   justify-content: center;
   align-items: center;
   display: flex;
+`;
+const PriceDiv = styled.div`
+  display: flex;
+
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  font-size: 35px;
+  margin-top: 20px;
+`;
+const Pricebox = styled.div`
+  width: 250px;
+  height: 50px;
+  border-radius: 20px;
+  background-color: ${(props) => props.theme.searchColor};
+  cursor: pointer;
+  text-align: center;
 `;
