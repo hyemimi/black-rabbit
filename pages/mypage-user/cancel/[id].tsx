@@ -7,10 +7,31 @@ import { useState } from "react";
 import { Select } from "@/components/detail/Seller";
 import { Option } from "@/components/detail/Seller";
 import { useRouter } from "next/router";
+import useCancelMutation from "@/hooks/api/payment/CancelMutation";
 
 export default function Cancel() {
-  const [content, setContent] = useState<string>("");
+  const [reason, setReason] = useState<string>("");
+  const { mutate } = useCancelMutation();
   const router = useRouter();
+  const cancelOrder = () => {
+    if (reason !== "") {
+      if (window.confirm("환불하시겠습니까?")) {
+        console.log(reason);
+        mutate(
+          { cancelReason: reason, orderPk: Number(router.query.id) },
+          {
+            onSuccess: () => router.push("/mypage-user/cancel/Success"),
+            onError: () => {
+              window.confirm("오류가 발생했습니다");
+            },
+          }
+        );
+      }
+    } else {
+      window.confirm("환불 사유를 선택해주세요");
+    }
+  };
+
   return (
     <Wrapper>
       <TitleDiv>
@@ -24,17 +45,18 @@ export default function Cancel() {
           <hr />
           <Row>
             <H1>환불사유</H1>
-            <Select>
-              <Option>단순 변심</Option>
-              <Option>옵션 변경</Option>
-              <Option>배송 지연</Option>
+            <Select onChange={(e) => setReason(e.currentTarget.value)}>
+              <Option value="" defaultChecked>
+                ---선택---
+              </Option>
+              <Option value="단순 변심">단순 변심</Option>
+              <Option value="옵션 변경">옵션 변경</Option>
+              <Option value="배송 지연">배송 지연</Option>
             </Select>
           </Row>
         </form>
       </Box>
-      <Button onClick={() => router.push("/mypage-user/cancel/Success")}>
-        환불신청
-      </Button>
+      <Button onClick={() => cancelOrder()}>환불신청</Button>
     </Wrapper>
   );
 }
