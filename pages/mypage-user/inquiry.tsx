@@ -18,7 +18,7 @@ interface FormData {
 export default function inquiry() {
   const [images, setImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement | null>(null);
-  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState<string>("");
   const {
     register,
     handleSubmit,
@@ -45,11 +45,6 @@ export default function inquiry() {
     setValue("title", "");
     setValue("content", "");
   };
-  const searchItem = (e: any) => {
-    // 상품을 조회합니다
-    e.preventDefault();
-    setIsOpen(true);
-  };
   return (
     <Wrapper>
       <TitleDiv>
@@ -58,8 +53,28 @@ export default function inquiry() {
       <Box height="1500px">
         <form>
           <Row>
-            <H1>문의상품</H1>
-            <Button onClick={searchItem}>상품조회</Button>
+            <H1>문의상품 : Canon EOS Rebel T7 18-55mm 번들 세트</H1>
+          </Row>
+          <Row>
+            <H1>문의유형</H1>
+            <TypeDiv
+              onClick={() => setSelected("상품문의")}
+              isSelected={selected === "상품문의"}
+            >
+              상품문의
+            </TypeDiv>
+            <TypeDiv
+              onClick={() => setSelected("배송문의")}
+              isSelected={selected === "배송문의"}
+            >
+              배송문의
+            </TypeDiv>
+            <TypeDiv
+              onClick={() => setSelected("배송전변경")}
+              isSelected={selected === "배송전변경"}
+            >
+              배송전변경
+            </TypeDiv>
           </Row>
           <hr />
           <Row>
@@ -120,11 +135,6 @@ export default function inquiry() {
         </form>
       </Box>
       <Button onClick={handleSubmit(handleValid)}>문의하기</Button>
-      {isOpen && (
-        <Modal>
-          <ListModal setIsOpen={setIsOpen}></ListModal>
-        </Modal>
-      )}
     </Wrapper>
   );
 }
@@ -151,14 +161,16 @@ const Button = styled.button`
   width: 130px;
   cursor: pointer;
 `;
-const Overlay = styled(motion.div)`
-  position: fixed;
-  top: 0;
-
-  width: 120%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  opacity: 0;
+const TypeDiv = styled.div<{ isSelected: boolean }>`
+  background-color: ${(props) =>
+    props.isSelected ? props.theme.pointColor : props.theme.searchColor};
+  border: none;
+  text-align: center;
+  margin-left: 30px;
+  height: 50px;
+  width: 130px;
+  cursor: pointer;
+  padding: 15px;
 `;
 const Div = styled.div`
   display: flex;
