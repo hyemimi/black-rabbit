@@ -77,14 +77,20 @@ export default function orderlist() {
               <Button>배송상태</Button>
               <Button
                 onClick={() =>
-                  router.push(`/mypage-user/cancel/${item.orderPk}`)
+                  router.push({
+                    pathname: `/mypage-user/cancel/${item.orderPk}`,
+                    query: { title: item.title },
+                  })
                 }
               >
                 교환/반품 신청
               </Button>
               <Button
                 onClick={() =>
-                  router.push(`/mypage-user/review/${item.orderPk}`)
+                  router.push({
+                    pathname: `/mypage-user/review/${item.orderPk}`,
+                    query: { title: item.title },
+                  })
                 }
               >
                 리뷰 작성하기

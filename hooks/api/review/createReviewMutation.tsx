@@ -1,9 +1,9 @@
-//import { instance } from "@/libs/api/client";
+import { instance } from "@/libs/api/client";
 import { useMutation } from "@tanstack/react-query";
 
 /* 리뷰를 생성합니다 */
 
-/* export interface createReviewMutationRequest {
+export interface createReviewMutationRequest {
   content: string;
   itemId: string;
   star: number;
@@ -14,4 +14,3 @@ export default function useCreateReviewMutation() {
     instance.post<any>("/reviews/user-write", data)
   );
 }
- */

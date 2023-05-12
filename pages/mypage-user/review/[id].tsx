@@ -7,6 +7,8 @@ import tempimage from "../../public/help.png";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 import ReactStars from "react-stars";
+import { useRouter } from "next/router";
+import useCreateReviewMutation from "@/hooks/api/review/createReviewMutation";
 interface FormData {
   title: string;
   content: string;
@@ -15,8 +17,10 @@ interface FormData {
 }
 
 export default function writeReview() {
+  const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement | null>(null);
+  const { mutate: createReviewMutate } = useCreateReviewMutation();
 
   /* 별점관리 */
   const [rating, setRating] = useState(0);
@@ -49,7 +53,8 @@ export default function writeReview() {
   } = useForm<FormData>();
   const handleValid = ({ title, content, image }: FormData) => {
     //Api 호출
-    console.log(rating);
+
+    /*  createReviewMutate({}); */
     setValue("title", "");
     setValue("content", "");
   };
@@ -58,20 +63,23 @@ export default function writeReview() {
     <Wrapper>
       <form>
         <TitleDiv>
-          <h1>상품은 어떠셨나요? 리뷰와 별점을 남겨주세요</h1>
+          <Header>
+            <H1>상품은 어떠셨나요? 리뷰와 별점을 남겨주세요</H1>
+            <ReactStars
+              value={rating}
+              count={5}
+              onChange={ratingChanged}
+              size={40}
+              color2={"#ffd700"}
+            />
+          </Header>
         </TitleDiv>
-        <ReactStars
-          value={rating}
-          count={5}
-          onChange={ratingChanged}
-          size={40}
-          color2={"#ffd700"}
-        />
+
         <Box height="1200px">
           <Row>
             <ReviewBox height="135px">
               <ImageDiv></ImageDiv>
-              <H1>상품명</H1>
+              <H1>상품명 : {router.query.title}</H1>
             </ReviewBox>
           </Row>
           <hr />
@@ -141,6 +149,11 @@ export default function writeReview() {
 const Row = styled.div`
   display: flex;
   padding: 20px;
+  align-items: center;
+`;
+const Header = styled.div`
+  display: flex;
+  jusfify-content: space-between;
   align-items: center;
 `;
 const H1 = styled.h1`

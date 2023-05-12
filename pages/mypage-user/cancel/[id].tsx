@@ -13,6 +13,7 @@ export default function Cancel() {
   const [reason, setReason] = useState<string>("");
   const { mutate } = useCancelMutation();
   const router = useRouter();
+  console.log(router.query);
   const cancelOrder = () => {
     if (reason !== "") {
       if (window.confirm("환불하시겠습니까?")) {
@@ -40,7 +41,7 @@ export default function Cancel() {
       <Box height="300px">
         <form>
           <Row>
-            <H1>oo렌탈 Canon EOS Rebel T7 18-55mm 번들 세트</H1>
+            <H1>{router.query.title}</H1>
           </Row>
           <hr />
           <Row>
