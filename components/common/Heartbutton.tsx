@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Image from "next/image";
 import heart from "../../public/heart.png";
-import useLikeMutation from "@/hooks/api/product/LikeMutation";
+import useLikeMutation from "@/hooks/api/like/LikeMutation";
 
 export default function Heartbutton({ isHeart }: any) {
   const { mutate } = useLikeMutation();

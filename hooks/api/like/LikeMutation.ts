@@ -9,6 +9,6 @@ export interface LikeMutationRequest {
 /* 좋아요를 등록합니다 */
 export default function useLikeMutation() {
   return useMutation((data: LikeMutationRequest) =>
-    instance.post("/items/likes", data)
+    instance.post("/likes", data)
   );
 }
