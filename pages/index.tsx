@@ -120,7 +120,7 @@ export default function Home() {
           <FilterButton>전체보기</FilterButton>
         </div>
       </FilterDiv>
-      <ProductList />
+      {items && <ProductList items={items} />}
     </Wrapper>
   );
 }

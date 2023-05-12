@@ -1,11 +1,12 @@
 import Product from "./Product";
 import styled from "styled-components";
 import { items } from "@/temp/items";
-export default function ProductList() {
+import { IContent } from "@/pages/like";
+export default function ProductList(items: any) {
   return (
     <Wrapper>
-      {items.map((product) => (
-        <Product key={product.Item_id} {...product} />
+      {items.data.content.map((product: IContent) => (
+        <Product key={product.itemId} {...product} />
       ))}
     </Wrapper>
   );

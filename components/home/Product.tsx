@@ -5,33 +5,41 @@ import tempimage from "../../public/help.png";
 import { useRouter } from "next/router";
 import Heartbutton from "../common/Heartbutton";
 import { IItem } from "@/temp/items";
+import { IContent } from "@/pages/like";
+import { useMakeStars } from "@/hooks/review/useMakeStars";
 
 export default function Product({
-  Item_id,
-  modelName,
-  image,
+  itemId,
   title,
+  imagePath,
+  storeName,
+  reviewCount,
+  starAvg,
   pricePerOne,
-  isHeart,
-}: IItem) {
+}: IContent) {
   const router = useRouter();
   return (
     <Box>
       <InnerBox>
         <Image
-          onClick={() => router.push(`/product/${Item_id}`)}
-          src={tempimage}
+          onClick={() => router.push(`/product/${itemId}`)}
+          src={imagePath}
           alt=""
           width={240}
           height={200}
         ></Image>
         <Wrapper>
           <Overview>
-            <h1>{modelName}</h1> <br />
+            <h1>
+              {storeName},{title}
+            </h1>{" "}
+            <br />
             <p>{pricePerOne}</p> <br />
-            <p>{title}</p>
+            <p>
+              {useMakeStars(starAvg)}({reviewCount})
+            </p>
           </Overview>
-          <Heartbutton isHeart={isHeart} />
+          <Heartbutton />
         </Wrapper>
       </InnerBox>
     </Box>
