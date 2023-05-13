@@ -6,8 +6,9 @@ import { useState, useRef } from "react";
 import tempimage from "../../public/help.png";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
-import { AnimatePresence } from "framer-motion";
-import { useMakeStars } from "@/hooks/review/useMakeStars";
+import ReactStars from "react-stars";
+import { useRouter } from "next/router";
+import useCreateReviewMutation from "@/hooks/api/review/createReviewMutation";
 interface FormData {
   title: string;
   content: string;
@@ -16,17 +17,16 @@ interface FormData {
 }
 
 export default function writeReview() {
+  const router = useRouter();
   const [images, setImages] = useState<string[]>([]);
   const fileInput = useRef<HTMLInputElement | null>(null);
-  const [rating, setRating] = useState(0);
+  const { mutate: createReviewMutate } = useCreateReviewMutation();
 
-  const [hoverRating, setHoverRating] = useState(0);
-  const onMouseEnter = (index: number) => setHoverRating(index);
-  // 마우스가 별 위에 올라가면 스테이트를 변경.
-  const onMouseLeave = () => setHoverRating(0);
-  // 마우스가 별 밖으로 나가면 스테이트를 0으로 변경.
-  const onSaveRating = (index: number) => setRating(index);
-  // 클릭시, 별 인덱스를 스테이트에 저장.
+  /* 별점관리 */
+  const [rating, setRating] = useState(0);
+  const ratingChanged = (newRating: number) => {
+    setRating(newRating);
+  };
 
   /* 이미지들의 url을 string 배열로 넣습니다 */
   const handleChange = (e: React.ChangeEvent) => {
@@ -37,7 +37,7 @@ export default function writeReview() {
     });
     setImages((prev) => prev.concat(selectedFiles));
   };
-
+  /* 이미지 삭제 */
   const deleteImage = (url: string) => {
     let newImageList = images.filter((image) => image !== url);
     setImages(newImageList);
@@ -53,20 +53,33 @@ export default function writeReview() {
   } = useForm<FormData>();
   const handleValid = ({ title, content, image }: FormData) => {
     //Api 호출
+
+    /*  createReviewMutate({}); */
     setValue("title", "");
     setValue("content", "");
   };
+
   return (
     <Wrapper>
       <form>
         <TitleDiv>
-          <h1>상품은 어떠셨나요? 리뷰와 별점을 남겨주세요</h1>
+          <Header>
+            <H1>상품은 어떠셨나요? 리뷰와 별점을 남겨주세요</H1>
+            <ReactStars
+              value={rating}
+              count={5}
+              onChange={ratingChanged}
+              size={40}
+              color2={"#ffd700"}
+            />
+          </Header>
         </TitleDiv>
+
         <Box height="1200px">
           <Row>
             <ReviewBox height="135px">
               <ImageDiv></ImageDiv>
-              <H1>상품명</H1>
+              <H1>상품명 : {router.query.title}</H1>
             </ReviewBox>
           </Row>
           <hr />
@@ -103,7 +116,8 @@ export default function writeReview() {
               onChange={handleChange}
             />
             <Button
-              onClick={() => {
+              onClick={(e: any) => {
+                e.preventDefault();
                 fileInput.current?.click();
               }}
             >
@@ -135,6 +149,11 @@ export default function writeReview() {
 const Row = styled.div`
   display: flex;
   padding: 20px;
+  align-items: center;
+`;
+const Header = styled.div`
+  display: flex;
+  jusfify-content: space-between;
   align-items: center;
 `;
 const H1 = styled.h1`

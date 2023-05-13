@@ -7,38 +7,54 @@ import Image from "next/image";
 import helpIcon from "../public/help.png";
 import loginIcon from "../public/login.png";
 import cartIcon from "../public/cart.png";
+import { useState } from "react";
+import UserMypageSidebar from "./UserMypageSidebar";
+import SellerMypageSidebar from "./SellerMypageSidebar";
 export default function Sidebar() {
   const router = useRouter();
   let user_id = 1; // 임시데이터
+  const [ismypage, setIsMypage] = useState(true); // 마이페이지 여부
+  const [isuser, setIsUser] = useState(false); // 유저 or 사업자 여부 관리
+  /* 사이드바 속성 */
+  const menuList = [
+    { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon },
+    { ref: "/like", label: "좋아요", width: 30, height: 30, icon: likeIcon },
+    { ref: "/cart", label: "장바구니", width: 30, height: 30, icon: cartIcon },
+    { ref: "/", label: "알림", width: 30, height: 30, icon: alarmIcon },
+    {
+      ref: "/userLogin",
+      label: "로그인",
+      width: 30,
+      height: 30,
+      icon: loginIcon,
+    },
+  ];
+
   return (
     <Side>
       <Logo>
         <h1>데이필름</h1>
       </Logo>
       <Div>
-        <MenuButton onClick={() => router.push("/")}>
-          <Image width={32} height={32} src={homeIcon} alt="" /> 홈
-        </MenuButton>
-        <MenuButton onClick={() => router.push(`/like`)}>
-          <Image width={30} height={30} src={likeIcon} alt="" />
-          좋아요
-        </MenuButton>
-        <MenuButton onClick={() => router.push(`/cart`)}>
-          <Image width={30} height={30} src={cartIcon} alt="" />
-          장바구니
-        </MenuButton>
-        <MenuButton>
-          <Image width={30} height={30} src={alarmIcon} alt="" />
-          알림
-        </MenuButton>
-        <MenuButton>
-          <Image width={30} height={30} src={helpIcon} alt="" />
-          도움
-        </MenuButton>
-        <MenuButton onClick={() => router.push("/userLogin")}>
-          <Image width={30} height={30} src={loginIcon} alt="" />
-          로그인
-        </MenuButton>
+        {!ismypage ? (
+          menuList.map((menu) => (
+            <>
+              <MenuButton onClick={() => router.push(menu.ref)}>
+                <Image
+                  width={menu.width}
+                  height={menu.height}
+                  src={menu.icon}
+                  alt=""
+                />
+                {menu.label}
+              </MenuButton>
+            </>
+          ))
+        ) : isuser ? (
+          <UserMypageSidebar />
+        ) : (
+          <SellerMypageSidebar />
+        )}
       </Div>
     </Side>
   );

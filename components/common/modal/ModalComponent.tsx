@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
-export const ModalButton = styled.div`
+export const ModalButton = styled.button`
+  border: none;
   cursor: pointer;
   background-color: ${(props) => props.theme.searchColor};
 `;
@@ -48,8 +49,6 @@ export const HeaderButton = styled.div`
   font-weight: 700;
   top: 20%;
   margin: 0 auto;
-
   color: #999;
-
   background-color: transparent;
 `;
