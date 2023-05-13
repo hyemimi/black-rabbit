@@ -3,7 +3,7 @@ import React, { ReactElement, useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 interface closeModalProps {
-  closeAddModal: () => void;
+  closeAddModal: (e: any) => void;
 }
 
 interface InputItem {

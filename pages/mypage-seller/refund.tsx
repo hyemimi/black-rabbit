@@ -24,6 +24,65 @@ import RefundWaiting from "@/components/mypage/seller/order/refund/refundWaiting
 
 const Refund = () => {
   const router = useRouter();
+  const ItemList = [
+    {
+      itemId: 1,
+      title: "Canon EOS Rebel T7 18-55mm 번들 세트",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23-03-15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "환불대기",
+      method: "PARCEL",
+      orderNum: 1234,
+      refundDate: "23-03-16",
+    },
+
+    {
+      itemId: 2,
+      title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "환불완료",
+      method: "PARCEL",
+      orderNum: 1234,
+      refundDate: "23-03-16",
+    },
+    {
+      itemId: 3,
+      title: "소니 A7M4 미러리스 카메라",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "환불완료",
+      method: "PARCEL",
+      orderNum: 1234,
+      refundDate: "23-03-16",
+    },
+    {
+      itemId: 4,
+      title: "소니 FE 24-70mm GM F2.8",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "환불완료",
+      method: "VISIT",
+      orderNum: 1234,
+      refundDate: "23-03-16",
+    },
+  ];
 
   const [tab, setTab] = useState<string>("환불대기");
 
@@ -72,27 +131,30 @@ const Refund = () => {
           <P>검색조건</P>
 
           <FilterDiv>
-            <FilterName>상품명</FilterName>
+            <FilterName>거래방법</FilterName>
             <Select>
-              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
-              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
-              <Option>EOS 어쩌구</Option>
+              <Option>전체</Option>
+              <Option>배송</Option>
+              <Option>방문</Option>
             </Select>
           </FilterDiv>
           <FilterDiv>
-            <FilterName>기간</FilterName>
+            <FilterName>환불신청일</FilterName>
             <Select>
+              <Option>전체</Option>
+              <Option>오늘</Option>
+              <Option>지난 7일</Option>
               <Option>지난 30일</Option>
               <Option>지난 1년</Option>
-              <Option>지난 1주일</Option>
             </Select>
           </FilterDiv>
           <FilterDiv>
-            <FilterName>처리상태</FilterName>
+            <FilterName>상품명</FilterName>
             <Select>
-              <Option>결제완료</Option>
-              <Option>배송진행</Option>
-              <Option>배송완료</Option>
+              <Option>전체</Option>
+              {ItemList.map((item: any) => (
+                <Option key={item.itemId}>{item.title}</Option>
+              ))}
             </Select>
           </FilterDiv>
         </SearchDiv>
@@ -108,7 +170,7 @@ const Refund = () => {
                 환불완료
               </WhiteButton>
             </DeleteDiv>
-            <RefundWaiting />
+            <RefundWaiting ItemList={ItemList} />
           </>
         ) : null}
         {tab == "환불완료" ? (
@@ -121,7 +183,7 @@ const Refund = () => {
                 환불완료
               </StateButton>
             </DeleteDiv>
-            <RefundCompleted />
+            <RefundCompleted ItemList={ItemList} />
           </>
         ) : null}
       </WholeDiv>

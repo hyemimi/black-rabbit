@@ -12,22 +12,8 @@ import {
   FilterName,
   Select,
   Option,
-  ColumnDiv,
-  DeleteButton,
   DeleteDiv,
-  GreenButton,
-  ItemTitle,
-  Label,
-  LeftTd,
-  OverflowDiv,
-  RightTd,
-  Table,
-  Tbody,
-  Td,
-  Thead,
-  Tr,
   WholeLists,
-  RowDiv,
 } from "@/components/detail/Seller";
 
 import styled from "styled-components";
@@ -41,43 +27,55 @@ const Rental = () => {
   const ItemList = [
     {
       itemId: 1,
-      pricePerOne: 123,
-      likeCount: 1,
+      title: "Canon EOS Rebel T7 18-55mm 번들 세트",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23-03-15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "결제완료",
       method: "PARCEL",
-
-      reviewCount: 5,
-      starAvg: 4.4,
-      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
+      orderNum: 1234,
     },
     {
       itemId: 2,
-      pricePerOne: 20000,
-
-      likeCount: 23,
-      method: "PARCEL",
-      reviewCount: 12,
-      starAvg: 4.0,
       title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "배송진행",
+      method: "PARCEL",
+      orderNum: 1234,
     },
     {
-      itemId: 1,
-      pricePerOne: 12324,
-
-      likeCount: 1,
-      method: "PARCEL",
-      reviewCount: 5,
-      starAvg: 4.4,
+      itemId: 3,
       title: "소니 A7M4 미러리스 카메라",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "결제완료",
+      method: "PARCEL",
+      orderNum: 1234,
     },
     {
-      itemId: 2,
-      pricePerOne: 20000,
-
-      likeCount: 23,
-      method: "PARCEL",
-      reviewCount: 12,
-      starAvg: 4.0,
+      itemId: 4,
       title: "소니 FE 24-70mm GM F2.8",
+      orderedDate: "23/3/13 16:45",
+      deliveryDate: "23/3/15",
+      parcelCompany: "cj대한통운",
+      waybillNumber: "203310022",
+      price: "100000",
+      customerName: "슈슈숩",
+      productStatus: "대여완료",
+      method: "VISIT",
+      orderNum: 1234,
     },
   ];
   const [tab, setTab] = useState<string>("결제완료");
@@ -131,27 +129,39 @@ const Rental = () => {
           <P>검색조건</P>
 
           <FilterDiv>
-            <FilterName>상품명</FilterName>
+            <FilterName>거래방법</FilterName>
             <Select>
-              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
-              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
-              <Option>EOS 어쩌구</Option>
+              <Option>전체</Option>
+              <Option>방문</Option>
+              <Option>배송</Option>
             </Select>
           </FilterDiv>
           <FilterDiv>
-            <FilterName>기간</FilterName>
+            <FilterName>주문일시</FilterName>
             <Select>
+              <Option>전체</Option>
+              <Option>지난 3일</Option>
+              <Option>지난 7일</Option>
               <Option>지난 30일</Option>
               <Option>지난 1년</Option>
-              <Option>지난 1주일</Option>
             </Select>
           </FilterDiv>
           <FilterDiv>
-            <FilterName>처리상태</FilterName>
+            <FilterName>출고예정일</FilterName>
             <Select>
-              <Option>결제완료</Option>
-              <Option>배송진행</Option>
-              <Option>배송완료</Option>
+              <Option>전체</Option>
+              <Option>오늘</Option>
+              <Option>지난 3일</Option>
+              <Option>지난 7일</Option>
+            </Select>
+          </FilterDiv>
+          <FilterDiv>
+            <FilterName>상품명</FilterName>
+            <Select>
+              <Option>전체</Option>
+              {ItemList.map((item, index) => (
+                <Option key={index}>{item.title}</Option>
+              ))}
             </Select>
           </FilterDiv>
         </SearchDiv>
@@ -163,30 +173,30 @@ const Rental = () => {
               <StateButton onClick={handleTabClick} value="결제완료">
                 결제완료
               </StateButton>{" "}
-              <WhiteButton onClick={handleTabClick} value="배송완료">
-                배송완료
+              <WhiteButton onClick={handleTabClick} value="배송진행">
+                배송진행
               </WhiteButton>
               <WhiteButton onClick={handleTabClick} value="대여완료">
                 대여완료
               </WhiteButton>
             </DeleteDiv>
-            <Paycompleted />
+            <Paycompleted ItemList={ItemList} />
           </>
         ) : null}
-        {tab == "배송완료" ? (
+        {tab == "배송진행" ? (
           <>
             <DeleteDiv>
               <WhiteButton onClick={handleTabClick} value="결제완료">
                 결제완료
               </WhiteButton>
-              <StateButton onClick={handleTabClick} value="배송완료">
-                배송완료
+              <StateButton onClick={handleTabClick} value="배송진행">
+                배송진행
               </StateButton>
               <WhiteButton onClick={handleTabClick} value="대여완료">
                 대여완료
               </WhiteButton>
             </DeleteDiv>
-            <DeliveryCompleted />
+            <DeliveryCompleted ItemList={ItemList} />
           </>
         ) : null}
         {tab == "대여완료" ? (
@@ -196,14 +206,14 @@ const Rental = () => {
                 결제완료
               </WhiteButton>
 
-              <WhiteButton onClick={handleTabClick} value="배송완료">
-                배송완료
+              <WhiteButton onClick={handleTabClick} value="배송진행">
+                배송진행
               </WhiteButton>
               <StateButton onClick={handleTabClick} value="대여완료">
                 대여완료
               </StateButton>
             </DeleteDiv>
-            <RentalCompleted />
+            <RentalCompleted ItemList={ItemList} />
           </>
         ) : null}
       </WholeDiv>

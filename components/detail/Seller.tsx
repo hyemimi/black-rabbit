@@ -10,6 +10,7 @@ export const Wrapper = styled.div`
 export const WholeDiv = styled.div`
   margin: 0 auto;
   align: left;
+  width: 1440px;
 `;
 export const Title = styled.h1`
   text-align: left;
@@ -113,7 +114,7 @@ export const WholeLists = styled.h1`
 export const Hr = styled.hr`
   margin: 10px 100px 0px 10px;
   width: 960px;
-  border: 1px solid #777c77;
+  border: 0.7px solid #777c77;
 `;
 
 export const DeleteDiv = styled.div`
@@ -142,6 +143,7 @@ export const DeleteButton = styled.button`
   border: 1px #d9d9d9;
   border-radius: 5px;
   padding: 5px 10px;
+  cursor: pointer;
 `;
 
 export const RowButtonDiv = styled.div`
@@ -158,6 +160,7 @@ export const Table = styled.table`
   border-spacing: 0 10px;
   white-space: nowrap;
   font-weight: 400;
+  overflow: scroll;
 `;
 
 export const Thead = styled.thead`
@@ -166,9 +169,13 @@ export const Thead = styled.thead`
   font-weight: 400;
 `;
 
+export const Th = styled.th`
+  vertical-align: center;
+  vertical-align: middle;
+`;
+
 export const Tr = styled.tr`
   width: 960px;
-  cursor: pointer;
 `;
 
 export const Td = styled.td`
@@ -208,6 +215,7 @@ export const ColumnDiv = styled.div`
   flex-direction: column;
   align-items: center;
   vertical-align: middle;
+  cursor: pointer;
 `;
 
 export const RowDiv = styled.div`
@@ -220,8 +228,8 @@ export const ItemTitle = styled.h1`
 `;
 
 export const OverflowDiv = styled.div`
-  oveflow-x: auto;
-  width: 100%;
+  oveflow-x: scroll;
+  width: 960px;
 `;
 
 export const GreenButton = styled.button`
@@ -236,7 +244,7 @@ export const GreenButton = styled.button`
   }
 `;
 
-const GrayButton = styled.button`
+export const GrayButton = styled.button`
   background: #d9d9d9;
   border-radius: 5px;
   border: none;

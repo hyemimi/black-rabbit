@@ -1,4 +1,4 @@
-import UpdateItemPlan from "@/components/mypage/seller/Item/UpdateItemPlan";
+import UpdateItemPlan from "@/components/mypage/seller/Item/Calendar";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 
