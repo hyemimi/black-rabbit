@@ -4,12 +4,10 @@ import { StyledButton } from "../common/Button";
 
 import { useCallback, useRef, useState } from "react";
 
-
 import AgreeTerms from "./AgreeTerms";
 import UseUserSignupMutation from "../../hooks/api/auth/UserSignUpMutation";
 import axios from "axios";
 import { P } from "../detail/Seller";
-
 
 interface SignUpForm {
   email: string;
@@ -84,7 +82,6 @@ const IndividualSignUpForm = () => {
       }
     }
   };
-
 
   const onValid = () => {
     if (
@@ -199,9 +196,7 @@ const IndividualSignUpForm = () => {
       </Div>
 
       <Div>
-
         <AgreeTerms checkItems={checkItems} setCheckItems={setCheckItems} />
-
       </Div>
 
       <StyledButton type="submit">가입하기</StyledButton>

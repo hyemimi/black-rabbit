@@ -4,8 +4,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import styled from "styled-components";
 
-
-interface FormData {
+export interface LoginType {
   userID: string;
   userPW: string;
 }
@@ -15,12 +14,12 @@ function LoginForm() {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<LoginType>();
 
   const { mutate, isSuccess } = useLoginMutation();
   const [isLoggedIn, setIsLoggedIn] = useState<Boolean>(false);
 
-  const handleValid = ({ userID, userPW }: FormData) => {
+  const handleValid = ({ userID, userPW }: LoginType) => {
     //Api 호출
     setValue("userID", "");
     setValue("userPW", "");
