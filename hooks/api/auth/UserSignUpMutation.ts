@@ -26,9 +26,7 @@ export default function UseUserSignupMutation() {
   return useMutation(
     (data: UserSignupMutationRequest) => instance.post("/sign/user", data),
     {
-
       onSuccess: (res) => {
-
         alert("회원가입 성공");
         Router.push({
           pathname: "/signup/completed",

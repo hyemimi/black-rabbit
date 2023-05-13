@@ -6,7 +6,6 @@ import axios from "axios";
 import Link from "next/link";
 import AddressSelectModal from "@/components/mypage/seller/Item/AddressSlelectModal";
 import InnerModal from "../../components/mypage/seller/Item/InnerModal";
-import { NextPage } from "next";
 
 const QuillEditor = dynamic(
   () => import("../../components/mypage/seller/Item/QuilEditor"),
@@ -33,6 +32,11 @@ interface ItemForm {
   itemImages: HTMLImageElement;
 }
 
+interface InputItem {
+  id: number;
+  title: string;
+}
+
 const AddItem = () => {
   //state
   const [showImages, setShowImages] = useState([]);
@@ -55,6 +59,46 @@ const AddItem = () => {
   const pricePerFiveRef = useRef<HTMLInputElement>(null);
   const pricePerTenRef = useRef<HTMLInputElement>(null);
   const itemImagesRef = useRef<HTMLImageElement>(null);
+  const nextID = useRef<number>(1);
+  const [inputItems, setInputItems] = useState<InputItem[]>([
+    { id: 0, title: "" },
+  ]);
+
+  const onValid = () => {
+    if (Number(itemNumberRef.current!.value) === inputItems.length) {
+      return true;
+    }
+  };
+
+  function addInput() {
+    const input = {
+      // 새로운 인풋객체를 하나 만들고,
+      id: nextID.current, // id 값은 변수로 넣어주고,
+      title: "", // 내용은 빈칸으로 만들자
+    };
+
+    setInputItems([...inputItems, input]); // 기존 값에 새로운 인풋객체를 추가해준다.
+    nextID.current += 1; // id값은 1씩 늘려준다.
+  }
+
+  // 삭제
+  function deleteInput(index: number) {
+    // 인덱스 값을 받아서
+    setInputItems(inputItems.filter((item) => item.id !== index)); // 인덱스 값과 같지 않은 애들만 남겨둔다
+  }
+
+  function handleTitleChange(
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) {
+    // ↓ 이벤트 객체를 받고, 인덱스를 받자
+    if (index > inputItems.length) return; // 혹시 모르니 예외처리
+
+    // 인풋배열을 copy 해주자
+    const inputItemsCopy: InputItem[] = JSON.parse(JSON.stringify(inputItems));
+    inputItemsCopy[index].title = e.target.value; // 그리고 해당 인덱스를 가진 <input>의 내용을 변경해주자
+    setInputItems(inputItemsCopy); // 그걸 InputItems 에 저장해주자
+  }
 
   const itemCategoryHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setItemCategory(e.target!.value);
@@ -94,45 +138,53 @@ const AddItem = () => {
   };
 
   const SubmitHandler = (event: React.FormEvent) => {
-    event.preventDefault();
-    const enteredItemTitle = itemTitleRef.current!.value;
-    const enteredQuantity = itemNumberRef.current!.value;
-    const enteredBrand = itemBrandRef.current!.value;
-    const enteredModel = itemModelRef.current!.value;
-    const enteredPricePerOne = pricePerOneRef.current!.value;
-    const enteredPricePerFive = pricePerFiveRef.current!.value;
-    const enteredPricePerTen = pricePerTenRef.current!.value;
+    if (onValid()) {
+      event.preventDefault();
+      const enteredItemTitle = itemTitleRef.current!.value;
+      const enteredQuantity = itemNumberRef.current!.value;
+      const enteredBrand = itemBrandRef.current!.value;
+      const enteredModel = itemModelRef.current!.value;
+      const enteredPricePerOne = pricePerOneRef.current!.value;
+      const enteredPricePerFive = pricePerFiveRef.current!.value;
+      const enteredPricePerTen = pricePerTenRef.current!.value;
 
-    const formData = new FormData();
+      const formData = new FormData();
 
-    formData.append("title", JSON.stringify(enteredItemTitle));
-    formData.append("category", JSON.stringify(itemCategory));
-    formData.append("quantity", JSON.stringify(enteredQuantity));
-    formData.append("brandName", JSON.stringify(enteredBrand));
-    formData.append("modelName", JSON.stringify(enteredModel));
-    formData.append("method", JSON.stringify(transMethod));
-    formData.append("postalCode", JSON.stringify(postalCode));
-    formData.append("address", JSON.stringify(address));
-    formData.append("addressDetail", JSON.stringify(addressDetail));
-    formData.append("pricePerOne", JSON.stringify(enteredPricePerOne));
-    formData.append("pricePerFive ", JSON.stringify(enteredPricePerFive));
-    formData.append("pricePerTen", JSON.stringify(enteredPricePerTen));
-    formData.append("detail", JSON.stringify(htmlStr));
-    for (var i = 0; i < imageList.length; i++) {
-      formData.append("images", imageList[i]);
-    }
-    for (var i = 0; i < imageList.length; i++) {
-      formData.append("infoImages", imageList[i]);
-    }
-
-    try {
-      axios.post("15.165.101.95:8080/items/store-write", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      for (let value of formData.values()) {
-        console.log(value);
+      formData.append("title", JSON.stringify(enteredItemTitle));
+      formData.append("category", JSON.stringify(itemCategory));
+      formData.append("method", JSON.stringify(transMethod));
+      formData.append("brandName", JSON.stringify(enteredBrand));
+      formData.append("modelName", JSON.stringify(enteredModel));
+      formData.append("quantity", JSON.stringify(enteredQuantity));
+      for (var i = 0; i < inputItems.length; i++) {
+        formData.append("serialNumbers", inputItems[i].title);
       }
-    } catch (e) {}
+
+      formData.append("postalCode", JSON.stringify(postalCode));
+      formData.append("address", JSON.stringify(address));
+      formData.append("addressDetail", JSON.stringify(addressDetail));
+      formData.append("pricePerOne", JSON.stringify(enteredPricePerOne));
+      formData.append("pricePerFive ", JSON.stringify(enteredPricePerFive));
+      formData.append("pricePerTen", JSON.stringify(enteredPricePerTen));
+      formData.append("detail", JSON.stringify(htmlStr));
+
+      for (var i = 0; i < imageList.length; i++) {
+        formData.append("images", imageList[i]);
+      }
+
+      for (var i = 0; i < imageList.length; i++) {
+        formData.append("infoImages", imageList[i]);
+      }
+
+      try {
+        axios.post("15.165.101.95:8080/items/store-write", formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        // for (let value of formData.values()) {
+        //   console.log(value);
+        // }
+      } catch (e) {}
+    }
   };
 
   return (
@@ -142,7 +194,7 @@ const AddItem = () => {
         <hr />
         <form onSubmit={SubmitHandler}>
           <Div>
-            <Label>제목</Label>
+            <OneLabel>제목</OneLabel>
             <Input
               type="text"
               name="title"
@@ -165,13 +217,11 @@ const AddItem = () => {
               <option value="ETC">기타</option>
             </Select>
 
-            <Label htmlFor="quantity">수량</Label>
-            <Input
-              type="number"
-              name="quantity"
-              ref={itemNumberRef}
-              placeholder="수량"
-            />
+            <Label htmlFor="method">거래방법</Label>
+            <Select name="method" onChange={transMethodHandler}>
+              <option value="PARCEL">택배수령</option>
+              <option value="VISIT">방문수령</option>
+            </Select>
           </Div>
 
           <Div>
@@ -191,25 +241,71 @@ const AddItem = () => {
             />
           </Div>
           <Div>
-            <Label htmlFor="method">거래방법</Label>
-            <Select name="method" onChange={transMethodHandler}>
-              <option value="PARCEL">택배수령</option>
-              <option value="VISIT">방문수령</option>
-            </Select>
+            <HalfDiv>
+              <OneLabel htmlFor="quantity">수량</OneLabel>
+              <CountInput
+                type="number"
+                name="quantity"
+                ref={itemNumberRef}
+                placeholder="수량"
+              />
+            </HalfDiv>
+
+            <HalfDiv>
+              <ProductLabel htmlFor="quantity">
+                상품별 <br />
+                일련번호
+              </ProductLabel>
+              <ColumnDiv>
+                {inputItems.map((item, index) => (
+                  <Div key={index}>
+                    <ProductLabel>제품{index + 1}</ProductLabel>
+                    <Input
+                      type="text"
+                      className={`title-${index}`}
+                      onChange={(e) => handleTitleChange(e, index)}
+                      value={item.title}
+                    />
+
+                    {index === 0 && inputItems.length < 30 && (
+                      <DeleteButton type="button" onClick={addInput}>
+                        +
+                      </DeleteButton>
+                    )}
+
+                    {index > 0 && inputItems[index - 1] ? (
+                      <DeleteButton
+                        type="button"
+                        onClick={() => deleteInput(item.id)}
+                      >
+                        -
+                      </DeleteButton>
+                    ) : (
+                      ""
+                    )}
+                  </Div>
+                ))}
+              </ColumnDiv>
+            </HalfDiv>
           </Div>
 
           <AddressDiv>
             <Label htmlFor="address">거래주소</Label>
             <ButtonDiv>
-              <Input
+              <AddressInput
                 type="number"
                 name="postalCode"
                 value={postalCode}
                 placeholder="우편번호"
               />
-              <Button onClick={closeModal}>선택</Button>
-              <Link href={"/mypage-seller/addAddress"}>
-                <Button>추가</Button>
+              <Button type="button" onClick={closeModal}>
+                선택
+              </Button>
+              <Link
+                href={"/mypage-seller/addAddress"}
+                style={{ padding: "0", margin: "0" }}
+              >
+                <Button type="button">추가</Button>
               </Link>
             </ButtonDiv>
             <div>
@@ -224,13 +320,13 @@ const AddItem = () => {
                 </AddressSelectModal>
               )}
             </div>
-            <Input
+            <AddressInput
               type="text"
               name="address"
               value={address}
               placeholder="기본주소"
             />
-            <Input
+            <AddressInput
               type="text"
               name="addressDetail"
               value={addressDetail}
@@ -242,8 +338,8 @@ const AddItem = () => {
             <Label>대여료</Label>
             <AddressDiv>
               <PriceDiv>
-                <Label htmlFor="pricePerOne">1일</Label>
-                <Input
+                <PriceLabel htmlFor="pricePerOne">1일</PriceLabel>
+                <PriceInput
                   type="price"
                   name="pricePerOne"
                   ref={pricePerOneRef}
@@ -252,8 +348,8 @@ const AddItem = () => {
                 <Label>원</Label>
               </PriceDiv>
               <PriceDiv>
-                <Label htmlFor="pricePerFive">5일 이상</Label>
-                <Input
+                <PriceLabel htmlFor="pricePerFive">5일 이상</PriceLabel>
+                <PriceInput
                   type="text"
                   name="pricePerFive"
                   ref={pricePerFiveRef}
@@ -262,8 +358,8 @@ const AddItem = () => {
                 <Label>원</Label>
               </PriceDiv>
               <PriceDiv>
-                <Label htmlFor="pricePerTen">10일 이상</Label>
-                <Input
+                <PriceLabel htmlFor="pricePerTen">10일 이상</PriceLabel>
+                <PriceInput
                   type="text"
                   name="pricePerTen"
                   ref={pricePerTenRef}
@@ -284,7 +380,7 @@ const AddItem = () => {
           <ImageDiv>
             <Label>이미지등록</Label>
             <ImageUploadLabel htmlFor="itemImages">사진 선택</ImageUploadLabel>
-            <P>최대 열장까지 업로드 가능</P>
+            <P>※ 직접 촬영한 사진으로 업로드 해주세요 (최대 10장)</P>
 
             <Div>
               <FileInput
@@ -320,13 +416,7 @@ const AddItem = () => {
 
 export default AddItem;
 
-const StyledTitle = styled.h1`
-  text-align: left;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 2rem;
-`;
-
+//전체 아웃라인
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -336,37 +426,16 @@ const Wrapper = styled.div`
   justify-content: space-between;
   text-align: center;
 `;
-const Label = styled.label`
+
+const WholeDiv = styled.div`
+  margin: 0 auto 5rem auto;
+`;
+
+const StyledTitle = styled.h1`
   text-align: left;
-  width: 10rem;
-  margin: 0.5rem 0rem 0.5rem 0.2rem;
-
-  font-weight: 400;
-`;
-
-const Input = styled.input`
-  position: relative;
-  border-radius: 10px;
-  width: 100%;
-  height: 2.5rem;
-  color: black;
-  font-size: 16px;
-  border: 1px solid #d9d9d9;
-  margin: 0.2rem 0.5rem 0.5rem 0.2rem;
-  inline: inline-block;
-`;
-const Select = styled.select`
-  width: 100%;
-  height: 2.5rem;
-  margin: 0 0.5rem 0 0.5rem;
-  inline: inline-block;
-  font-size: 16px;
-  border: 1px solid #d9d9d9;
-  border-radius: 10px;
-`;
-
-const FileInput = styled.input`
-  display: none;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 2rem;
 `;
 
 const Div = styled.div`
@@ -380,12 +449,169 @@ const Div = styled.div`
   vertical-align: center;
 `;
 
+const HalfDiv = styled.div`
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: left;
+  text-align: left;
+  margin: 0 0.2rem;
+`;
+
+const OneLabel = styled.label`
+  text-align: left;
+  width: 5.2rem;
+  font-weight: 400;
+  line-height: 2.5rem;
+  vertical-align: center;
+  margin-left: 0.2rem;
+  margin-top: 0.2rem;
+  padding-right: 1.5rem;
+`;
+
+const Label = styled.label`
+  text-align: left;
+  width: 180px;
+  margin: 0.5rem 0.5rem 0.5rem 0.2rem;
+  font-weight: 400;
+`;
+
+const ProductLabel = styled.label`
+  text-align: left;
+  width: 100px;
+  margin: 0.5rem 0rem;
+  font-weight: 400;
+  text-align: left;
+`;
+
+const CountInput = styled.input`
+  border-radius: 10px;
+  width: 100%;
+  height: 2.5rem;
+  color: black;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  margin: 0.2rem 0.8rem 0.5rem 0.2rem;
+  inline: inline-block;
+  padding: 0.5rem;
+`;
+
+const Input = styled.input`
+  border-radius: 10px;
+  width: 100%;
+  height: 2.5rem;
+  color: black;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  margin: 0.2rem 1rem 0.5rem 0.2rem;
+  inline: inline-block;
+  padding: 0.5rem;
+`;
+
+const Select = styled.select`
+  width: 100%;
+  height: 2.5rem;
+  margin: 0 1rem 0 0.2rem;
+  inline: inline-block;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+`;
+
+//거래주소
+
+const AddressDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  text-align: left;
+  width: 101%;
+  margin-bottom: 1rem;
+  padding-right: 0.5rem;
+  padding-left: 0.2rem;
+`;
+
+const AddressInput = styled.input`
+  border-radius: 10px;
+  width: 98%;
+  height: 2.5rem;
+  color: black;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  margin: 0.2rem 0.2rem 0.5rem 0.2rem;
+  inline: inline-block;
+  padding: 0.5rem;
+`;
+
+const Button = styled.button`
+  width: 3rem;
+  height: 40px;
+  margin: 0.2rem 0.2rem;
+  border: 0;
+  padding: 0.2rem;
+  background: #d9d9d9;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background: #2f3640;
+    color: white;
+  }
+`;
+
+const ButtonDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  vertical-align: center;
+  padding-right: 0.7rem;
+`;
+
+//대여료
 const Prices = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: left;
   text-align: left;
   width: 100%;
+`;
+
+const PriceInput = styled.input`
+  border-radius: 10px;
+  width: 30%;
+  height: 2.5rem;
+  color: black;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  margin: 0.2rem 0.2rem 0.5rem 0.2rem;
+  inline: inline-block;
+  padding: 0.5rem;
+`;
+
+const PriceDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  text-align: left;
+  margin: 0rem 0;
+  line-height: 30px;
+  vertical-align: center;
+`;
+
+const PriceLabel = styled.label`
+  text-align: left;
+  width: 5rem;
+  margin: 0.5rem 0.2rem 0.5rem 0.2rem;
+  padding-left: 0.2rem;
+  font-weight: 400;
+`;
+
+//상품 상세설명
+//이미지 등록
+const FileInput = styled.input`
+  display: none;
 `;
 
 const ImageUploadLabel = styled.label`
@@ -476,18 +702,14 @@ const Contents = {
 
 const ImagePreview = styled.div`
   width: 100%;
-  overflow: scroll;
+  overflow-x: scroll;
   display: flex;
-`;
-
-const WholeDiv = styled.div`
-  margin: 0 auto 5rem auto;
 `;
 
 const DeleteButton = styled.button`
   width: 15%;
   height: 2rem;
-  margin: 5px auto;
+  margin: 5px 0px;
   float: right;
   border: 0;
   background: #d9d9d9;
@@ -498,45 +720,8 @@ const DeleteButton = styled.button`
   }
 `;
 
-const Button = styled.button`
-  width: 40px;
-  height: 40px;
-  margin: 0 3px;
-  border: 0;
-  background: #d9d9d9;
-  border-radius: 10px;
-  cursor: pointer;
-  &:hover {
-    background: #2f3640;
-    color: white;
-  }
-`;
-
-const ButtonDiv = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  text-align: left;
-  vertical-align: center;
-`;
-
-const AddressDiv = styled.div`
+const ColumnDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  text-align: left;
-  width: 100%;
-  margin-bottom: 1rem;
-`;
-
-const PriceDiv = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
-  text-align: left;
-  margin: 0rem 0;
-  line-height: 30px;
-  vertical-align: center;
+  padding-right: 0.7rem;
 `;

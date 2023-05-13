@@ -26,8 +26,8 @@ export default function InnerModal({
     {
       id: 1,
       postalCode: 32334,
-      address: "용인시 기흥구 덕영대로 1asdfasfsdfasfas 7",
-      addressDetail: "203호",
+      address: "경기도 성남시 대왕판교로 7",
+      addressDetail: "103동 203호",
     },
   ];
 
@@ -56,18 +56,19 @@ export default function InnerModal({
         </Header>
         <TableDiv>
           <Table>
-            <thead>
-              <tr>
-                <td></td>
-                <td>우편번호</td>
-                <td>기본주소</td>
-                <td>상세주소</td>
-              </tr>
-            </thead>
-            <tbody>
+            <Thead>
+              <Tr>
+                <LeftTd>선택</LeftTd>
+                <Td>이름</Td>
+                <Td>우편번호</Td>
+                <Td>기본주소</Td>
+                <RightTd>상세주소</RightTd>
+              </Tr>
+            </Thead>
+            <Tbody>
               {addresses.map((add) => (
                 <tr key={add.id}>
-                  <Td>
+                  <LeftTd>
                     {
                       <input
                         type="radio"
@@ -75,14 +76,15 @@ export default function InnerModal({
                         onChange={(e) => setCheckedNumber(add.id)}
                       ></input>
                     }
-                  </Td>
+                  </LeftTd>
+                  <Td>기본배송지</Td>
 
                   <Td> {add.postalCode} </Td>
                   <Td>{add.address}</Td>
-                  <Td>{add.addressDetail}</Td>
+                  <RightTd>{add.addressDetail}</RightTd>
                 </tr>
               ))}
-            </tbody>
+            </Tbody>
           </Table>
         </TableDiv>
 
@@ -93,9 +95,9 @@ export default function InnerModal({
     </Div>
   );
 }
-
+// ${(props) => props.theme.searchColor};
 const Header = styled.div`
-  background-color: ${(props) => props.theme.searchColor};
+  background: #b6dcbe;
 `;
 const BigTitle = styled.h2`
   padding: 20px;
@@ -135,11 +137,11 @@ const StyledButton = styled.button`
   height: 40px;
   margin: 10px 350px;
   border: 0;
-  background: #d9d9d9;
+  background: #b9d9c0;
   border-radius: 10px;
   cursor: pointer;
   &:hover {
-    background: #b9d9c0;
+    background: #f1f1f1;
   }
 `;
 
@@ -151,20 +153,9 @@ const ButtonDiv = styled.div`
   bottom: 0px;
 `;
 const TableDiv = styled.div`
-  margin: 0 auto;
+  margin: 1rem auto;
   text-align: center;
   align-items: center;
-`;
-const Table = styled.table`
-  border: 1px solid #333;
-  width: 700px;
-  margin: 1rem auto;
-`;
-
-const Td = styled.td`
-  border: 1px solid #333;
-  overflow: scroll;
-  vertical-align: center;
 `;
 
 const Exit = styled.button`
@@ -175,11 +166,71 @@ const Exit = styled.button`
   right: 0;
   top: 0;
   border: 0;
-  background: #d9d9d9;
+  background: #f1f1f1;
   border-radius: 10px;
   cursor: pointer;
   &:hover {
     background: #2f3640;
     color: white;
   }
+`;
+
+//상품 정보 표
+const Table = styled.table`
+  width: 700px;
+  text-align: center;
+  margin: auto;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  white-space: nowrap;
+`;
+
+const Thead = styled.thead`
+  width: 960px;
+  border: 1px solid;
+  font-weight: 400;
+`;
+
+const Tr = styled.tr`
+  width: 960px;
+  cursor: pointer;
+`;
+
+const Td = styled.td`
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  padding: 10px;
+  vertical-align: center;
+  vertical-align: middle;
+`;
+
+const LeftTd = styled.td`
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  border-left: 1px solid #d9d9d9;
+  padding: 10px;
+  border-radius: 5px 0 0 5px;
+  box-shadow: 0 0 0 1px #f1f1f1;
+  vertical-align: middle;
+`;
+const RightTd = styled.td`
+  border-top: 1px solid #d9d9d9;
+  border-bottom: 1px solid #d9d9d9;
+  border-right: 1px solid #d9d9d9;
+  padding: 10px;
+  border-radius: 0 5px 5px 0;
+  box-shadow: 0 0 0 1px #f1f1f1;
+  vertical-align: middle;
+`;
+
+const Tbody = styled.tbody`
+  background: #f1f1f1;
+  oveflow-x: auto;
+`;
+
+const ColumnDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  vertical-align: middle;
 `;
