@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
 import styled from "styled-components";
 import ProductList from "@/components/home/ProductList";
 import { Wrapper } from "@/components/common/Wrapper";
@@ -10,8 +9,8 @@ import {
   AllProductQueryParam,
   useGetAllProduct,
 } from "@/hooks/api/product/GetAllProduct";
-import { instance } from "@/libs/api/client";
-import { useQueryClient } from "@tanstack/react-query";
+import Pagination from "react-js-pagination";
+
 const inter = Inter({ subsets: ["latin"] });
 
 /* 카테고리 리스트 입니다*/
@@ -35,6 +34,13 @@ export default function Home() {
   const [selectedMet, setSelectedMet] = useState<string>("");
   const [selectedWhe, setSelectedWhe] = useState<string>("");
   const { items, refetch } = useGetAllProduct(search);
+
+  /* paging 구현 */
+
+  const [page, setPage] = useState(1);
+  const handlePageChange = (page: number) => {
+    setPage(page);
+  };
 
   useEffect(() => {
     refetch();
@@ -121,6 +127,17 @@ export default function Home() {
         </div>
       </FilterDiv>
       {items && <ProductList items={items} />}
+      <footer>
+        <PaginationBox>
+          <Pagination
+            activePage={page}
+            itemsCountPerPage={9}
+            totalItemsCount={100}
+            pageRangeDisplayed={5}
+            onChange={handlePageChange}
+          ></Pagination>
+        </PaginationBox>
+      </footer>
     </Wrapper>
   );
 }
@@ -186,4 +203,47 @@ const FilterButton = styled.button`
     background-color: rgb(63, 63, 63);
   transition-duration: 100ms;
   }}
+`;
+
+const PaginationBox = styled.div`
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul.pagination li {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e2e2e2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+  }
+  ul.pagination li:first-child {
+    border-radius: 5px 0 0 5px;
+  }
+  ul.pagination li:last-child {
+    border-radius: 0 5px 5px 0;
+  }
+  ul.pagination li a {
+    text-decoration: none;
+    color: #337ab7;
+    font-size: 1rem;
+  }
+  ul.pagination li.active a {
+    color: white;
+  }
+  ul.pagination li.active {
+    background-color: #337ab7;
+  }
+  ul.pagination li a:hover,
+  ul.pagination li a.active {
+    color: blue;
+  }
 `;
