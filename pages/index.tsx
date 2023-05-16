@@ -28,7 +28,8 @@ const CategoryList = [
 export default function Home() {
   const router = useRouter();
   const [search, setSearch] = useState<AllProductQueryParam>({
-    paged: true,
+    page: 0,
+    size: 9,
   });
   const [selectedCat, setSelectedCat] = useState<string>("");
   const [selectedMet, setSelectedMet] = useState<string>("");
@@ -42,10 +43,14 @@ export default function Home() {
     setPage(page);
   };
 
+  useEffect(() => setSearch({ ...search, page: page - 1 }), [page]);
+
   useEffect(() => {
     refetch();
   }, [search]);
-  console.log(search);
+
+  console.log("param ", search);
+
   const onSelectorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.currentTarget.name === "category") {
       /* 카테고리 필터 */
@@ -132,9 +137,10 @@ export default function Home() {
           <Pagination
             activePage={page}
             itemsCountPerPage={9}
-            totalItemsCount={100}
+            totalItemsCount={10}
             pageRangeDisplayed={5}
             onChange={handlePageChange}
+            hideNavigation={true}
           ></Pagination>
         </PaginationBox>
       </footer>
@@ -240,7 +246,7 @@ const PaginationBox = styled.div`
     color: white;
   }
   ul.pagination li.active {
-    background-color: #337ab7;
+    background-color: ${(props) => props.theme.pointColor};
   }
   ul.pagination li a:hover,
   ul.pagination li a.active {

@@ -4,12 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 /* 전체 상품 조회 */
 
 export interface AllProductQueryParam {
+  page: number;
+  size: number;
   category?: string;
-  offset?: number;
-  paged?: boolean;
-  pageNumber?: number;
-  pageSize?: number;
-  unpaged?: boolean;
 }
 
 export function useGetAllProduct(search?: AllProductQueryParam) {
