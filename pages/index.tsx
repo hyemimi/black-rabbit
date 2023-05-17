@@ -67,6 +67,15 @@ export default function Home() {
     <Wrapper>
       <Head>
         <title>데이필름</title>
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
+        />
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/react-quill@1.3.3/dist/quill.snow.css"
+        />
       </Head>
       <Banner>
         <Title>데이필름과 함께 멋진 작품을 만들어보세요</Title>
@@ -129,6 +138,7 @@ const Banner = styled.div`
   background-color: ${(props) => props.theme.pointColor};
   height: 250px;
   width: 900px;
+  border-radius: 10px;
 `;
 const Input = styled.input`
   width: 180px;
