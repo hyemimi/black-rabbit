@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import Link from "next/link";
 import Modal from "@/components/common/modal/Modal";
-import ProductDeleteModal from "@/components/mypage/seller/Item/ProductDeleteModal";
-import ProductAddModal from "@/components/mypage/seller/Item/ProductAddModal";
+import ProductDeleteModal from "@/components/mypage/seller/Item/Modal/ProductDeleteModal";
+import ProductAddModal from "@/components/mypage/seller/Item/Modal/ProductAddModal";
 import SellerMypageSidebar from "@/layout/SellerMypageSidebar";
 import {
   Title,
@@ -147,7 +147,6 @@ const ProductLists = () => {
 
   return (
     <>
-      <SellerMypageSidebar />
       <Wrapper>
         <WholeDiv>
           <Title>상품 조회 및 수정 </Title>
