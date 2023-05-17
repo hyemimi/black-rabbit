@@ -14,3 +14,26 @@ export const modalState = atom<ModalType>({
     content: "",
   },
 });
+
+export interface ItemForm {
+  storeId: number;
+  itemTitle: string;
+  itemCategory: string;
+  itemNumber: number;
+  itemBrand: string;
+  itemModel: string;
+  transactionWay: string;
+  postalCode: number;
+  address: string;
+  addressDetail: string;
+  feePerDay: number;
+  fee5Day: number;
+  fee10Day: number;
+  itemDescription: HTMLImageElement;
+  itemImages: HTMLImageElement;
+}
+
+export interface InputItem {
+  id: number;
+  title: string;
+}
