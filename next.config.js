@@ -1,16 +1,17 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+// const nextConfig = {
+//   reactStrictMode: true,
+//   compiler: {
+//     styledComponents: true,
+//   },
+// };
+
+module.exports = {
   reactStrictMode: true,
   compiler: {
     styledComponents: true,
   },
-};
-
-module.exports = nextConfig;
-
-/* 
-
-async rewrites() {
+  async rewrites() {
     return [
       {
         source: "/:path*",
@@ -18,4 +19,6 @@ async rewrites() {
       },
     ];
   },
-*/
+};
+
+//nextConfig;

@@ -1,11 +1,12 @@
 import styled from "styled-components";
-import { StyledButton } from "@/components/common/Button";
 import { useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import axios from "axios";
 import Link from "next/link";
-import AddressSelectModal from "@/components/mypage/seller/Item/AddressSlelectModal";
-import InnerModal from "../../components/mypage/seller/Item/InnerModal";
+import AddressSelectModal from "@/components/mypage/seller/Item/Modal/AddressSlelectModal";
+import InnerModal from "../../components/mypage/seller/Item/Modal/InnerModal";
+import { InputItem } from "@/Interfaces";
+import { Wrapper, WholeDiv, Title, Hr } from "@/components/detail/Seller";
 
 const QuillEditor = dynamic(
   () => import("../../components/mypage/seller/Item/QuilEditor"),
@@ -13,29 +14,6 @@ const QuillEditor = dynamic(
     ssr: false,
   }
 );
-
-interface ItemForm {
-  storeId: number;
-  itemTitle: string;
-  itemCategory: string;
-  itemNumber: number;
-  itemBrand: string;
-  itemModel: string;
-  transactionWay: string;
-  postalCode: number;
-  address: string;
-  addressDetail: string;
-  feePerDay: number;
-  fee5Day: number;
-  fee10Day: number;
-  itemDescription: HTMLImageElement;
-  itemImages: HTMLImageElement;
-}
-
-interface InputItem {
-  id: number;
-  title: string;
-}
 
 const AddItem = () => {
   //state
@@ -70,6 +48,7 @@ const AddItem = () => {
     }
   };
 
+  //상품별 일련번호
   function addInput() {
     const input = {
       // 새로운 인풋객체를 하나 만들고,
@@ -110,11 +89,13 @@ const AddItem = () => {
     //콘솔시 이전값 찍히는데 왜?
   };
 
+  //모달
   const closeModal = () => {
     setSelectModal((prev) => !prev);
     console.log(selectModal);
   };
 
+  //아이템이미지 등록
   const handleAddImages = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files !== null && imageList.length < 10) {
       const imageLists = event.target.files;
@@ -132,10 +113,13 @@ const AddItem = () => {
     }
   };
 
+  //아이템 이미지 삭제
   const handleDeleteImage = (id: number) => {
     setShowImages(showImages.filter((_, index) => index !== id));
     setImageList(imageList.filter((_, index) => index !== id));
   };
+
+  //제출 폼데이터
 
   const SubmitHandler = (event: React.FormEvent) => {
     if (onValid()) {
@@ -190,22 +174,22 @@ const AddItem = () => {
   return (
     <Wrapper>
       <WholeDiv>
-        <StyledTitle>상품 등록</StyledTitle>
-        <hr />
+        <Title>상품 등록</Title>
+        <Hr />
         <form onSubmit={SubmitHandler}>
-          <Div>
-            <OneLabel>제목</OneLabel>
+          <ItemDiv>
+            <OneLabel htmlFor="title">제목</OneLabel>
             <Input
               type="text"
-              name="title"
+              id="title"
               ref={itemTitleRef}
               placeholder="브랜드명 + 모델명으로 구성된 제목을 적어주세요."
             />
             {/* {errors?.itemTitle && <span>{errors?.itemTitle?.message}</span>} */}
-          </Div>
+          </ItemDiv>
 
-          <Div>
-            <Label htmlFor="category">카테고리</Label>
+          <ItemDiv>
+            <OneLabel htmlFor="category">카테고리</OneLabel>
             <Select name="category" onChange={itemCategoryHandler}>
               <option value="CAMERA">카메라</option>
               <option value="LENS">렌즈</option>
@@ -217,82 +201,78 @@ const AddItem = () => {
               <option value="ETC">기타</option>
             </Select>
 
-            <Label htmlFor="method">거래방법</Label>
+            <OneLabel htmlFor="method">거래방법</OneLabel>
             <Select name="method" onChange={transMethodHandler}>
               <option value="PARCEL">택배수령</option>
               <option value="VISIT">방문수령</option>
             </Select>
-          </Div>
+          </ItemDiv>
 
-          <Div>
-            <Label>브랜드명</Label>
+          <ItemDiv>
+            <OneLabel>브랜드명</OneLabel>
             <Input
               type="text"
               name="itemBrand"
               ref={itemBrandRef}
               placeholder="예) 캐논"
             />
-            <Label>모델명</Label>
+            <OneLabel>모델명</OneLabel>
             <Input
               type="text"
               name="itemModel"
               ref={itemModelRef}
               placeholder="예) ES303"
             />
-          </Div>
-          <Div>
-            <HalfDiv>
-              <OneLabel htmlFor="quantity">수량</OneLabel>
-              <CountInput
-                type="number"
-                name="quantity"
-                ref={itemNumberRef}
-                placeholder="수량"
-              />
-            </HalfDiv>
+          </ItemDiv>
+          <ItemDiv>
+            <OneLabel htmlFor="quantity">수량</OneLabel>
+            <Input
+              type="number"
+              name="quantity"
+              ref={itemNumberRef}
+              placeholder="수량"
+            />
 
-            <HalfDiv>
-              <ProductLabel htmlFor="quantity">
-                상품별 <br />
-                일련번호
-              </ProductLabel>
-              <ColumnDiv>
-                {inputItems.map((item, index) => (
-                  <Div key={index}>
-                    <ProductLabel>제품{index + 1}</ProductLabel>
-                    <Input
-                      type="text"
-                      className={`title-${index}`}
-                      onChange={(e) => handleTitleChange(e, index)}
-                      value={item.title}
-                    />
+            <OneLabel htmlFor="quantity">
+              상품별 <br />
+              일련번호
+            </OneLabel>
+            <ColumnDiv>
+              {inputItems.map((item, index) => (
+                <ProductDiv key={index}>
+                  <ProductLabel>제품{index + 1}</ProductLabel>
+                  <ProductInput
+                    type="text"
+                    className={`title-${index}`}
+                    onChange={(e) => handleTitleChange(e, index)}
+                    value={item.title}
+                  />
 
-                    {index === 0 && inputItems.length < 30 && (
-                      <DeleteButton type="button" onClick={addInput}>
-                        +
-                      </DeleteButton>
-                    )}
+                  {index === 0 && inputItems.length < 30 && (
+                    <ProductButton type="button" onClick={addInput}>
+                      +
+                    </ProductButton>
+                  )}
 
-                    {index > 0 && inputItems[index - 1] ? (
-                      <DeleteButton
-                        type="button"
-                        onClick={() => deleteInput(item.id)}
-                      >
-                        -
-                      </DeleteButton>
-                    ) : (
-                      ""
-                    )}
-                  </Div>
-                ))}
-              </ColumnDiv>
-            </HalfDiv>
-          </Div>
+                  {index > 0 && inputItems[index - 1] ? (
+                    <ProductButton
+                      type="button"
+                      onClick={() => deleteInput(item.id)}
+                    >
+                      -
+                    </ProductButton>
+                  ) : (
+                    ""
+                  )}
+                </ProductDiv>
+              ))}
+            </ColumnDiv>
+          </ItemDiv>
 
           <AddressDiv>
-            <Label htmlFor="address">거래주소</Label>
+            <BigTitle>거래주소</BigTitle>
             <ButtonDiv>
-              <AddressInput
+              <Input
                 type="number"
                 name="postalCode"
                 value={postalCode}
@@ -334,51 +314,49 @@ const AddItem = () => {
             />
           </AddressDiv>
 
-          <Prices>
-            <Label>대여료</Label>
-            <AddressDiv>
-              <PriceDiv>
-                <PriceLabel htmlFor="pricePerOne">1일</PriceLabel>
-                <PriceInput
-                  type="price"
-                  name="pricePerOne"
-                  ref={pricePerOneRef}
-                  placeholder="가격/1일"
-                />
-                <Label>원</Label>
-              </PriceDiv>
-              <PriceDiv>
-                <PriceLabel htmlFor="pricePerFive">5일 이상</PriceLabel>
-                <PriceInput
-                  type="text"
-                  name="pricePerFive"
-                  ref={pricePerFiveRef}
-                  placeholder="가격/1일"
-                />
-                <Label>원</Label>
-              </PriceDiv>
-              <PriceDiv>
-                <PriceLabel htmlFor="pricePerTen">10일 이상</PriceLabel>
-                <PriceInput
-                  type="text"
-                  name="pricePerTen"
-                  ref={pricePerTenRef}
-                  placeholder="가격/1일"
-                />
-                <Label>원</Label>
-              </PriceDiv>
-            </AddressDiv>
-          </Prices>
+          <AddressDiv>
+            <BigTitle>대여료</BigTitle>
+            <PriceDiv>
+              <OneLabel htmlFor="pricePerOne">1일</OneLabel>
+              <PriceInput
+                type="price"
+                name="pricePerOne"
+                ref={pricePerOneRef}
+                placeholder="가격/1일"
+              />
+              <OneLabel>원</OneLabel>
+            </PriceDiv>
+            <PriceDiv>
+              <OneLabel htmlFor="pricePerFive">5일 이상</OneLabel>
+              <PriceInput
+                type="text"
+                name="pricePerFive"
+                ref={pricePerFiveRef}
+                placeholder="가격/1일"
+              />
+              <OneLabel>원</OneLabel>
+            </PriceDiv>
+            <PriceDiv>
+              <OneLabel htmlFor="pricePerTen">10일 이상</OneLabel>
+              <PriceInput
+                type="text"
+                name="pricePerTen"
+                ref={pricePerTenRef}
+                placeholder="가격/1일"
+              />
+              <OneLabel>원</OneLabel>
+            </PriceDiv>
+          </AddressDiv>
 
-          <Div>
+          <AddressDiv>
+            <BigTitle>상품 상세설명</BigTitle>
             <EditorContainer>
-              <Label>상품 상세설명</Label>
               <QuillEditor htmlStr={htmlStr} setHtmlStr={setHtmlStr} />
             </EditorContainer>
-          </Div>
+          </AddressDiv>
 
           <ImageDiv>
-            <Label>이미지등록</Label>
+            <BigTitle>이미지등록</BigTitle>
             <ImageUploadLabel htmlFor="itemImages">사진 선택</ImageUploadLabel>
             <P>※ 직접 촬영한 사진으로 업로드 해주세요 (최대 10장)</P>
 
@@ -416,28 +394,6 @@ const AddItem = () => {
 
 export default AddItem;
 
-//전체 아웃라인
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  padding: 0;
-  margin: 0 auto;
-  justify-content: space-between;
-  text-align: center;
-`;
-
-const WholeDiv = styled.div`
-  margin: 0 auto 5rem auto;
-`;
-
-const StyledTitle = styled.h1`
-  text-align: left;
-  font-size: 1.5rem;
-  font-weight: 500;
-  line-height: 2rem;
-`;
-
 const Div = styled.div`
   width: 100%;
   display: flex;
@@ -449,70 +405,83 @@ const Div = styled.div`
   vertical-align: center;
 `;
 
-const HalfDiv = styled.div`
-  width: 50%;
+const ItemDiv = styled.div`
+  width: 960px;
+  margin: 10px 10px;
+  display: flex;
+  flex-direction: row;
+`;
+
+const OneLabel = styled.label`
+  width: 70px;
+  text-align: left;
+  font-weight: 400;
+  vertical-align: center;
+  margin: 0 10px;
+  display: inline-block;
+  line-height: 40px;
+`;
+
+const Input = styled.input`
+  border-radius: 10px;
+  width: 370px;
+  height: 40px;
+  color: black;
+  font-size: 16px;
+  border: 1px solid #d9d9d9;
+  margin: 0 10px;
+  inline: inline-block;
+  padding: 0.5rem;
+`;
+
+const ProductDiv = styled.div`
+  width: 400px;
   display: flex;
   flex-direction: row;
   justify-content: left;
   text-align: left;
   text-align: left;
-  margin: 0 0.2rem;
-`;
-
-const OneLabel = styled.label`
-  text-align: left;
-  width: 5.2rem;
-  font-weight: 400;
-  line-height: 2.5rem;
-  vertical-align: center;
-  margin-left: 0.2rem;
-  margin-top: 0.2rem;
-  padding-right: 1.5rem;
-`;
-
-const Label = styled.label`
-  text-align: left;
-  width: 180px;
-  margin: 0.5rem 0.5rem 0.5rem 0.2rem;
-  font-weight: 400;
+  margin: 5px 0;
 `;
 
 const ProductLabel = styled.label`
   text-align: left;
-  width: 100px;
-  margin: 0.5rem 0rem;
+  width: 50px;
+  margin: 10px 10px;
   font-weight: 400;
   text-align: left;
 `;
 
-const CountInput = styled.input`
+const ProductInput = styled.input`
   border-radius: 10px;
-  width: 100%;
-  height: 2.5rem;
+  width: 250px;
+  height: 40px;
   color: black;
   font-size: 16px;
   border: 1px solid #d9d9d9;
-  margin: 0.2rem 0.8rem 0.5rem 0.2rem;
+  margin: 0 5px;
   inline: inline-block;
   padding: 0.5rem;
 `;
 
-const Input = styled.input`
+const ProductButton = styled.button`
+  width: 45px;
+  height: 2rem;
+  margin: 5px 5px;
+  float: right;
+  border: 0;
+  background: #d9d9d9;
   border-radius: 10px;
-  width: 100%;
-  height: 2.5rem;
-  color: black;
-  font-size: 16px;
-  border: 1px solid #d9d9d9;
-  margin: 0.2rem 1rem 0.5rem 0.2rem;
-  inline: inline-block;
-  padding: 0.5rem;
+  cursor: pointer;
+  &:hover {
+    background: #b9d9c0;
+  }
 `;
 
 const Select = styled.select`
-  width: 100%;
-  height: 2.5rem;
-  margin: 0 1rem 0 0.2rem;
+  width: 370px;
+  height: 40px;
+  margin: 0 10px;
   inline: inline-block;
   font-size: 16px;
   border: 1px solid #d9d9d9;
@@ -520,36 +489,39 @@ const Select = styled.select`
 `;
 
 //거래주소
-
+const BigTitle = styled.h1`
+  text-align: left;
+  width: 180px;
+  margin: 10px 10px;
+  font-weight: 400;
+  background: 5px;
+`;
 const AddressDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: left;
   text-align: left;
-  width: 101%;
-  margin-bottom: 1rem;
-  padding-right: 0.5rem;
-  padding-left: 0.2rem;
+  width: 960px;
+  margin: 20px 10px;
 `;
 
 const AddressInput = styled.input`
   border-radius: 10px;
-  width: 98%;
-  height: 2.5rem;
+  width: 600px;
+  height: 40px;
   color: black;
   font-size: 16px;
   border: 1px solid #d9d9d9;
-  margin: 0.2rem 0.2rem 0.5rem 0.2rem;
+  margin: 5px 10px;
   inline: inline-block;
   padding: 0.5rem;
 `;
 
 const Button = styled.button`
-  width: 3rem;
+  width: 50px;
   height: 40px;
-  margin: 0.2rem 0.2rem;
+  margin: 0 3px;
   border: 0;
-  padding: 0.2rem;
   background: #d9d9d9;
   border-radius: 10px;
   cursor: pointer;
@@ -566,46 +538,31 @@ const ButtonDiv = styled.div`
   justify-content: left;
   vertical-align: center;
   padding-right: 0.7rem;
+  margin: 5px 0;
 `;
 
 //대여료
-const Prices = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: left;
-  text-align: left;
-  width: 100%;
-`;
 
 const PriceInput = styled.input`
   border-radius: 10px;
-  width: 30%;
-  height: 2.5rem;
+  width: 490px;
+  height: 40px;
   color: black;
   font-size: 16px;
   border: 1px solid #d9d9d9;
-  margin: 0.2rem 0.2rem 0.5rem 0.2rem;
+  margin: 0;
   inline: inline-block;
-  padding: 0.5rem;
 `;
 
 const PriceDiv = styled.div`
-  width: 100%;
+  width: 700px;
   display: flex;
   flex-direction: row;
   justify-content: left;
   text-align: left;
-  margin: 0rem 0;
+  margin: 5px 0px;
   line-height: 30px;
   vertical-align: center;
-`;
-
-const PriceLabel = styled.label`
-  text-align: left;
-  width: 5rem;
-  margin: 0.5rem 0.2rem 0.5rem 0.2rem;
-  padding-left: 0.2rem;
-  font-weight: 400;
 `;
 
 //상품 상세설명
@@ -646,16 +603,16 @@ const ImageBlank = styled.img`
 `;
 
 const ImageDiv = styled.div`
-  maargin: 2rem;
+  margin: 20px 10px;
   padding: 2rem 0;
   text-align: left;
-  width: 690px;
+  width: 960px;
 `;
 
 const EditorContainer = styled.div`
-  width: 100%;
-  height: 400px;
-  margin: 3 auto;
+  width: 955px;
+  height: fit-content;
+  padding : 0 10px;
   display ; block;
 `;
 
@@ -724,4 +681,18 @@ const ColumnDiv = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 0.7rem;
+  width: 300px;
+`;
+
+const StyledButton = styled.button`
+  width: 940px;
+  height: 40px;
+  margin: 10px 20px 10px 20px;
+  border: 0;
+  background: #d9d9d9;
+  border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    background: #b9d9c0;
+  }
 `;
