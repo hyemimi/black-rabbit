@@ -10,6 +10,7 @@ import cartIcon from "../public/cart.png";
 import { useState } from "react";
 import UserMypageSidebar from "./UserMypageSidebar";
 import SellerMypageSidebar from "./SellerMypageSidebar";
+import Link from "next/link";
 export default function Sidebar() {
   const router = useRouter();
   let user_id = 1; // 임시데이터
@@ -33,7 +34,14 @@ export default function Sidebar() {
   return (
     <Side>
       <Logo>
-        <h1>데이필름</h1>
+        <Link href={"/"}>
+          <Image
+            width="100"
+            height="100"
+            src="/DayFilmMid.png"
+            alt="logo"
+          ></Image>
+        </Link>
       </Logo>
       <Div>
         {!ismypage ? (
@@ -60,7 +68,8 @@ export default function Sidebar() {
   );
 }
 const Div = styled.div`
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 const Side = styled.div`
   position: fixed;
@@ -76,6 +85,7 @@ const Side = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  overflow-y: scroll;
 `;
 const Logo = styled.div`
   margin: 10px;
