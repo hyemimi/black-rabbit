@@ -1,15 +1,15 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import homeIcon from "../public/home.png";
+import homeIcon2 from "../public/home2.png";
 import likeIcon from "../public/heart.png";
 import alarmIcon from "../public/bell.png";
 import Image from "next/image";
-import helpIcon from "../public/help.png";
 import loginIcon from "../public/login.png";
 import cartIcon from "../public/cart.png";
 import { useState } from "react";
 import UserMypageSidebar from "./UserMypageSidebar";
 import SellerMypageSidebar from "./SellerMypageSidebar";
+import Link from "next/link";
 export default function Sidebar() {
   const router = useRouter();
   let user_id = 1; // 임시데이터
@@ -17,7 +17,7 @@ export default function Sidebar() {
   const [isuser, setIsUser] = useState(false); // 유저 or 사업자 여부 관리
   /* 사이드바 속성 */
   const menuList = [
-    { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon },
+    { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon2 },
     { ref: "/like", label: "좋아요", width: 30, height: 30, icon: likeIcon },
     { ref: "/cart", label: "장바구니", width: 30, height: 30, icon: cartIcon },
     { ref: "/", label: "알림", width: 30, height: 30, icon: alarmIcon },
@@ -33,7 +33,14 @@ export default function Sidebar() {
   return (
     <Side>
       <Logo>
-        <h1>데이필름</h1>
+        <Link href={"/"}>
+          <Image
+            width="100"
+            height="100"
+            src="/DayFilmMid.png"
+            alt="logo"
+          ></Image>
+        </Link>
       </Logo>
       <Div>
         {!ismypage ? (
@@ -60,7 +67,8 @@ export default function Sidebar() {
   );
 }
 const Div = styled.div`
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 `;
 const Side = styled.div`
   position: fixed;
@@ -76,6 +84,7 @@ const Side = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.4em;
+  overflow-y: scroll;
 `;
 const Logo = styled.div`
   margin: 10px;

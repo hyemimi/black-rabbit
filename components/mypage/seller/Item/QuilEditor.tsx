@@ -31,7 +31,7 @@ const QuillEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
       }
 
       // file 데이터 담아서 서버에 전달하여 이미지 업로드
-      const res = await axios.post("/items/store-write", formData);
+      const res = await axios.post("/items/store-write/images", formData);
 
       if (quillRef.current) {
         // 현재 Editor 커서 위치에 서버로부터 전달받은 이미지 불러오는 url을 이용하여 이미지 태그 추가
@@ -76,11 +76,8 @@ const QuillEditor: NextPage<IEditor> = ({ htmlStr, setHtmlStr }) => {
           [{ align: [] }, { color: [] }, { background: [] }], // 정렬, 글씨 색깔, 글씨 배경색 설정
           ["clean"], // toolbar 설정 초기화 설정
         ],
-
         // custom 핸들러 설정
-        // handlers: {
-        //   image: imageHandler, // 이미지 tool 사용에 대한 핸들러 설정
-        // },
+        handlers: { image: imageHandler },
       },
     }),
     []

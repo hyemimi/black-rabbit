@@ -1,7 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import ReactDom, { createPortal } from "react-dom";
 import styled from "styled-components";
-import { MultiSelect } from "./Multiselect";
+import { MultiSelect } from "../Multiselect";
 
 interface closeModalProps {
   closeModal: (e: any) => void;

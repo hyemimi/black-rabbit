@@ -29,11 +29,22 @@ import {
   Hr,
   WholeLists,
 } from "@/components/detail/Seller";
-import addItem from "./addItem";
-import canon1 from "../../public/canon1.jpeg";
-import Image from "next/image";
+import { useState } from "react";
+import InquiryModal from "@/components/mypage/seller/inquiry/inquiryModal";
+import styled from "styled-components";
 
-const Customer = () => {
+const Inquiry = () => {
+  const [IsAnswerModal, setIsAnswerModal] = useState<boolean>(false);
+
+  const handleAnswerModal = () => {
+    setIsAnswerModal(true);
+  };
+
+  const closeAnswerModal = () => {
+    setIsAnswerModal((prev) => !prev);
+  };
+
+  const handleDeleteInquiry = () => {};
   const ItemList = [
     {
       itemId: 1,
@@ -69,7 +80,7 @@ const Customer = () => {
       title: "소니 FE 24-70mm GM F2.8",
       starAvg: 4.4,
       Inquirytitle: "너무조하용~",
-      status: "답변완료",
+      status: "미답변",
     },
   ];
   return (
@@ -127,25 +138,28 @@ const Customer = () => {
           <FilterDiv>
             <FilterName>상품명</FilterName>
             <Select>
-              <Option>Canon EOS Rebel T7 18-55mm 번들 세트</Option>
-              <Option>[소니] FE 28-60mm F4-5.6 표준렌즈</Option>
-              <Option>EOS 어쩌구</Option>
+              <Option>전체</Option>
+              {ItemList.map((item) => (
+                <Option key={item.itemId}>{item.title}</Option>
+              ))}
             </Select>
           </FilterDiv>
           <FilterDiv>
-            <FilterName>기간</FilterName>
+            <FilterName>문의기간</FilterName>
             <Select>
+              <Option>전체</Option>
+              <Option>오늘</Option>
+              <Option>지난 7일</Option>
               <Option>지난 30일</Option>
               <Option>지난 1년</Option>
-              <Option>지난 1주일</Option>
             </Select>
           </FilterDiv>
           <FilterDiv>
             <FilterName>처리상태</FilterName>
             <Select>
-              <Option>결제완료</Option>
-              <Option>배송진행</Option>
-              <Option>배송완료</Option>
+              <Option>전체</Option>
+              <Option>답변완료</Option>
+              <Option>미답변</Option>
             </Select>
           </FilterDiv>
         </SearchDiv>
@@ -173,13 +187,29 @@ const Customer = () => {
                   <Td>{item.customerId}</Td>
                   <Td>{item.title}</Td>
                   <Td>{item.Inquirytitle}</Td>
-                  <Td>{item.status}</Td>
+                  <Td>
+                    {item.status === "답변완료" ? (
+                      <StatusSign color="#B6DCBE">{item.status}</StatusSign>
+                    ) : (
+                      <StatusSign color="#d9d9d9">{item.status}</StatusSign>
+                    )}
+                  </Td>
                   <Td>{item.date}</Td>
                   <RightTd>
                     <ColumnDiv>
-                      <button>답변</button>
-                      <button>수정</button>
-                      <button>삭제</button>
+                      <InquiryButton
+                        color="#B6DCBE"
+                        onClick={handleAnswerModal}
+                      >
+                        답변
+                      </InquiryButton>
+                      {IsAnswerModal && (
+                        <InquiryModal
+                          closeAnswerModal={closeAnswerModal}
+                        ></InquiryModal>
+                      )}
+                      <InquiryButton color="#d9d9d9">수정</InquiryButton>
+                      <InquiryButton color="#F55757">삭제</InquiryButton>
                     </ColumnDiv>
                   </RightTd>
                 </Tr>
@@ -191,4 +221,25 @@ const Customer = () => {
     </Wrapper>
   );
 };
-export default Customer;
+export default Inquiry;
+
+const InquiryButton = styled.button`
+  width: 50px;
+  height: 25px;
+  background-color: ${(props) => props.color};
+  border: none;
+  margin: 3px auto;
+  cursor: pointer;
+  border-radius: 5px;
+`;
+
+const StatusSign = styled.h1`
+  width: 70px;
+  height: 30px;
+  line-height: 30px;
+  background-color: ${(props) => props.color};
+  border: none;
+  margin: 3px auto;
+  cursor: pointer;
+  border-radius: 5px;
+`;
