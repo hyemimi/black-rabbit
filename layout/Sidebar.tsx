@@ -10,11 +10,14 @@ import { useState } from "react";
 import UserMypageSidebar from "./UserMypageSidebar";
 import SellerMypageSidebar from "./SellerMypageSidebar";
 import Link from "next/link";
+import { useRecoilState } from "recoil";
+import { UserState } from "@/recoil/atoms";
 export default function Sidebar() {
   const router = useRouter();
   let user_id = 1; // 임시데이터
-  const [ismypage, setIsMypage] = useState(true); // 마이페이지 여부
-  const [isuser, setIsUser] = useState(false); // 유저 or 사업자 여부 관리
+  const [user, setUser] = useRecoilState(UserState);
+  const { isuser, ismypage } = user;
+
   /* 사이드바 속성 */
   const menuList = [
     { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon2 },
@@ -57,7 +60,7 @@ export default function Sidebar() {
               </MenuButton>
             </>
           ))
-        ) : isuser ? (
+        ) : isuser && ismypage ? (
           <UserMypageSidebar />
         ) : (
           <SellerMypageSidebar />

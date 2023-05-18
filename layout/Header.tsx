@@ -3,9 +3,25 @@ import { motion, useScroll, useAnimation } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Searchbar from "@/components/common/Searchbar";
+import { useRecoilState } from "recoil";
+import { UserState, isLoginState, useSsrComplectedState } from "@/recoil/atoms";
 
 function Header() {
   const router = useRouter();
+  const [islogin, setIsLogin] = useRecoilState(isLoginState); // 로그인 여부
+  const [user, setUser] = useRecoilState(UserState); // 유저 정보
+  const { nickname, ismypage, isuser } = user;
+
+  /* SSR 완료시 호출*/
+  const setSsrCompleted = useSsrComplectedState();
+  useEffect(setSsrCompleted, [setSsrCompleted]);
+
+  const pushMypage = () => {
+    setUser({ ...user, ismypage: !ismypage });
+  };
+  const pushLogout = () => {
+    setIsLogin(false);
+  };
 
   return (
     <>
@@ -13,8 +29,13 @@ function Header() {
         <Col>
           <Searchbar></Searchbar>
         </Col>
+        <Col>{islogin && <Button onClick={pushMypage}>{nickname}</Button>}</Col>
         <Col>
-          <Button onClick={() => router.push("/userLogin")}>Login</Button>
+          {islogin ? (
+            <Button onClick={() => pushLogout}>Logout</Button>
+          ) : (
+            <Button onClick={() => router.push("/userLogin")}>Login</Button>
+          )}
         </Col>
       </Nav>
     </>
@@ -31,24 +52,14 @@ const Nav = styled.nav`
   width: 100%;
   top: 0px;
   font-size: 14px;
-  justify-content: space-evenly;
-
+  justify-content: center;
   padding: 20px 60px;
 `;
-
-/*
-top: 0px;
-width: 100vw;
-height: 70px;
-position: fixed;
-background-color: #2f2f2f;
-box-sizing: border-box;
-border-bottom: 1px solid rgb(55, 55, 55);
-*/
 
 const Col = styled.div`
   display: flex;
   align-items: center;
+  margin: 10px;
 `;
 
 const Button = styled.button`
