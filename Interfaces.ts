@@ -37,3 +37,9 @@ export interface InputItem {
   id: number;
   title: string;
 }
+
+export interface SignUpForm {
+  email: string;
+  nickname: string;
+  pw: string;
+}
