@@ -1,22 +1,6 @@
 import {
-  Title,
-  WholeDiv,
-  Wrapper,
-  StatusDiv,
-  StatusBox,
-  StatusName,
-  Number,
-  SearchDiv,
-  FilterDiv,
-  P,
-  FilterName,
-  Select,
-  Option,
-  ColumnDiv,
   DeleteButton,
   DeleteDiv,
-  GreenButton,
-  ItemTitle,
   Label,
   LeftTd,
   OverflowDiv,
@@ -26,65 +10,70 @@ import {
   Td,
   Thead,
   Tr,
-  WholeLists,
-  RowDiv,
-  RowButtonDiv,
 } from "@/components/detail/Seller";
 import { useState } from "react";
+import Modal from "@/components/common/modal/Modal";
+import RefundCheckModal from "./Modal/RefundCheckModal";
 
-const RefundWaiting = () => {
-  const ItemList = [
-    {
-      itemId: 1,
-      pricePerOne: 123,
-      likeCount: 1,
-      method: "PARCEL",
+const RefundWaiting = ({ ItemList }: any) => {
+  const [checkItems, setCheckItems] = useState<number[]>([]);
+  const [selectModal, setSelectModal] = useState<boolean>(false);
+  const closeModal = (e: any) => {
+    e.stopPropagation();
+    setSelectModal((prev) => !prev);
+  };
 
-      reviewCount: 5,
-      starAvg: 4.4,
-      title: " Canon EOS Rebel T7 18-55mm 번들 세트",
-    },
-    {
-      itemId: 2,
-      pricePerOne: 20000,
+  // 체크박스 단일 선택
+  const handleSingleCheck = (checked: boolean, itemId: number) => {
+    if (checked) {
+      // 단일 선택 시 체크된 아이템을 배열에 추가
+      setCheckItems((prev: number[]) => [...prev, itemId]);
+    } else {
+      // 단일 선택 해제 시 체크된 아이템을 제외한 배열 (필터)
+      setCheckItems(checkItems.filter((el: any) => el !== itemId));
+    }
+  };
 
-      likeCount: 23,
-      method: "PARCEL",
-      reviewCount: 12,
-      starAvg: 4.0,
-      title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
-    },
-    {
-      itemId: 1,
-      pricePerOne: 12324,
+  // 체크박스 전체 선택
+  const handleAllCheck = (checked: boolean) => {
+    if (checked) {
+      // 전체 선택 클릭 시 데이터의 모든 아이템(id)를 담은 배열로 checkItems 상태 업데이트
+      const idArray: number[] = [];
+      ItemList.forEach((el: any) => idArray.push(el.itemId));
+      setCheckItems(idArray);
+    } else {
+      // 전체 선택 해제 시 checkItems 를 빈 배열로 상태 업데이트
+      setCheckItems([]);
+    }
+  };
 
-      likeCount: 1,
-      method: "PARCEL",
-      reviewCount: 5,
-      starAvg: 4.4,
-      title: "소니 A7M4 미러리스 카메라",
-    },
-    {
-      itemId: 2,
-      pricePerOne: 20000,
-
-      likeCount: 23,
-      method: "PARCEL",
-      reviewCount: 12,
-      starAvg: 4.0,
-      title: "소니 FE 24-70mm GM F2.8",
-    },
-  ];
-  const [tab, setTab] = useState<string>("");
+  const handleRefundCheck = () => {
+    setSelectModal(true);
+  };
 
   return (
     <>
       <DeleteDiv>
         <Label>
-          <input type="checkbox" />
+          <input
+            type="checkbox"
+            onChange={(e) => handleAllCheck(e.target.checked)}
+            // 데이터 개수와 체크된 아이템의 개수가 다를 경우 선택 해제 (하나라도 해제 시 선택 해제)
+            checked={checkItems.length === 4 ? true : false}
+          />
           전체선택
         </Label>
-        <DeleteButton>환불승인</DeleteButton>
+        <DeleteButton onClick={handleRefundCheck}>환불승인</DeleteButton>
+        {selectModal && (
+          <Modal>
+            <RefundCheckModal
+              closeModal={closeModal}
+              selectedItems={ItemList.filter((item: any) =>
+                checkItems.includes(item.itemId)
+              ).filter((item: any) => item.productStatus === "환불대기")}
+            ></RefundCheckModal>
+          </Modal>
+        )}
       </DeleteDiv>
 
       <OverflowDiv>
@@ -92,44 +81,39 @@ const RefundWaiting = () => {
           <Thead>
             <tr>
               <th>선택</th>
-              <th>번호</th>
               <th>주문번호</th>
-              <th>상품정보</th>
+              <th>상품명</th>
+              <th>거래방법</th>
               <th>주문일시</th>
-              <th>출고(예정)일</th>
-              <th>텍베시</th>
-              <th>운송장번호</th>
+              <th>환불신청일</th>
               <th>결제금액</th>
               <th>고객명</th>
             </tr>
           </Thead>
           <Tbody>
-            {ItemList.map((item, index) => (
+            {ItemList.filter(
+              (item: any) => item.productStatus === "환불대기"
+            ).map((item: any, index: number) => (
               <Tr key={item.title}>
                 <LeftTd>
-                  <input type="checkbox" key={item.itemId}></input>
+                  <input
+                    type="checkbox"
+                    key={item.itemId}
+                    onChange={(e: any) => {
+                      e.stopPropagation();
+                      handleSingleCheck(e.target.checked, item.itemId);
+                    }}
+                    // 체크된 아이템 배열에 해당 아이템이 있을 경우 선택 활성화, 아닐 시 해제
+                    checked={checkItems.includes(item.itemId) ? true : false}
+                  ></input>
                 </LeftTd>
-                <Td>{index + 1}</Td>
-                <Td>
-                  <ColumnDiv>
-                    <ItemTitle>{item.title}</ItemTitle>
-                  </ColumnDiv>
-                </Td>
-
-                <Td>
-                  <p>
-                    대여중 : 1 <br />
-                    수리중 : 1<br /> 대여가능 : 1
-                  </p>
-                </Td>
-                <Td>{item.starAvg}점</Td>
-                <Td>{item.reviewCount}개</Td>
-                <Td>{item.pricePerOne}원/일</Td>
+                <Td>{item.orderNum}</Td>
+                <Td>{item.title}</Td>
                 <Td>{item.method}</Td>
-                <Td>100000원</Td>
-                <RightTd>
-                  <ColumnDiv></ColumnDiv>
-                </RightTd>
+                <Td>{item.orderedDate}</Td>
+                <Td>{item.refundDate}</Td>
+                <Td>{item.price}</Td>
+                <RightTd>{item.customerName}</RightTd>
               </Tr>
             ))}
           </Tbody>

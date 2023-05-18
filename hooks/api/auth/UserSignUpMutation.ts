@@ -3,9 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUser } from "@/hooks/user/login";
 import { useState } from "react";
 import { replaceAccessTokenForRequestInstance } from "@/libs/api/client";
-import { useQueryClient } from "@tanstack/react-query";
-import Router from "next/router";
-import { baseURL } from "@/libs/api/client";
+import { useRouter } from "next/router";
 import axios from "axios";
 
 interface UserSignupMutationRequest {
@@ -23,14 +21,13 @@ interface UserSignupMutationResponse {
 /*회원가입 - 개인 유저*/
 
 export default function UseUserSignupMutation() {
+  const router = useRouter();
   return useMutation(
     (data: UserSignupMutationRequest) => instance.post("/sign/user", data),
     {
-
       onSuccess: (res) => {
-
         alert("회원가입 성공");
-        Router.push({
+        router.push({
           pathname: "/signup/completed",
           query: { nickname: res.data.nickname },
         });

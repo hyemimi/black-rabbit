@@ -1,10 +1,10 @@
 import React, { ReactElement, useEffect, useState } from "react";
-import ReactDom, { createPortal } from "react-dom";
 import styled from "styled-components";
-import { MultiSelect } from "./Multiselect";
+import { MultiSelect } from "../Multiselect";
 
 interface closeModalProps {
-  closeModal: () => void;
+  closeModal: (e: any) => void;
+  setDeleteItems: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 interface product {
@@ -13,7 +13,10 @@ interface product {
   value: string;
 }
 
-const ProductDeleteModal = ({ closeModal }: closeModalProps) => {
+const ProductDeleteModal = ({
+  closeModal,
+  setDeleteItems,
+}: closeModalProps) => {
   const onDeleteItem = () => {
     //선택된 아이템 서버로 보냄
   };

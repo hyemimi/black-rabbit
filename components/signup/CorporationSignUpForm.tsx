@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { StyledButton } from "../common/Button";
-import { useState, useCallback, useRef } from "react";
-import { useRouter } from "next/router";
+import { useState, useRef } from "react";
 import axios from "axios";
 import AgreeTerms from "./AgreeTerms";
 import Modal from "../common/modal/Modal";
