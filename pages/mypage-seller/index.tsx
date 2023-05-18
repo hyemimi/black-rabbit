@@ -41,6 +41,8 @@ import {
   GrayButton,
 } from "@/components/detail/Seller";
 import { random } from "nanoid";
+import axios from "axios";
+
 const ProductLists = () => {
   const ListsNum = 1;
   const router = useRouter();
@@ -62,6 +64,13 @@ const ProductLists = () => {
     setSelectAddModal((prev) => !prev);
   };
 
+  const ServerItemList = async () => {
+    const response = await axios.get("/items/all");
+    return response.data.content;
+  };
+
+  console.log(ServerItemList);
+
   const ItemList = [
     {
       itemId: 1,
@@ -72,6 +81,9 @@ const ProductLists = () => {
       reviewCount: 5,
       starAvg: 4.4,
       title: "Canon EOS Rebel T7 18-55mm 번들 세트",
+      rentalable: 1,
+      rentaling: 2,
+      fixing: 3,
     },
     {
       itemId: 2,
@@ -82,6 +94,9 @@ const ProductLists = () => {
       reviewCount: 12,
       starAvg: 4.0,
       title: "[소니] FE 28-60mm F4-5.6 표준렌즈",
+      rentalable: 1,
+      rentaling: 3,
+      fixing: 3,
     },
     {
       itemId: 3,
@@ -92,6 +107,9 @@ const ProductLists = () => {
       reviewCount: 5,
       starAvg: 4.4,
       title: "소니 A7M4 미러리스 카메라",
+      rentalable: 1,
+      rentaling: 3,
+      fixing: 3,
     },
     {
       itemId: 4,
@@ -102,8 +120,26 @@ const ProductLists = () => {
       reviewCount: 12,
       starAvg: 4.0,
       title: "소니 FE 24-70mm GM F2.8",
+      rentalable: 1,
+      rentaling: 1,
+      fixing: 3,
     },
   ];
+
+  var rentalable = 0;
+  for (var i = 0; i < ItemList.length; i++) {
+    rentalable = rentalable + ItemList[i].rentalable;
+  }
+
+  var rentaling = 0;
+  for (var i = 0; i < ItemList.length; i++) {
+    rentaling = rentaling + ItemList[i].rentaling;
+  }
+
+  var fixing = 0;
+  for (var i = 0; i < ItemList.length; i++) {
+    fixing = fixing + ItemList[i].fixing;
+  }
 
   // 체크박스 단일 선택
   const handleSingleCheck = (checked: boolean, itemId: number) => {
@@ -153,16 +189,16 @@ const ProductLists = () => {
           <StatusDiv>
             <StatusBox>
               <StatusName>대여가능</StatusName>
-              <Number>3건</Number>
+              <Number>{rentalable}건</Number>
             </StatusBox>
 
             <StatusBox>
               <StatusName>대여중</StatusName>
-              <Number>2건</Number>
+              <Number>{rentaling}건</Number>
             </StatusBox>
             <StatusBox>
               <StatusName>수리중</StatusName>
-              <Number>1건</Number>
+              <Number>{fixing}건</Number>
             </StatusBox>
           </StatusDiv>
 
@@ -285,8 +321,9 @@ const ProductLists = () => {
 
                         <Td>
                           <p>
-                            대여중 : 1 <br />
-                            수리중 : 1<br /> 대여가능 : 1
+                            대여가능 : {item.rentalable} <br />
+                            대여중 : {item.rentaling} <br />
+                            수리중 : {item.fixing}
                           </p>
                         </Td>
                         <Td>{item.starAvg}점</Td>

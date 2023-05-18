@@ -1,10 +1,9 @@
 import { useRouter } from "next/router";
 import styled from "styled-components";
-import homeIcon from "../public/home.png";
+import homeIcon2 from "../public/home2.png";
 import likeIcon from "../public/heart.png";
 import alarmIcon from "../public/bell.png";
 import Image from "next/image";
-import helpIcon from "../public/help.png";
 import loginIcon from "../public/login.png";
 import cartIcon from "../public/cart.png";
 import { useState } from "react";
@@ -18,7 +17,7 @@ export default function Sidebar() {
   const [isuser, setIsUser] = useState(false); // 유저 or 사업자 여부 관리
   /* 사이드바 속성 */
   const menuList = [
-    { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon },
+    { ref: "/", label: "홈", width: 32, height: 32, icon: homeIcon2 },
     { ref: "/like", label: "좋아요", width: 30, height: 30, icon: likeIcon },
     { ref: "/cart", label: "장바구니", width: 30, height: 30, icon: cartIcon },
     { ref: "/", label: "알림", width: 30, height: 30, icon: alarmIcon },
