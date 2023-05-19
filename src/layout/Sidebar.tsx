@@ -7,12 +7,20 @@ import SellerMypageSidebar from "./SellerMypageSidebar";
 import Link from "next/link";
 import { useRecoilState } from "recoil";
 import { UserState } from "@/src/stores/recoil/atoms";
+import { motion } from "framer-motion";
 export default function Sidebar() {
   const router = useRouter();
   let user_id = 1; // 임시데이터
   const [user, setUser] = useRecoilState(UserState);
   const { isuser, ismypage } = user;
-
+  const logoVariants = {
+    normal: {
+      scale: 1,
+    },
+    active: {
+      scale: 1.2,
+    },
+  };
   /* 사이드바 속성 */
   const menuList = [
     { ref: "/", label: "홈", width: 32, height: 32 },
@@ -29,7 +37,7 @@ export default function Sidebar() {
 
   return (
     <Side>
-      <Logo>
+      <Logo variants={logoVariants} whileHover="active" initial="normal">
         <Link href={"/"}>
           <Image
             width="100"
@@ -77,7 +85,8 @@ const Side = styled.div`
   gap: 0.4em;
   overflow-y: scroll;
 `;
-const Logo = styled.div`
+
+const Logo = styled(motion.div)`
   margin: 10px;
   padding-right: 50px;
   padding-left: 50px;
@@ -87,6 +96,7 @@ const Logo = styled.div`
     font-size: 50px;
   }
 `;
+
 const MenuButton = styled.div`
   height: fit-content;
   font-size: 20px;
