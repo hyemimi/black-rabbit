@@ -1,5 +1,4 @@
-import { Wrapper } from "@/src/components/common/Wrapper";
-import Card from "@/src/layout/Card";
+import { Wrapper } from "@/styles/Wrapper";
 import { useRouter } from "next/router";
 import styled from "styled-components";
 import { useEffect } from "react";
