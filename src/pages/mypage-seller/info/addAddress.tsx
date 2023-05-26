@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Title, Hr, RowDiv } from "@/styles/MypageSellerStyle";
 import { useRouter } from "next/router";
-import { Input } from "@/src/components/common/modal/ModalStyle";
+import { Input } from "@/styles/ModalStyle";
 import { useState } from "react";
 
 const Address = () => {

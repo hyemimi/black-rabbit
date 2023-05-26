@@ -14,6 +14,8 @@ import {
   Option,
   DeleteDiv,
   WholeLists,
+  StateButton,
+  WhiteButton,
 } from "@/styles/MypageSellerStyle";
 
 import styled from "styled-components";
@@ -26,7 +28,7 @@ const Return = () => {
   const router = useRouter();
   const [tab, setTab] = useState<string>("반납대기");
 
-  const ItemList = [
+  var ItemList = [
     {
       itemId: 1,
       title: "Canon EOS Rebel T7 18-55mm 번들 세트",
@@ -192,24 +194,3 @@ const Return = () => {
   );
 };
 export default Return;
-
-const StateButton = styled.button`
-  width: 480px;
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #d9d9d9;
-  font-size: 20px;
-  background: #b6dcbe;
-  &:active {
-    background-color: #b6dcbe;
-  }
-`;
-
-const WhiteButton = styled.button`
-  width: 480px;
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #d9d9d9;
-  font-size: 20px;
-  background: white;
-`;

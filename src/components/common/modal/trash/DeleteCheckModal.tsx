@@ -6,9 +6,7 @@ import {
   ContentsDiv,
   Div,
   CheckQuestion,
-} from "@/src/components/common/modal/ModalStyle";
-
-import { FcHighPriority } from "react-icons/fc";
+} from "@/styles/ModalStyle";
 
 import styled from "styled-components";
 

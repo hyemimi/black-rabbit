@@ -1,3 +1,5 @@
+import { Box } from "@/styles/ModalStyle";
+import { useModal } from "@/src/components/common/modal/useModal";
 import {
   Title,
   WholeDiv,
@@ -19,10 +21,20 @@ import {
   Hr,
   WholeLists,
 } from "@/styles/MypageSellerStyle";
-import styled from "styled-components";
+import {
+  HeaderButton,
+  ModalFooter,
+  ModalHeader,
+  ModalMain,
+  ModalSection,
+} from "@/src/components/common/modal/ModalComponent";
+import { ModalDiv } from "@/src/components/common/modal/ModalDiv";
+import { ModalExample } from "@/src/components/common/modal/ModalExample";
 
 const Review = () => {
-  const ItemList = [
+  const { openModal, closeModal } = useModal();
+
+  var ItemList = [
     {
       itemId: 1,
       customerId: "감자",
@@ -56,6 +68,33 @@ const Review = () => {
       reviewContents: "너무조하용~",
     },
   ];
+
+  const reviewModalData = {
+    title: "상품평",
+    content: (
+      <ModalDiv>
+        <ModalSection>
+          <ModalHeader>
+            (상품명)
+            <HeaderButton onClick={closeModal}>X</HeaderButton>
+          </ModalHeader>
+          <ModalMain>
+            {ItemList[0].title}
+            <Box>
+              <h1>{ItemList[0].reviewContents}</h1>
+            </Box>
+          </ModalMain>
+          <ModalFooter>
+            <button onClick={closeModal}>닫기</button>
+          </ModalFooter>
+        </ModalSection>
+      </ModalDiv>
+    ),
+    callback: () => {
+      alert("modal");
+    },
+  };
+
   return (
     <Wrapper>
       <WholeDiv>
@@ -128,7 +167,10 @@ const Review = () => {
             </Thead>
             <Tbody>
               {ItemList.map((item, index) => (
-                <Tr key={item.itemId}>
+                <Tr
+                  key={item.itemId}
+                  onClick={() => openModal(reviewModalData)}
+                >
                   <LeftTd>{item.itemId}</LeftTd>
                   <Td>{item.customerId}</Td>
                   <Td>{item.date}</Td>

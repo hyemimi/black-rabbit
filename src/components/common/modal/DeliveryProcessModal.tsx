@@ -24,7 +24,7 @@ import {
   Header,
   Box,
   ModalDiv,
-} from "@/src/components/common/modal/ModalStyle";
+} from "@/styles/ModalStyle";
 
 interface closeModalProps {
   closeDeliveryModal: (e: any) => void;

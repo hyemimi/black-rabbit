@@ -16,9 +16,24 @@ import {
 
 import styled from "styled-components";
 import { useState } from "react";
+import { useModal } from "@/src/components/common/modal/useModal";
 
 const RentalCompleted = ({ ItemList }: any) => {
   const [checkItems, setCheckItems] = useState<number[]>([]);
+  const { openModal } = useModal();
+
+  const handleDeleteItems = () => {
+    ItemList = ItemList.filter(
+      (item: any) => !checkItems.includes(item.itemId)
+    );
+  };
+
+  const modalData = {
+    title: "삭제",
+    content: `선택된 상품 ${checkItems.length}개를 삭제하시겠습니까?`,
+    callback: handleDeleteItems,
+  };
+
   // 체크박스 단일 선택
   const handleSingleCheck = (checked: boolean, itemId: number) => {
     if (checked) {
@@ -43,9 +58,6 @@ const RentalCompleted = ({ ItemList }: any) => {
     }
   };
 
-  const handleDeleteItems = () => {
-    confirm("정말 삭제하시겠습니까?");
-  };
   return (
     <>
       <DeleteDiv>
@@ -58,7 +70,9 @@ const RentalCompleted = ({ ItemList }: any) => {
           />
           전체선택
         </Label>
-        <DeleteButton onClick={handleDeleteItems}>선택삭제</DeleteButton>
+        <DeleteButton onClick={() => openModal(modalData)}>
+          선택삭제
+        </DeleteButton>
       </DeleteDiv>
 
       <OverflowDiv>

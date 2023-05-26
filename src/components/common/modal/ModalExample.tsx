@@ -6,7 +6,7 @@ import {
   ModalDimmer,
   ModalFooter,
   ModalTitle,
-} from "./ModalExampleStyle";
+} from "../../../../styles/ModalExampleStyle";
 import { useModal } from "./useModal";
 
 export const ModalExample = () => {

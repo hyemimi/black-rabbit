@@ -28,7 +28,7 @@ export const ModalTitle = styled.div`
   font-weight: bold;
   font-size: large;
   border-bottom: 1px solid #cbcbcb;
-  background: #b6dcbe;
+  background: ${(props) => props.theme.pointColor};
 `;
 export const ModalContents = styled.div`
   padding: 1rem;

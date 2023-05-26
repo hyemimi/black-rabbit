@@ -13,9 +13,8 @@ import {
 } from "@/styles/MypageSellerStyle";
 import { useState } from "react";
 import Modal from "@/src/components/common/modal/Modal";
-import DeleteCheckModal from "../../../../common/modal/DeleteCheckModal";
+import DeleteCheckModal from "../../../../common/modal/trash/DeleteCheckModal";
 import { useModal } from "@/src/components/common/modal/useModal";
-import { ModalExample } from "@/src/components/common/modal/ModalExample";
 
 const RefundCompleted = ({ ItemList }: any) => {
   const [checkItems, setCheckItems] = useState<number[]>([]);
@@ -79,7 +78,6 @@ const RefundCompleted = ({ ItemList }: any) => {
         <DeleteButton onClick={() => openModal(modalData)}>
           선택삭제
         </DeleteButton>
-        <ModalExample />
 
         {selectModal && (
           <Modal>

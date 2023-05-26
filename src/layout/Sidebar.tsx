@@ -34,7 +34,7 @@ export default function Sidebar() {
           <Image
             width="100"
             height="100"
-            src="/DayFilmMid.png"
+            src="/DayFilmLight.png"
             alt="logo"
           ></Image>
         </Link>

@@ -14,6 +14,7 @@ import {
   Option,
   DeleteDiv,
   WholeLists,
+  TabDiv,
   RowDiv,
 } from "@/styles/MypageSellerStyle";
 import styled from "styled-components";
@@ -24,7 +25,7 @@ import RefundWaiting from "@/src/components/mypage/seller/order/refund/refundWai
 
 const Refund = () => {
   const router = useRouter();
-  const ItemList = [
+  var ItemList = [
     {
       itemId: 1,
       title: "Canon EOS Rebel T7 18-55mm 번들 세트",
@@ -162,27 +163,27 @@ const Refund = () => {
 
         {tab == "환불대기" ? (
           <>
-            <DeleteDiv>
+            <TabDiv>
               <StateButton onClick={handleTabClick} value="환불대기">
                 환불대기
               </StateButton>
               <WhiteButton onClick={handleTabClick} value="환불완료">
                 환불완료
               </WhiteButton>
-            </DeleteDiv>
+            </TabDiv>
             <RefundWaiting ItemList={ItemList} />
           </>
         ) : null}
         {tab == "환불완료" ? (
           <>
-            <DeleteDiv>
+            <TabDiv>
               <WhiteButton onClick={handleTabClick} value="환불대기">
                 환불대기
               </WhiteButton>
               <StateButton onClick={handleTabClick} value="환불완료">
                 환불완료
               </StateButton>
-            </DeleteDiv>
+            </TabDiv>
             <RefundCompleted ItemList={ItemList} />
           </>
         ) : null}
@@ -196,11 +197,12 @@ const StateButton = styled.button`
   width: 480px;
   margin: 0;
   padding: 10px;
-  border: 1px solid #d9d9d9;
+  border: none;
   font-size: 20px;
-  background: #b6dcbe;
+
+  background: ${(props) => props.theme.pointColor};
   &:active {
-    background-color: #b6dcbe;
+    background-color: #${(props) => props.theme.pointColor};
   }
 `;
 

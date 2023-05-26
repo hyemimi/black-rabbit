@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import styled from "styled-components";
-import { MultiSelect } from "../../../components/mypage/seller/Item/Multiselect";
+import { MultiSelect } from "../../../mypage/seller/Item/Multiselect";
 
 interface closeModalProps {
   closeModal: (e: any) => void;

@@ -4,20 +4,39 @@ import downarrow from "public/static/images/down-chevro.png";
 import uparrow from "public/static/images/down-chevro.png";
 import Image from "next/image";
 
+import { keyframes } from "styled-components";
 import { useState } from "react";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { isSideBarOpenState } from "../stores/recoil/sidebarAtoms";
 
 export default function SellerMypageSidebar() {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useRecoilState(
+    isSideBarOpenState("manage")
+  );
+  const [isOrderMenuOpen, setisOrderMenuOpen] = useRecoilState(
+    isSideBarOpenState("order")
+  );
+  // const MenuOpenComponent = (id: string) => {
+  //   const [isMenuOpen, setIsMenuOpen] = useRecoilState(isSideBarOpenState(id));
+  //   return isMenuOpen;
+  // };
+
+  const useHandleOpenMenu = (id: string) => {
+    const [isOpen, setIsOpen] = useRecoilState(isSideBarOpenState(id));
+    setIsOpen((prev) => !prev);
+  };
+
   const router = useRouter();
   let user_id = 1; // 임시데이터
 
   const SellerMypageSidebar = [
-    { ref: "/", label: "홈", width: 25, height: 27 },
+    // { ref: "/", label: "홈", width: 25, height: 27 },
     {
       ref: null,
       label: "상품관리",
       width: 20,
       height: 20,
+      mode: false,
 
       undermenu: [
         { ref: "/mypage-seller", label: "상품조회/수정" },
@@ -30,6 +49,7 @@ export default function SellerMypageSidebar() {
       label: "주문/배송",
       width: 23,
       height: 21,
+      mode: false,
 
       undermenu: [
         { ref: "/mypage-seller/orderedLists", label: "주문내역조회" },
@@ -43,7 +63,7 @@ export default function SellerMypageSidebar() {
       label: "정산",
       width: 24,
       height: 24,
-
+      mode: false,
       undermenu: [{ ref: "/mypage-seller/calculate", label: "정산현황" }],
     },
     {
@@ -51,6 +71,7 @@ export default function SellerMypageSidebar() {
       label: "고객관리",
       width: 22,
       height: 21,
+      mode: false,
 
       undermenu: [
         { ref: "/mypage-seller/inquiry", label: "고객문의" },
@@ -62,7 +83,7 @@ export default function SellerMypageSidebar() {
       label: "판매자정보",
       width: 23,
       height: 23,
-
+      mode: false,
       undermenu: [
         { ref: "/mypage-seller/info/sellerInfo", label: "계정정보" },
         { ref: "/mypage-seller/info/address", label: "주소록/배송정보 관리" },
@@ -78,23 +99,25 @@ export default function SellerMypageSidebar() {
   return (
     <>
       {SellerMypageSidebar.map((menu) => (
-        <>
-          <MenuButton onClick={() => setIsMenuOpen((prev) => !prev)}>
+        <ButtonDiv key={menu.label} onClick={() => setIsMenuOpen(!menu.mode)}>
+          <MenuButton>
             <MenuLabel>{menu.label}</MenuLabel>
-            {isMenuOpen ? (
+
+            {menu.mode ? (
               <>
-                <label> </label>
-                <StyledImage width={20} height={20} src={uparrow} alt="" />
+                {" "}
+                <ArrowImg1 width={10} height={10} src={uparrow} alt="" />
               </>
             ) : (
               <>
                 {" "}
-                <StyledImage width={15} height={15} src={downarrow} alt="" />
+                <ArrowImg2 width={10} height={10} src={downarrow} alt="" />
               </>
             )}
           </MenuButton>
-          {isMenuOpen &&
-            menu.undermenu &&
+
+          {menu.undermenu &&
+            isMenuOpen &&
             menu.undermenu.map((undermenu) => (
               <UnderMenuButton
                 key={menu.label}
@@ -103,14 +126,38 @@ export default function SellerMypageSidebar() {
                 {undermenu.label}
               </UnderMenuButton>
             ))}
-        </>
+        </ButtonDiv>
       ))}
     </>
   );
 }
 
-const StyledImage = styled(Image)`
-  padding-top: 2px;
+const move1 = keyframes`
+	//단계 별로 변화를 주는 코드
+	0%{
+
+    }
+  
+    100%{
+
+        opacity: 1;
+        transform: rotate(180deg);
+    }
+`;
+
+const move2 = keyframes`
+	//단계 별로 변화를 주는 코드
+	0%{
+
+        transform:rotate(180deg);
+    }
+
+
+    100%{
+ 
+        opacity: 1;
+        transform: rotate(0deg);
+    }
 `;
 
 const MenuButton = styled.div`
@@ -125,6 +172,28 @@ const MenuButton = styled.div`
   margin: 17px auto;
   vertical-align: middle;
   align-items: left;
+  padding-top: 10px;
+
+  &:hover {
+    font-weight: 400;
+    color: #1a3620;
+  }
+`;
+
+const ArrowImg1 = styled(Image)`
+  animation: ${move1} 0.3s linear forwards;
+  margin-right: 20px;
+  float: right;
+`;
+const ArrowImg2 = styled(Image)`
+  animation: ${move2} 0.3s linear forwards;
+  margin-right: 20px;
+  float: right;
+`;
+
+const ButtonDiv = styled.div`
+  vertical-align: center;
+  items-align: space-between;
 `;
 
 const MenuLabel = styled.label`
@@ -133,7 +202,6 @@ const MenuLabel = styled.label`
 `;
 const UnderMenuButton = styled.div`
   height: fit-content;
-
   font-size: 15px;
   font-weight: 300;
   padding: 10px;
@@ -141,5 +209,9 @@ const UnderMenuButton = styled.div`
   cursor: pointer;
   border: none;
   background-color: transparent;
-  padding-left: 60px;
+  padding-left: 40px;
+  &:hover {
+    font-weight: 400;
+    color: #1a3620;
+  }
 `;
