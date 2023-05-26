@@ -119,14 +119,23 @@ export const Hr = styled.hr`
 
 export const DeleteDiv = styled.div`
   margin: 0 0 0 10px;
-  border-top: 1px solid #d9d9d9;
+  border: none;
   height: 50px;
   width: 960px;
-  background: #b6dcbe;
+  background: ${(props) => props.theme.pointColor};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 5px;
+`;
+export const TabDiv = styled.div`
+  margin: 0 0 0 10px;
+  border: none;
+  height: 50px;
+  width: 960px;
+  background: ${(props) => props.theme.pointColor};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
 export const Label = styled.label`
@@ -149,6 +158,27 @@ export const DeleteButton = styled.button`
 export const RowButtonDiv = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+export const StateButton = styled.button`
+  width: 480px;
+  margin: 0;
+  padding: 10px;
+  border: none;
+  font-size: 20px;
+  background: ${(props) => props.theme.pointColor};
+  &:active {
+    background-color: #${(props) => props.theme.pointColor};
+  }
+`;
+
+export const WhiteButton = styled.button`
+  width: 480px;
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #d9d9d9;
+  font-size: 20px;
+  background: white;
 `;
 
 //상품 정보 표
@@ -233,7 +263,7 @@ export const OverflowDiv = styled.div`
 `;
 
 export const GreenButton = styled.button`
-  background: #b6dcbe;
+  background: ${(props) => props.theme.pointColor};
   border-radius: 5px;
   border: none;
   padding: 5px 10px;
