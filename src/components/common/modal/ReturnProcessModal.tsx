@@ -18,7 +18,7 @@ import {
   ModalDiv,
   ModalTable,
   CheckQuestion,
-} from "@/src/components/common/modal/ModalStyle";
+} from "@/styles/ModalStyle";
 import styled from "styled-components";
 
 interface closeModalProps {
