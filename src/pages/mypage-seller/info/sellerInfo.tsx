@@ -1,4 +1,4 @@
-import { Button } from "@/src/components/common/modal/ModalStyle";
+import { Button } from "@/styles/ModalStyle";
 import {
   Title,
   WholeDiv,
@@ -88,14 +88,6 @@ const SellerInfo = () => {
 };
 export default SellerInfo;
 
-const SytledForm = styled.form`
-  border-radius: 0.4em;
-  margin: auto;
-  width: 20rem;
-  justify-content: center;
-  text-align: center;
-`;
-
 const StyledLabel = styled.label`
   text-align: left;
   line-height: 2rem;
@@ -121,17 +113,11 @@ const StyledHr = styled.hr`
   margin: 1rem irem 0 0;
 `;
 
-const StyledSpan = styled.span`
-  font-size: small;
-  color: ${(props) =>
-    props.className == "message error" ? "#e01c1c" : "#02A913"};
-`;
-
 const CheckButton = styled.button`
   margin-left: 1rem;
   height: 2.5rem;
   width: 4rem;
-  background: #b9d9c0;
+  background: ${(props) => props.theme.pointColor};
   border-radius: 10px;
   border: 0;
   text-align: center;
