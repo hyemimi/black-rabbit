@@ -13,11 +13,25 @@ import {
 } from "@/styles/MypageSellerStyle";
 import { useState } from "react";
 import Modal from "@/src/components/common/modal/Modal";
-import DeleteCheckModal from "../../../../common/modal/DeleteCheckModal";
+import DeleteCheckModal from "../../../../common/modal/trash/DeleteCheckModal";
+import { useModal } from "@/src/components/common/modal/useModal";
 
 const ReturnCompleted = ({ ItemList }: any) => {
   const [checkItems, setCheckItems] = useState<number[]>([]);
   const [selectModal, setSelectModal] = useState<boolean>(false);
+  const { openModal } = useModal();
+
+  const handleDeleteItems = () => {
+    ItemList = ItemList.filter(
+      (item: any) => !checkItems.includes(item.itemId)
+    );
+  };
+
+  const modalData = {
+    title: "삭제",
+    content: `선택된 상품 ${checkItems.length}개를 삭제하시겠습니까?`,
+    callback: handleDeleteItems,
+  };
 
   const closeModal = (e: any) => {
     e.stopPropagation();
@@ -62,7 +76,9 @@ const ReturnCompleted = ({ ItemList }: any) => {
           />
           전체선택
         </Label>
-        <DeleteButton onClick={handleItemDelete}>선택삭제</DeleteButton>
+        <DeleteButton onClick={() => openModal(modalData)}>
+          선택삭제
+        </DeleteButton>
         {selectModal && (
           <Modal>
             <DeleteCheckModal

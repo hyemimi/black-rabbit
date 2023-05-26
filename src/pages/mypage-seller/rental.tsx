@@ -24,7 +24,7 @@ import DeliveryCompleted from "../../components/mypage/seller/order/rental/deliv
 import RentalCompleted from "@/src/components/mypage/seller/order/rental/rentalCompleted";
 const Rental = () => {
   const router = useRouter();
-  const ItemList = [
+  var ItemList = [
     {
       itemId: 1,
       title: "Canon EOS Rebel T7 18-55mm 번들 세트",
@@ -226,11 +226,11 @@ const StateButton = styled.button`
   width: 320px;
   margin: 0;
   padding: 10px;
-  border: 1px solid #d9d9d9;
+  border: none;
   font-size: 20px;
-  background: #b6dcbe;
+  background-color: ${(props) => props.theme.pointColor};
   &:active {
-    background-color: #b6dcbe;
+    background-color: ${(props) => props.theme.pointColor};
   }
 `;
 
