@@ -9,9 +9,19 @@ import {
   AllProductQueryParam,
   useGetAllProduct,
 } from "@/src/hooks/api/product/GetAllProduct";
+
 import Pagination from "react-js-pagination";
+import { motion } from "framer-motion";
 
 const inter = Inter({ subsets: ["latin"] });
+
+const logoVariants = {
+  active: {
+    backgroundColor: "rgba(0,0,0,0.3)",
+
+    duration: 2,
+  },
+};
 
 /* 카테고리 리스트 입니다*/
 const CategoryList = [
@@ -88,7 +98,7 @@ export default function Home() {
           href="https://unpkg.com/react-quill@1.3.3/dist/quill.snow.css"
         /> */}
       </Head>
-      <Banner>
+      <Banner variants={logoVariants} whileHover="active">
         <Title>데이필름과 함께 멋진 작품을 만들어보세요</Title>
       </Banner>
       <FilterDiv>
@@ -157,11 +167,16 @@ export default function Home() {
   );
 }
 
-const Banner = styled.div`
-  background-color: ${(props) => props.theme.pointColor};
+//linear-gradient(, rgba(0, 0, 0, 0));
+const Banner = styled(motion.div)`
   height: 250px;
   width: 900px;
   border-radius: 10px;
+  background: linear-gradient(
+    to bottom,
+    rgba(211, 234, 216, 1),
+    rgba(0, 0, 0, 0)
+  );
 `;
 const Input = styled.input`
   width: 180px;
