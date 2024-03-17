@@ -68,7 +68,8 @@ const CorporationSignUpForm = () => {
   const pwRef = useRef<string>(null);
 
   //사업자 등록번호 확인
-  async function corporationNumberHandler() {
+  async function corporationNumberHandler(e: any) {
+    e.preventDefault();
     try {
       const corporationNumber = getValues("businessNumber");
       const data = { b_no: [JSON.stringify(Number(corporationNumber))] };
@@ -90,10 +91,10 @@ const CorporationSignUpForm = () => {
   }
 
   // 비밀번호 확인
-
   const passwordConfirmChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
+    e.preventDefault();
     const passwordConfirmCurrent = e.target.value;
     const currPw = watch("pw");
     setPasswordConfirm(passwordConfirmCurrent);
@@ -138,7 +139,8 @@ const CorporationSignUpForm = () => {
     }
   };
   const handle = {
-    clickButton: () => {
+    clickButton: (e: any) => {
+      e.preventDefault();
       setOpenPostcode((current) => !current);
     },
   };
