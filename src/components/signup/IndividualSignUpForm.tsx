@@ -52,7 +52,8 @@ const IndividualSignUpForm = () => {
     setIsNicknameChecked(false);
   };
 
-  const checkNickname = async () => {
+  const checkNickname = async (e: any) => {
+    e.preventDefault();
     const enteredNickname = getValues("nickname");
     if (enteredNickname.length > 0) {
       const response = await axios.get("/user/check/nickname", {
